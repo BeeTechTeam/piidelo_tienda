@@ -1,0 +1,241 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
+body {
+    font-family: "Quicksand", sans-serif;
+    background: #00c6ff;
+    background: -webkit-linear-gradient(to top, #0072ff, #00c6ff);
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+/* Scrollbar */
+
+::-webkit-scrollbar {
+    width: 3px;
+    height: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #88532b;
+}
+
+::-webkit-scrollbar-corner {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+
+/* Card */
+
+.card {
+    margin: unset !important;
+}
+
+
+/* Imagenes */
+
+.card-image {
+    transition: transform 0.5s;
+    display: block;
+}
+
+.card-image:hover {
+    transform: scale(1.1);
+}
+
+
+/* Botones */
+
+.btn {
+    border-radius: 30px !important;
+    box-shadow: unset !important;
+    font-family: "Quicksand", sans-serif;
+}
+
+
+/* Mostrar buscador */
+
+.mostrar_buscador {
+    z-index: 3;
+    position: absolute;
+    top: 0px;
+    -webkit-transition: all 1s;
+    -moz-transition: all 1s;
+    -mos-transition: all 1s;
+    -o-transition: all 1s;
+    transition: all 1s;
+}
+
+
+/* Ocultar buscador */
+
+.ocultar_buscador {
+    z-index: -1;
+    position: absolute;
+    top: -70px;
+    -webkit-transition: all 1s;
+    -moz-transition: all 1s;
+    -mos-transition: all 1s;
+    -o-transition: all 1s;
+    transition: all 1s;
+}
+
+
+/* Cantidad del carrito */
+
+.count-items {
+    background: white;
+    color: #000000;
+    border-radius: 100px;
+    height: 15px;
+    width: 15px;
+    margin: unset;
+    padding: unset;
+    text-align: center;
+    font-family: "Quicksand", sans-serif !important;
+    font-size: 12px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 100px;
+    line-height: 1.2;
+}
+
+
+/* Opciones header */
+
+.options-header {
+    cursor: pointer;
+    margin: 0px 8px 0px 8px;
+    color: #000000;
+    display: inline-block !important;
+}
+
+
+/* Header transparente */
+
+.transparente {
+    position: absolute;
+    top: 0;
+    height: 80px;
+    background: unset !important;
+    box-shadow: unset;
+    -webkit-transition: background 1s ease-out;
+    -moz-transition: background 1s ease-out;
+    -o-transition: background 1s ease-out;
+    transition: background 1s ease-out;
+}
+
+
+/* Header blanco */
+
+.blanco {
+    position: fixed;
+    top: 0;
+    height: 80px;
+    background: #ffffff !important;
+    box-shadow: unset;
+    -webkit-transition: background 1s ease-out;
+    -moz-transition: background 1s ease-out;
+    -o-transition: background 1s ease-out;
+    transition: background 1s ease-out;
+    z-index: 5;
+}
+
+
+/* Media */
+
+#materialbox-overlay {
+    background-color: #29292942 !important;
+}
+
+
+/* Modal */
+
+.modal .modal-content {
+    background: #ffffff;
+}
+
+.modal {
+    max-height: 80% !important;
+}
+
+
+/* Collapsible */
+
+.collapsible-body {
+    padding: 0 10px !important;
+}
+
+
+/* Botones de comprar ahora y vista rápida */
+
+.button_vr_ca {
+    width: 150px !important;
+    background: #ffffff !important;
+    border-radius: 30px !important;
+    text-align: center !important;
+    cursor: pointer !important;
+    transition: all 0.1s ease-in-out !important;
+    border: unset !important;
+    box-shadow: -6px -6px 10px rgba(255, 255, 255, 0.8), 5px 3px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+.button_vr_ca:hover {
+    opacity: 1 !important;
+    box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.5), inset 8px 8px 16px rgba(0, 0, 0, 0.1) !important;
+    color: #000000 !important;
+    border: unset !important;
+}
+
+
+/* Botones de comprar ahora y vista rápida */
+
+.less_plus {
+    width: 40px !important;
+    height: 40px !important;
+    background: #ffffff !important;
+    border-radius: 40px !important;
+    text-align: center !important;
+    cursor: pointer !important;
+    transition: all 0.1s ease-in-out !important;
+    border: unset !important;
+    box-shadow: -6px -6px 10px rgba(255, 255, 255, 0.8), 5px 3px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+.less_plus:hover {
+    opacity: 1 !important;
+    box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.5), inset 8px 8px 16px rgba(0, 0, 0, 0.1) !important;
+    color: #1461a3 !important;
+    border: unset !important;
+}
+
+
+/* Input de cantidad a comprar */
+
+.cantidad_a_comprar {
+    border: unset !important;
+    margin: 0px 5px !important;
+    padding: unset !important;
+    font-family: 'Quicksand';
+    font-weight: bold;
+    text-align: center;
+}
+
+
+/* Disabled element */
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+
+/* Ocultar loader */
+
+.hide_loader {
+    opacity: 0;
+}
