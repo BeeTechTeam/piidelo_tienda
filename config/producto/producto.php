@@ -7,8 +7,8 @@ $connection = mysqli_connect(server, user, password, database) or die("No se pud
 $metodo = $_POST["metodo"];
 
 /**Ruta de fotos de los productos */
-$ruta = "http://192.168.1.4/ecommerce/backoffice/images/productos/";
-// $ruta = "https://ecommerce.izipedidos.pe/backoffice/images/productos/";
+$ruta = "http://192.168.1.4/piidelo/piidelo_backoffice/images/productos/";
+// $ruta = "https://piidelo.izipedidos.pe/backoffice/images/productos/";
 
 switch ($metodo) {
         /**Leer productos */

@@ -14,7 +14,7 @@
 
 <body style="background-color: unset;">
     <!-- WhatsApp -->
-    <a href="https://api.whatsapp.com/send?phone=51924182041&text=Vengo%20de%20la%20web%20iZiPedidos,%20quiero%20saber%20sobre%20" target="_blank">
+    <a href="https://api.whatsapp.com/send?phone=51922944350&text=Vengo%20de%20la%20web%20iZiPedidos,%20quiero%20saber%20sobre%20" target="_blank">
         <img src="image/whatsapp.png" style="width: 50px; position: fixed; z-index: 100; bottom: 10px; left: 10px; cursor: pointer;" />
     </a>
 
@@ -42,8 +42,8 @@
                 <div class="col s4 right-align hide-on-med-and-down">
                     <i onclick="mostrar_buscador();" class="material-icons options-header">search</i>
                     <i onclick="mostrar_carrito();" class="material-icons options-header">shopping_cart<h5 id="cantidad_carrito" class="count-items">0</h5></i>
-                    <i onclick="iniciar_sesion();" class="material-icons options-header">account_circle</i>
-                    <i onclick="registarse();" class="material-icons options-header">person_add</i>
+                    <i onclick="signin();" class="material-icons options-header">account_circle</i>
+                    <i onclick="signup();" class="material-icons options-header">person_add</i>
                 </div>
             </div>
         </div>
@@ -52,8 +52,8 @@
     <!-- Desplegable small -->
     <ul class="sidenav" id="opciones_movil">
         <li onclick="mostrar_carrito();"><a href="#"><i class="material-icons options-header">shopping_cart</i>Mi carrito</a></li>
-        <li onclick="iniciar_sesion();"><a href="#"><i class="material-icons options-header">account_circle</i>Iniciar sesi&oacute;n</a></li>
-        <li onclick="registarse();"><a href="#"><i class="material-icons options-header">person_add</i>Registrase</a></li>
+        <li onclick="signin();"><a href="#"><i class="material-icons options-header">account_circle</i>Iniciar sesi&oacute;n</a></li>
+        <li onclick="signup();"><a href="#"><i class="material-icons options-header">person_add</i>Registrase</a></li>
     </ul>
 
     <!-- Buscador -->
@@ -637,9 +637,6 @@
         </div>
     </div>
 
-    <!-- Abrir carrito -->
-    <a href="#" data-target="side_carrito" class="sidenav-trigger" id="abrir"></a>
-
     <!-- Carrito de compras -->
     <ul id="side_carrito" class="sidenav">
         <li>
@@ -676,6 +673,131 @@
             </ul>
         </li>
     </ul>
+    <!-- Abrir carrito -->
+    <a href="#" data-target="side_carrito" class="sidenav-trigger hide" id="abrir_carrito"></a>
+
+    <!-- Modal de registrarse -->
+    <div id="modal_registrarse" class="modal" style="border-radius: 30px;">
+        <div style="text-align: end; padding: 10px 25px;">
+            <i class="material-icons modal-close" id="close_vista_rapida">close</i>
+        </div>
+        <div class="row" style="border-radius: 30px; height: 100%;">
+            <div class="col s12 center-align" style="height: 100%; border-radius: 0px 30px 30px 0px;">
+                <h3 style="font-weight: bold; color: #1461a3;">Crear cuenta</h3>
+                <p>Completa la informaci&oacute;n solicitada para crear tu cuenta</p>
+                <form class="col s12">
+                    <div class="input-field col s12 m12 l6 xl6">
+                        <i class="material-icons prefix" style="color: #1461a3;">business_center</i>
+                        <input id="txt_ruc_dni" type="number" placeholder="RUC o DNI">
+                    </div>
+                    <div class="input-field col s12 m12 l6 xl6">
+                        <i class="material-icons prefix" style="color: #1461a3;">business</i>
+                        <input id="txt_razon_social_nombres" type="text" placeholder="Razón Social o Nombres">
+                    </div>
+                    <div class="input-field col s12 m12 l6 xl6">
+                        <i class="material-icons prefix" style="color: #1461a3;">phone</i>
+                        <input id="txt_telefono" type="number" placeholder="Teléfono">
+                    </div>
+                    <div class="input-field col s12 m12 l6 xl6">
+                        <i class="material-icons prefix" style="color: #1461a3;">email</i>
+                        <input id="txt_email" type="email" placeholder="Email">
+                    </div>
+                    <div class="input-field col s12 m12 l6 xl6">
+                        <i class="material-icons prefix" style="color: #1461a3;">lock</i>
+                        <input id="txt_password" type="password" placeholder="Contraseña">
+                        <i class="material-icons hide" style="position: absolute; right: 11px; top: 11px; cursor: pointer; color: #1461a3;" id="ver_password">remove_red_eye
+                        </i>
+                        <i class="material-icons" style="position: absolute; right: 11px; top: 11px; cursor: pointer;" id="ocultar_password">remove_red_eye
+                        </i>
+                    </div>
+                    <div class="input-field col s12 m12 l6 xl6">
+                        <i class="material-icons prefix" style="color: #1461a3;">lock</i>
+                        <input id="txt_repeat_password" type="password" placeholder="Repetir contraseña">
+                        <i class="material-icons hide" style="position: absolute; right: 11px; top: 11px; cursor: pointer; color: #1461a3;" id="ver_password_repeat">remove_red_eye
+                        </i>
+                        <i class="material-icons" style="position: absolute; right: 11px; top: 11px; cursor: pointer;" id="ocultar_password_repeat">remove_red_eye
+                        </i>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col s12" style="text-align: center;">
+                        <div class="preloader-wrapper big active hide" style="width: 50px; height: 50px;" id="loader_signup">
+                            <div class="spinner-layer" style="border-color: #1461a3;">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12" style="padding: 5px;">
+                        <button id="btn_signup" onclick="registrarse();" class="btn" style="width: 130px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">REGISTRARSE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Abrir signup -->
+    <a class="modal-trigger hide" href="#modal_registrarse" id="abrir_signup"></a>
+
+    <!-- Modal de iniciar_sesion -->
+    <div id="modal_iniciar_sesion" class="modal" style="border-radius: 30px;">
+        <div style="text-align: end; padding: 10px;">
+            <i class="material-icons modal-close" id="close_vista_rapida">close</i>
+        </div>
+        <div class="row" style="border-radius: 30px; height: 100%;">
+            <div class="col s12 center-align" style="height: 100%; border-radius: 0px 30px 30px 0px;">
+                <h3 style="font-weight: bold; color: #1461a3; margin: 2vh;">Iniciar sesi&oacute;n</h3>
+                <p>Para mantenerse conectado con nosotros, inicie sesi&oacute;n con su informaci&oacute;n personal</p>
+                <form class="row" style="width: 50%; margin: auto;">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix" style="color: #1461a3;">email</i>
+                        <input id="txt_email_login" type="email" placeholder="Email">
+                    </div>
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix" style="color: #1461a3;">lock</i>
+                        <input id="txt_password_login" type="password" placeholder="Contraseña">
+                        <i class="material-icons hide" style="position: absolute; right: 11px; top: 11px; cursor: pointer; color: #1461a3;" id="ver_password_login">remove_red_eye
+                        </i>
+                        <i class="material-icons" style="position: absolute; right: 11px; top: 11px; cursor: pointer;" id="ocultar_password_login">remove_red_eye
+                        </i>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col s12" style="text-align: center;">
+                        <div class="preloader-wrapper big active hide" style="width: 50px; height: 50px;" id="loader_login">
+                            <div class="spinner-layer" style="border-color: #1461a3;">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12" style="padding: 5px;">
+                        <button id="btn_login" onclick="iniciar_sesion();" class="btn" style="width: 150px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">INICIAR SESI&Oacute;N</button>
+                    </div>
+                    <div class="col s12" style="padding: 5px;">
+                        <a style="color: #1461a3;" href="https://api.whatsapp.com/send?phone=51922944350&text=Vengo%20de%20la%20web%20iZiPedidos,%20quiero%20saber%20sobre%20" target="_blank">
+                            ¿Olvidaste tu contraseña?
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Abrir signup -->
+    <a class="modal-trigger hide" href="#modal_iniciar_sesion" id="abrir_signin"></a>
 
     <!-- Footer -->
     <footer class="page-footer">
@@ -782,6 +904,48 @@
 
     /**Activar buscador */
     buscador();
+
+    /**Contraseñas */
+    /**Ver contraseña */
+    $("#ver_password").on("click", function() {
+        $("#ver_password").addClass("hide");
+        $("#ocultar_password").removeClass("hide");
+        $("#txt_password").prop("type", "password");
+    });
+
+    /**Ocultar contraseña */
+    $("#ocultar_password").on("click", function() {
+        $("#txt_password").prop("type", "text")
+        $("#ocultar_password").addClass("hide");
+        $("#ver_password").removeClass("hide");
+    });
+    /**Ver contraseña */
+    $("#ver_password_login").on("click", function() {
+        $("#ver_password_login").addClass("hide");
+        $("#ocultar_password_login").removeClass("hide");
+        $("#txt_password_login").prop("type", "password");
+    });
+
+    /**Ocultar contraseña */
+    $("#ocultar_password_login").on("click", function() {
+        $("#txt_password_login").prop("type", "text")
+        $("#ocultar_password_login").addClass("hide");
+        $("#ver_password_login").removeClass("hide");
+    });
+
+    /**Ver contraseña */
+    $("#ver_password_repeat").on("click", function() {
+        $("#ver_password_repeat").addClass("hide");
+        $("#ocultar_password_repeat").removeClass("hide");
+        $("#txt_repeat_password").prop("type", "password")
+    });
+
+    /**Ocultar contraseña */
+    $("#ocultar_password_repeat").on("click", function() {
+        $("#txt_repeat_password").prop("type", "text")
+        $("#ocultar_password_repeat").addClass("hide");
+        $("#ver_password_repeat").removeClass("hide");
+    });
 </script>
 
 </html>

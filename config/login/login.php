@@ -1,98 +1,148 @@
 <?php
-require_once("../connection.php");
-$metodo = $_POST["metodo"];
-switch ($metodo) {
-    case "Login":
-        /**Recibimos los parámetros a través del método POST */
-        $documento  = trim($_POST["documento"]);
-        $password   = trim($_POST["password"]);
+require_once("../../database/connection.php");
+/**Creamos la conexión */
+$connection = mysqli_connect(server, user, password, database) or die("No se pudo conectar a la base de datos");
 
-        /**Función para el login */
-        function login($documento, $password)
-        {
-            /**Verificamos si el distribuidor se logea con su código de 4 dígitos */
-            if (strlen($documento) === 4) {
-                $select = "select * from usuario u
-                inner join distribuidor d on u.usu_id = d.dis_usu_id
-                where u.usu_documento = '" . trim($documento) . "' or d.dis_cod = '" . trim($documento)  . "' and u.usu_password = BINARY '" . trim($password) . "'";
+/**Recibimos los datos ingresados */
+$usuario = trim($_POST["usuario"]);
+$password = trim($_POST["password"]);
+
+/**Ruta de imagenes */
+$ruta = "http://localhost/piidelo/piidelo_backoffice/images/usuarios/";
+// $ruta = "https://ecommerce.izipedidos.pe/backoffice/images/usuarios/";
+
+/**Ejecutamos la función de inicio de sesión con los parámetros recibidos */
+signin($usuario, $password, $ruta, $connection);
+
+/**Función de inicio de sesión */
+function signin($usuario, $password, $ruta, $connection)
+{
+    /**Respuesta */
+    $response = array();
+    /**Buscamos el documento ingresado */
+    $select_usuario = "select * from usuario
+        where usu_usuario = '" . $usuario . "' and usu_estado = 'ACTIVO'";
+    $result_usuario = mysqli_query($connection, $select_usuario);
+    if ($result_usuario->num_rows < 1) {
+        $response = array(
+            "codigo" => 100,
+            "usuario" => [],
+            "empresa" => []
+        );
+        echo json_encode($response);
+        return;
+    }
+
+    /**Verificamos que la contraseña sea la correcta */
+    $select_usuario = "select * from usuario
+        where usu_usuario = '" . $usuario . "' and usu_password = '" . $password . "' and usu_estado = 'ACTIVO'";
+    $result_usuario = mysqli_query($connection, $select_usuario);
+    if ($result_usuario->num_rows < 1) {
+        $response = array(
+            "codigo" => 101,
+            "usuario" => [],
+            "empresa" => []
+        );
+        echo json_encode($response);
+        return;
+    }
+
+    /**Determinamos la función y el estado del usuario */
+    while ($row = $result_usuario->fetch_assoc()) {
+        $funcion = $row["usu_funcion"];
+        $estado = $row["usu_estado"];
+        $user = array(
+            "usu_id" => $row["usu_id"],
+            "usu_nombres" => $row["usu_nombres"],
+            "usu_apellidos" => $row["usu_apellidos"],
+            "usu_usuario" => $row["usu_usuario"],
+            "usu_password" => $row["usu_password"],
+            "usu_foto" => $ruta . $row["usu_foto"],
+            "usu_estado" => $estado,
+            "usu_funcion" => $funcion,
+        );
+    }
+
+    /**Usuario eliminado */
+    if ($estado === "ELIMINADO") {
+        $response = array(
+            "codigo" => 102,
+            "usuario" => [],
+            "empresa" => []
+        );
+        echo json_encode($response);
+        return;
+    }
+
+    /**Usuario webmaster */
+    if ($funcion === "WEBMASTER") {
+        $response = array(
+            "codigo" => 105,
+            "usuario" => [],
+            "empresa" => []
+        );
+        echo json_encode($response);
+        return;
+    }
+
+    /**Usuario proveedor */
+    if ($funcion === "PROVEEDOR") {
+        $response = array(
+            "codigo" => 105,
+            "usuario" => [],
+            "empresa" => []
+        );
+        echo json_encode($response);
+        return;
+    }
+
+
+    /**Usuario de cliente */
+    if ($funcion === "CLIENTE") {
+        $select_cliente = "select
+            c.cli_id as 'codigo',
+            c.cli_ruc as 'ruc',
+            c.cli_razon_social as 'razon_social',
+            c.cli_telefono as 'telefono',
+            c.cli_email as 'email',
+            c.cli_foto as 'foto',
+            c.cli_direccion as 'direccion',
+            c.cli_estado as 'estado'
+                from cliente c
+                    inner join usuario u on c.cli_id = u.usu_cliente
+                    where 
+                        u.usu_usuario = '" . $usuario . "' and 
+                        u.usu_password = '" . $password . "' and 
+                        u.usu_estado = 'ACTIVO' and
+                        c.cli_estado = 'ACTIVO'";
+        $result_cliente = mysqli_query($connection, $select_cliente);
+        if ($result_cliente->num_rows > 0) {
+            while ($row = $result_cliente->fetch_assoc()) {
+                $cliente = array(
+                    "codigo" => trim($row["codigo"]),
+                    "ruc" => trim($row["ruc"]),
+                    "razon_social" => trim($row["razon_social"]),
+                    "telefono" => trim($row["telefono"]),
+                    "email" => trim($row["email"]),
+                    "estado" => trim($row["estado"]),
+                );
             }
-
-            /**Verificamos si el distribuidor se logea con su RUC ó DNI */
-            else {
-                $select = "select * from usuario where usu_documento = '" . trim($documento) . "' and usu_password = BINARY '" . trim($password) . "'";
-            }
-            $resultado = $_SESSION["Connection"]->query($select);
-
-            /**Verificamos que existan las credenciales ingresadas */
-            if ($resultado->num_rows == 1) {
-                while ($row = $resultado->fetch_assoc()) {
-                    /**Cuando el usuario fue eliminado */
-                    if (trim($row["usu_estado"]) == "ELIMINADO") {
-                        $_SESSION["LoginID"] = null;
-                        $_SESSION["LoginFuncion"] = null;
-                        $_SESSION["LoginNombre"] = null;
-                        $mensaje = "ERROR: Usuario eliminado";
-                    }
-
-                    /**Cuando el usuario es un bodeguero */
-                    else if (trim($row["usu_funcion"]) == "BODEGUERO") {
-                        $_SESSION["LoginID"] = null;
-                        $_SESSION["LoginFuncion"] = null;
-                        $_SESSION["LoginNombre"] = null;
-                        $mensaje = "ERROR: Los usuarios de las tiendas sólo tienen acceso desde la aplicación móvil";
-                    }
-
-                    /**Cuando el usuario es el webmaster */
-                    else if (trim($row["usu_funcion"]) == "WEBMASTER") {
-                        $_SESSION["LoginID"] = null;
-                        $_SESSION["LoginFuncion"] = null;
-                        $_SESSION["LoginNombre"] = null;
-                        $mensaje = "ERROR: Sólo pueden ingresar los distribuidores";
-                    }
-
-                    /**Cuando el usuario es fabricante */
-                    else if (trim($row["usu_funcion"]) == "FABRICANTE") {
-                        $_SESSION["LoginID"] = null;
-                        $_SESSION["LoginFuncion"] = null;
-                        $_SESSION["LoginNombre"] = null;
-                        $mensaje = "ERROR: Sólo pueden ingresar los distribuidores";
-                    }
-
-                    /**Login exitoso */
-                    else {
-                        $_SESSION["LoginSession"] = session_name();
-                        $_SESSION["LoginID"] = trim($row["usu_id"]);
-                        $_SESSION["LoginFuncion"] = trim($row["usu_funcion"]);
-                        $_SESSION["LoginAvatar"] = trim($row["usu_avatar"]);
-                        $_SESSION["LoginNombre"] = trim($row["usu_nombre"]);
-                        $_SESSION["LoginDocumento"] = trim($row["usu_documento"]);
-                        $mensaje = "¡Bienvenido " . $_SESSION["LoginNombre"] . "!";
-                    }
-                }
-                $mensaje_bienvenida = $mensaje;
-            }
-
-            /**Cuando las credenciales son incorrectas */
-            else {
-                $_SESSION["LoginID"] = null;
-                $_SESSION["LoginFuncion"] = null;
-                $_SESSION["LoginNombre"] = null;
-                $mensaje_bienvenida = "ERROR: Datos de acceso incorrectos";
-            }
-
-            /**Array de bienvenida */
-            $array = array(
-                "mensaje_bienvenida" => $mensaje_bienvenida,
-                "usuario_id" => $_SESSION["LoginID"],
-                "usuario_funcion" => $_SESSION["LoginFuncion"],
-                "usuario_nombre" => $_SESSION["LoginNombre"]
+            $response = array(
+                "codigo" => 103,
+                "usuario" => $user,
+                "cliente" => $cliente
             );
-
-            echo json_encode($array);
-            $resultado->close();
+            echo json_encode($response);
         }
+        return;
+    }
 
-        /**Ejecutamos la función para el login */
-        login($documento, $password);
-        break;
+
+    /**Usuario no autorizado */
+    $response = array(
+        "codigo" => 105,
+        "usuario" => [],
+        "empresa" => []
+    );
+    echo json_encode($response);
 }

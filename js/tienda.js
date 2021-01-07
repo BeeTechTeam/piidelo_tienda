@@ -3,9 +3,226 @@ var rutcon = "../config/",
     store = localStorage;
 var parametros, distribuidor;
 
+/**Función de validar email */
+function validar_email(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
 
 
 /**-------------------------------------------- INDEX -------------------------------------------- */
+/**Signup */
+function signup() {
+    document.getElementById("abrir_signup").click();
+}
+
+function registrarse() {
+    var ruc_dni = document.getElementById("txt_ruc_dni").value;
+    var razon_social_nombres = document.getElementById("txt_razon_social_nombres").value;
+    var telefono = document.getElementById("txt_telefono").value;
+    var email = document.getElementById("txt_email").value;
+    var password = document.getElementById("txt_password").value;
+    var repeat_password = document.getElementById("txt_repeat_password").value;
+    if (ruc_dni === "") {
+        Swal.fire({
+            title: "iZi Pedidos",
+            icon: "warning",
+            text: "Ingresa el RUC",
+            showConfirmButton: false,
+            timer: 2000
+        });
+    } else if (razon_social_nombres === "") {
+        Swal.fire({
+            title: "iZi Pedidos",
+            icon: "warning",
+            text: "Ingresa la Razón Social o Nombres",
+            showConfirmButton: false,
+            timer: 2000
+        });
+    } else if (telefono === "") {
+        Swal.fire({
+            title: "iZi Pedidos",
+            icon: "warning",
+            text: "Ingresa el teléfono",
+            showConfirmButton: false,
+            timer: 2000
+        });
+    } else if (email === "") {
+        Swal.fire({
+            title: "iZi Pedidos",
+            icon: "warning",
+            text: "Ingresa el email",
+            showConfirmButton: false,
+            timer: 2000
+        });
+    } else if (password === "") {
+        Swal.fire({
+            title: "iZi Pedidos",
+            icon: "warning",
+            text: "Ingresa la contraseña",
+            showConfirmButton: false,
+            timer: 2000
+        });
+    } else if (!validar_email(email)) {
+        Swal.fire({
+            title: "iZi Pedidos",
+            icon: "warning",
+            text: "Ingresa un email válido",
+            showConfirmButton: false,
+            timer: 2000
+        });
+    } else if (password !== repeat_password) {
+        Swal.fire({
+            title: "iZi Pedidos",
+            icon: "warning",
+            text: "Las contraseñas no coinciden",
+            showConfirmButton: false,
+            timer: 2000
+        });
+    } else {
+        $("#btn_signup").addClass("hide");
+        $("#loader_signup").removeClass("hide");
+        parametros = {
+            metodo: "Signup",
+            ruc_dni: ruc_dni,
+            razon_social_nombres: razon_social_nombres,
+            telefono: telefono,
+            email: email,
+            password: password
+        };
+        $.ajax({
+            url: "config/signup/signup",
+            data: parametros,
+            type: "post",
+            cache: false,
+            success: function(resultado) {
+                $("#btn_signup").removeClass("hide");
+                $("#loader_signup").addClass("hide");
+                var response = JSON.parse(resultado);
+                var codigo = response.codigo;
+                var mensaje = response.mensaje;
+                var cliente = response.cliente;
+                if (codigo === 106 || codigo === 108) {
+                    Swal.fire({
+                        title: "iZi Pedidos",
+                        icon: "error",
+                        text: mensaje,
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (codigo === 107) {
+                    Swal.fire({
+                        title: "iZi Pedidos",
+                        icon: "success",
+                        text: mensaje,
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+            }
+        });
+    }
+}
+
+/**Signin */
+function signin() {
+    document.getElementById("abrir_signin").click();
+}
+
+function iniciar_sesion() {
+    var email_login = document.getElementById("txt_email_login").value;
+    var password_login = document.getElementById("txt_password_login").value;
+    if (email_login === "") {
+        Swal.fire({
+            title: "iZi Pedidos",
+            icon: "warning",
+            text: "Ingresa el email",
+            showConfirmButton: false,
+            timer: 2000
+        });
+    } else if (!validar_email(email_login)) {
+        Swal.fire({
+            title: "iZi Pedidos",
+            icon: "warning",
+            text: "Ingresa un email válido",
+            showConfirmButton: false,
+            timer: 2000
+        });
+    } else if (password_login === "") {
+        Swal.fire({
+            title: "iZi Pedidos",
+            icon: "warning",
+            text: "Ingresa la contraseña",
+            showConfirmButton: false,
+            timer: 2000
+        });
+    } else {
+        $("#btn_login").addClass("hide");
+        $("#loader_login").removeClass("hide");
+        parametros = {
+            usuario: email_login,
+            password: password_login
+        };
+        $.ajax({
+            url: "config/login/login",
+            data: parametros,
+            type: "post",
+            cache: false,
+            success: function(resultado) {
+                $("#btn_login").removeClass("hide");
+                $("#loader_login").addClass("hide");
+                var response = JSON.parse(resultado);
+                var codigo = response.codigo;
+                var usuario = response.usuario;
+                var cliente = response.cliente;
+                if (codigo === 100) {
+                    Swal.fire({
+                        title: "iZi Pedidos",
+                        icon: "error",
+                        text: "El usuario ingresado no existe",
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                } else if (codigo === 101) {
+                    Swal.fire({
+                        title: "iZi Pedidos",
+                        icon: "error",
+                        text: "La contraseña es incorrecta",
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                } else if (codigo === 102) {
+                    Swal.fire({
+                        title: "iZi Pedidos",
+                        icon: "error",
+                        text: "Tu usuario ha sido eliminado",
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                } else if (codigo === 103) {
+                    Swal.fire({
+                        title: "iZi Pedidos",
+                        icon: "success",
+                        text: "Bienvenido " + usuario.usu_nombres,
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                } else if (codigo === 105) {
+                    Swal.fire({
+                        title: "iZi Pedidos",
+                        icon: "error",
+                        text: "Sólo los clientes pueden ingresar",
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                }
+            }
+        });
+    }
+}
+
 /**Leer sliders */
 function leer_sliders() {
     parametros = {
@@ -518,7 +735,7 @@ function mostrar_carrito() {
                 `;
         }
     }
-    document.getElementById("abrir").click();
+    document.getElementById("abrir_carrito").click();
 }
 
 /**Aumentar cantidad en el carrito */
