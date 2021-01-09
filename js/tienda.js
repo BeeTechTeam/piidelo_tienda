@@ -3,12 +3,26 @@ var rutcon = "../config/",
     store = localStorage;
 var parametros, distribuidor;
 
+/**Funcion para obtener el dia de la semana */
+function dia_de_semana(dia, mes, year) {
+    var dias = ["domingo", "lunes", "martes", "mieercoles", "jueves", "viernes", "sabado"];
+    var dt = new Date(mes + " " + dia + ", " + year + " 12:00:00");
+    return dias[dt.getUTCDay()];
+};
+
 /**Función de validar email */
 function validar_email(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 }
 
+function inicio() {
+    window.location.href = "http://192.168.1.4/piidelo/piidelo_tienda/";
+}
 
+function logout() {
+    store.clear();
+    window.location.href = "http://192.168.1.4/piidelo/piidelo_tienda/";
+}
 /**-------------------------------------------- INDEX -------------------------------------------- */
 /**Signup */
 function signup() {
@@ -112,13 +126,18 @@ function registrarse() {
                     return;
                 }
                 if (codigo === 107) {
-                    Swal.fire({
-                        title: "iZi Pedidos",
-                        icon: "success",
-                        text: mensaje,
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
+                    // Swal.fire({
+                    //     title: "iZi Pedidos",
+                    //     icon: "success",
+                    //     // text: mensaje,
+                    //     text: "Bienvenido",
+                    //     showConfirmButton: false,
+                    //     timer: 2000
+                    // });
+                    // setTimeout(function() {
+                    login(email, password)
+                        // }, 500);
+
                     return;
                 }
             }
@@ -129,6 +148,72 @@ function registrarse() {
 /**Signin */
 function signin() {
     document.getElementById("abrir_signin").click();
+    document.getElementById("close_modal_registrarse").click();
+}
+
+function login(email, password) {
+    parametros = {
+        usuario: email,
+        password: password
+    };
+    $.ajax({
+        url: "config/login/login",
+        data: parametros,
+        type: "post",
+        cache: false,
+        success: function(resultado) {
+            $("#btn_login").removeClass("hide");
+            $("#loader_login").addClass("hide");
+            var response = JSON.parse(resultado);
+            var codigo = response.codigo;
+            var usuario = response.usuario;
+            var cliente = response.cliente;
+            store.setItem("cliente", JSON.stringify(cliente));
+            if (codigo === 100) {
+                Swal.fire({
+                    title: "iZi Pedidos",
+                    icon: "error",
+                    text: "El usuario ingresado no existe",
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            } else if (codigo === 101) {
+                Swal.fire({
+                    title: "iZi Pedidos",
+                    icon: "error",
+                    text: "La contraseña es incorrecta",
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            } else if (codigo === 102) {
+                Swal.fire({
+                    title: "iZi Pedidos",
+                    icon: "error",
+                    text: "Tu usuario ha sido eliminado",
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            } else if (codigo === 103) {
+                store.setItem("cliente", JSON.stringify(cliente));
+                Swal.fire({
+                    title: "iZi Pedidos",
+                    icon: "success",
+                    text: "Bienvenido " + usuario.usu_nombres,
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+                window.location.href = "http://192.168.1.4/piidelo/piidelo_tienda/view/checkout";
+            } else if (codigo === 105) {
+                Swal.fire({
+                    title: "iZi Pedidos",
+                    icon: "error",
+                    text: "Sólo los clientes pueden ingresar",
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            }
+        }
+    });
 }
 
 function iniciar_sesion() {
@@ -161,65 +246,7 @@ function iniciar_sesion() {
     } else {
         $("#btn_login").addClass("hide");
         $("#loader_login").removeClass("hide");
-        parametros = {
-            usuario: email_login,
-            password: password_login
-        };
-        $.ajax({
-            url: "config/login/login",
-            data: parametros,
-            type: "post",
-            cache: false,
-            success: function(resultado) {
-                $("#btn_login").removeClass("hide");
-                $("#loader_login").addClass("hide");
-                var response = JSON.parse(resultado);
-                var codigo = response.codigo;
-                var usuario = response.usuario;
-                var cliente = response.cliente;
-                if (codigo === 100) {
-                    Swal.fire({
-                        title: "iZi Pedidos",
-                        icon: "error",
-                        text: "El usuario ingresado no existe",
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                } else if (codigo === 101) {
-                    Swal.fire({
-                        title: "iZi Pedidos",
-                        icon: "error",
-                        text: "La contraseña es incorrecta",
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                } else if (codigo === 102) {
-                    Swal.fire({
-                        title: "iZi Pedidos",
-                        icon: "error",
-                        text: "Tu usuario ha sido eliminado",
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                } else if (codigo === 103) {
-                    Swal.fire({
-                        title: "iZi Pedidos",
-                        icon: "success",
-                        text: "Bienvenido " + usuario.usu_nombres,
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                } else if (codigo === 105) {
-                    Swal.fire({
-                        title: "iZi Pedidos",
-                        icon: "error",
-                        text: "Sólo los clientes pueden ingresar",
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                }
-            }
-        });
+        login(email_login, password_login);
     }
 }
 
@@ -266,6 +293,65 @@ function ocultar_buscador() {
 }
 
 /**Favoritos del mes */
+function imprimir_favoritos(producto) {
+    var stock = parseInt(producto.prod_stock);
+    if (stock === 0) {
+        document.getElementById("favoritos_del_mes").innerHTML +=
+            `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+        
+                <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
+                    <div class="card-image">
+                        <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                    </div>
+                    <div class="card-content" style="text-align: center; padding: unset;">
+                        <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                        <p>S/${producto.prod_precio_regular}</p>
+                        <div class="row" style="width: 100%; margin: unset;">
+                            <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                    <i class="material-icons">remove_red_eye</i>
+                                </button>
+                            </div>
+                            <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                <button class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                    AGOTADO
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>`;
+    } else {
+        document.getElementById("favoritos_del_mes").innerHTML +=
+            `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+        
+                <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
+                    <div class="card-image">
+                        <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                    </div>
+                    <div class="card-content" style="text-align: center; padding: unset;">
+                        <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                        <p>S/${producto.prod_precio_regular}</p>
+                        <div class="row" style="width: 100%; margin: unset;">
+                            <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                    <i class="material-icons">remove_red_eye</i>
+                                </button>
+                            </div>
+                            <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock})" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                    <i class="material-icons">add_shopping_cart</i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>`;
+    }
+}
+
 function favoritos_del_mes() {
     $("#favoritos_del_mes").html("");
     parametros = {
@@ -277,34 +363,11 @@ function favoritos_del_mes() {
         type: "post",
         cache: false,
         success: function(resultado) {
-            productos = JSON.parse(resultado);
-            for (var i = 0; i < productos.length; i++) {
-                document.getElementById("favoritos_del_mes").innerHTML +=
-                    `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
 
-                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
-                            <div class="card-image">
-                                <img src="${productos[i].prod_foto}" title="${productos[i].prod_nombre}" alt="${productos[i].prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
-                            </div>
-                            <div class="card-content" style="text-align: center; padding: unset;">
-                                <p style="font-weight: bold;">${productos[i].prod_nombre}</p>
-                                <p>S/${productos[i].prod_precio_regular}</p>
-                                <div class="row" style="width: 100%; margin: unset;">
-                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                        <button id="btn_vista_rapida${productos[i].prod_id}" onmouseenter="btn_vista_rapida_enter(${productos[i].prod_id});" onmouseleave="btn_vista_rapidaleave(${productos[i].prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(productos[i])})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                            <i class="material-icons">remove_red_eye</i>
-                                        </button>
-                                    </div>
-                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                        <button id="btn_comprar_ahora${productos[i].prod_id}" onmouseenter="btn_comprar_ahora_enter(${productos[i].prod_id});" onmouseleave="btn_comprar_ahora_leave(${productos[i].prod_id});" onclick="comprar_ahora(${productos[i].prod_id}, 1, ${productos[i].prod_stock})" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                            <i class="material-icons">add_shopping_cart</i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-    
-                    </div>`;
+            // console.log(resultado)
+            var productos = JSON.parse(resultado);
+            for (var i = 0; i < productos.length; i++) {
+                imprimir_favoritos(productos[i])
             }
             var longitud = productos.length;
             if (longitud > 0) {
@@ -315,6 +378,66 @@ function favoritos_del_mes() {
 }
 
 /**Productos nuevos */
+function imprimir_nuevos(producto) {
+    var stock = parseInt(producto.prod_stock);
+    if (stock === 0) {
+        document.getElementById("nuevos").innerHTML +=
+            `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+                    
+                            <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset;">
+                                <div class="card-image">
+                                    <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                                </div>
+                                <div class="card-content" style="text-align: center; padding: unset;">
+                                    <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                                    <p>S/${producto.prod_precio_regular}</p>
+                                    <div class="row" style="width: 100%; margin: unset;">
+                                        <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                            <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                                <i class="material-icons">remove_red_eye</i>
+                                            </button>
+                                        </div>
+                                        <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                            <button class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                                AGOTADO
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                
+                        </div>`;
+
+    } else {
+        document.getElementById("nuevos").innerHTML +=
+            `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+                        
+                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset;">
+                            <div class="card-image">
+                                <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                            </div>
+                            <div class="card-content" style="text-align: center; padding: unset;">
+                                <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                                <p>S/${producto.prod_precio_regular}</p>
+                                <div class="row" style="width: 100%; margin: unset;">
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            <i class="material-icons">remove_red_eye</i>
+                                        </button>
+                                    </div>
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock})" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            <i class="material-icons">add_shopping_cart</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            
+                    </div>`;
+    }
+}
+
 function productos_nuevos() {
     $("#nuevos").html("");
     parametros = {
@@ -326,34 +449,9 @@ function productos_nuevos() {
         type: "post",
         cache: false,
         success: function(resultado) {
-            productos = JSON.parse(resultado);
+            var productos = JSON.parse(resultado);
             for (var i = 0; i < productos.length; i++) {
-                document.getElementById("nuevos").innerHTML +=
-                    `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
-                        
-                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset;">
-                            <div class="card-image">
-                                <img src="${productos[i].prod_foto}" title="${productos[i].prod_nombre}" alt="${productos[i].prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
-                            </div>
-                            <div class="card-content" style="text-align: center; padding: unset;">
-                                <p style="font-weight: bold;">${productos[i].prod_nombre}</p>
-                                <p>S/${productos[i].prod_precio_regular}</p>
-                                <div class="row" style="width: 100%; margin: unset;">
-                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                        <button id="btn_vista_rapida${productos[i].prod_id}" onmouseenter="btn_vista_rapida_enter(${productos[i].prod_id});" onmouseleave="btn_vista_rapidaleave(${productos[i].prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(productos[i])})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                            <i class="material-icons">remove_red_eye</i>
-                                        </button>
-                                    </div>
-                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                        <button id="btn_comprar_ahora${productos[i].prod_id}" onmouseenter="btn_comprar_ahora_enter(${productos[i].prod_id});" onmouseleave="btn_comprar_ahora_leave(${productos[i].prod_id});" onclick="comprar_ahora(${productos[i].prod_id}, 1, ${productos[i].prod_stock})" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                            <i class="material-icons">add_shopping_cart</i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-            
-                    </div>`;
+                imprimir_nuevos(productos[i]);
             }
             var longitud = productos.length;
             if (longitud > 0) {
@@ -364,6 +462,65 @@ function productos_nuevos() {
 }
 
 /**Ofertas */
+function imprimir_ofertas(producto) {
+    var stock = parseInt(producto.prod_stock);
+    if (stock === 0) {
+        document.getElementById("ofertas").innerHTML +=
+            `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+
+                    <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
+                        <div class="card-image">
+                            <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                        </div>
+                        <div class="card-content" style="text-align: center; padding: unset;">
+                            <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                            <p>S/${producto.prod_precio_regular}</p>
+                            <div class="row" style="width: 100%; margin: unset;">
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        <i class="material-icons">remove_red_eye</i>
+                                    </button>
+                                </div>
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        AGOTADO
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+            </div>`;
+    } else {
+        document.getElementById("ofertas").innerHTML +=
+            `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+
+                    <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
+                        <div class="card-image">
+                            <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                        </div>
+                        <div class="card-content" style="text-align: center; padding: unset;">
+                            <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                            <p>S/${producto.prod_precio_regular}</p>
+                            <div class="row" style="width: 100%; margin: unset;">
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        <i class="material-icons">remove_red_eye</i>
+                                    </button>
+                                </div>
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock})" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        <i class="material-icons">add_shopping_cart</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+            </div>`;
+    }
+}
+
 function ofertas() {
     $("#ofertas").html("");
     parametros = {
@@ -375,34 +532,9 @@ function ofertas() {
         type: "post",
         cache: false,
         success: function(resultado) {
-            productos = JSON.parse(resultado);
+            var productos = JSON.parse(resultado);
             for (var i = 0; i < productos.length; i++) {
-                document.getElementById("ofertas").innerHTML +=
-                    `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
-
-                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
-                            <div class="card-image">
-                                <img src="${productos[i].prod_foto}" title="${productos[i].prod_nombre}" alt="${productos[i].prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
-                            </div>
-                            <div class="card-content" style="text-align: center; padding: unset;">
-                                <p style="font-weight: bold;">${productos[i].prod_nombre}</p>
-                                <p>S/${productos[i].prod_precio_regular}</p>
-                                <div class="row" style="width: 100%; margin: unset;">
-                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                        <button id="btn_vista_rapida${productos[i].prod_id}" onmouseenter="btn_vista_rapida_enter(${productos[i].prod_id});" onmouseleave="btn_vista_rapidaleave(${productos[i].prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(productos[i])})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                            <i class="material-icons">remove_red_eye</i>
-                                        </button>
-                                    </div>
-                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                        <button id="btn_comprar_ahora${productos[i].prod_id}" onmouseenter="btn_comprar_ahora_enter(${productos[i].prod_id});" onmouseleave="btn_comprar_ahora_leave(${productos[i].prod_id});" onclick="comprar_ahora(${productos[i].prod_id}, 1, ${productos[i].prod_stock})" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                            <i class="material-icons">add_shopping_cart</i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-            
-                </div>`;
+                imprimir_ofertas(productos[i]);
             }
             var longitud = productos.length;
             if (longitud > 0) {
@@ -433,89 +565,13 @@ function buscador() {
                 for (var i = 0; i < productos.length; i++) {
                     switch (productos[i].prod_tipo) {
                         case "Favorito":
-                            document.getElementById("favoritos_del_mes").innerHTML +=
-                                `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
-    
-                                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
-                                            <div class="card-image">
-                                                <img src="${productos[i].prod_foto}" title="${productos[i].prod_nombre}" alt="${productos[i].prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
-                                            </div>
-                                            <div class="card-content" style="text-align: center; padding: unset;">
-                                                <p style="font-weight: bold;">${productos[i].prod_nombre}</p>
-                                                <p>S/${productos[i].prod_precio_regular}</p>
-                                                <div class="row" style="width: 100%; margin: unset;">
-                                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                                        <button id="btn_vista_rapida${productos[i].prod_id}" onmouseenter="btn_vista_rapida_enter(${productos[i].prod_id});" onmouseleave="btn_vista_rapidaleave(${productos[i].prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(productos[i])})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                                            <i class="material-icons">remove_red_eye</i>
-                                                        </button>
-                                                    </div>
-                                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                                        <button id="btn_comprar_ahora${productos[i].prod_id}" onmouseenter="btn_comprar_ahora_enter(${productos[i].prod_id});" onmouseleave="btn_comprar_ahora_leave(${productos[i].prod_id});" onclick="comprar_ahora(${productos[i].prod_id}, 1, ${productos[i].prod_stock} )" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                                            <i class="material-icons">add_shopping_cart</i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-        
-                                    </div>`;
+                            imprimir_favoritos(productos[i]);
                             break;
                         case "Nuevo":
-                            document.getElementById("nuevos").innerHTML +=
-                                `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
-    
-                                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
-                                            <div class="card-image">
-                                                <img src="${productos[i].prod_foto}" title="${productos[i].prod_nombre}" alt="${productos[i].prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
-                                            </div>
-                                            <div class="card-content" style="text-align: center; padding: unset;">
-                                                <p style="font-weight: bold;">${productos[i].prod_nombre}</p>
-                                                <p>S/${productos[i].prod_precio_regular}</p>
-                                                <div class="row" style="width: 100%; margin: unset;">
-                                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                                        <button id="btn_vista_rapida${productos[i].prod_id}" onmouseenter="btn_vista_rapida_enter(${productos[i].prod_id});" onmouseleave="btn_vista_rapidaleave(${productos[i].prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(productos[i])})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                                            <i class="material-icons">remove_red_eye</i>
-                                                        </button>
-                                                    </div>
-                                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                                        <button id="btn_comprar_ahora${productos[i].prod_id}" onmouseenter="btn_comprar_ahora_enter(${productos[i].prod_id});" onmouseleave="btn_comprar_ahora_leave(${productos[i].prod_id});" onclick="comprar_ahora(${productos[i].prod_id}, 1, ${productos[i].prod_stock} )" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                                            <i class="material-icons">add_shopping_cart</i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                            
-                                    </div>`;
+                            imprimir_nuevos(productos[i]);
                             break;
                         case "Oferta":
-                            document.getElementById("ofertas").innerHTML +=
-                                `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
-    
-                                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
-                                            <div class="card-image">
-                                                <span style="background: #ff5722; z-index: 1; width: 100px; position: absolute;" class="btn pulse">OFERTA</span>
-                                                <img src="${productos[i].prod_foto}" title="${productos[i].prod_nombre}" alt="${productos[i].prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
-                                            </div>
-                                            <div class="card-content" style="text-align: center; padding: unset;">
-                                                <p style="font-weight: bold;">${productos[i].prod_nombre}</p>
-                                                <p>S/${productos[i].prod_precio_regular}</p>
-                                                <div class="row" style="width: 100%; margin: unset;">
-                                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                                        <button id="btn_vista_rapida${productos[i].prod_id}" onmouseenter="btn_vista_rapida_enter(${productos[i].prod_id});" onmouseleave="btn_vista_rapidaleave(${productos[i].prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(productos[i])})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                                            <i class="material-icons">remove_red_eye</i>
-                                                        </button>
-                                                    </div>
-                                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                                        <button id="btn_comprar_ahora${productos[i].prod_id}" onmouseenter="btn_comprar_ahora_enter(${productos[i].prod_id});" onmouseleave="btn_comprar_ahora_leave(${productos[i].prod_id});" onclick="comprar_ahora(${productos[i].prod_id}, 1, ${productos[i].prod_stock} )" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                                            <i class="material-icons">add_shopping_cart</i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                            
-                                </div>`;
+                            imprimir_ofertas(productos[i]);
                             break;
                     }
                 }
@@ -558,13 +614,26 @@ function vista_rapida(producto) {
     document.getElementById("nombre").innerHTML = producto.prod_nombre;
     document.getElementById("descripcion").innerHTML = producto.prod_descripcion;
     document.getElementById("precio_regular").innerHTML = "S/" + producto.prod_precio_regular;
-    document.getElementById("less_and_add").innerHTML =
-        `
-        <button class="less_plus"><i class="material-icons" style="cursor: pointer;" onclick="less(${producto.prod_id}, ${producto.prod_stock});">delete</i></button>
-        <input type="number" class="cantidad_a_comprar" id="cantidad_a_comprar" value="1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
-        <button class="less_plus"><i class="material-icons" style="cursor: pointer;" onclick="plus(${producto.prod_id}, ${producto.prod_stock});">add</i></button>
+    if (parseInt(producto.prod_stock) > 0) {
+        document.getElementById("less_and_add").innerHTML =
+            `
+                <div style="display: inline-flex; height: 40px; width: 120px;">
+                    <button class="less_plus"><i class="material-icons" style="cursor: pointer;" onclick="less(${producto.prod_id}, ${producto.prod_stock});">delete</i></button>
+                    <input type="number" class="cantidad_a_comprar" id="cantidad_a_comprar" value="1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                    <button class="less_plus"><i class="material-icons" style="cursor: pointer;" onclick="plus(${producto.prod_id}, ${producto.prod_stock});">add</i></button>
+                </div>
+        
         `;
-    document.getElementById("vr_ca").innerHTML = `<span onclick="comprar_ahora(${producto.prod_id}, ${parseInt(document.getElementById("cantidad_a_comprar").value)}, ${producto.prod_stock});" style="cursor: pointer; margin: auto; color: #ffffff; font-weight: bold;">COMPRAR AHORA</span>`;
+        document.getElementById("vr_ca").innerHTML = `
+            <div onclick="comprar_ahora(${producto.prod_id}, ${parseInt(document.getElementById("cantidad_a_comprar").value)}, ${producto.prod_stock});" style="cursor: pointer; border: 1px solid #1461a3; background: #1461a3; display: inline-flex; border-radius: 30px; height: 40px; width: 160px;">
+                <span style="margin: auto; color: #ffffff; font-weight: bold;">COMPRAR AHORA</span>
+            </div>
+        `;
+    } else {
+        document.getElementById("less_and_add").innerHTML = "";
+        document.getElementById("vr_ca").innerHTML = "";
+    }
+
     var detalles = JSON.parse(producto.prod_detalles);
     document.getElementById("detalles").innerHTML = "";
     for (var i = 0; i < detalles.length; i++) {
@@ -583,7 +652,11 @@ function vista_rapida(producto) {
 
     }
     $("#cantidad_a_comprar").keyup(function() {
-        document.getElementById("vr_ca").innerHTML = `<span onclick="comprar_ahora(${producto.prod_id}, ${$("#cantidad_a_comprar").val()}, ${producto.prod_stock});" style="cursor: pointer; margin: auto; color: #ffffff; font-weight: bold;">COMPRAR AHORA</span>`
+        document.getElementById("vr_ca").innerHTML = `
+            <div onclick="comprar_ahora(${producto.prod_id}, ${$("#cantidad_a_comprar").val()}, ${producto.prod_stock});" style="cursor: pointer; border: 1px solid #1461a3; background: #1461a3; display: inline-flex; border-radius: 30px; height: 40px; width: 160px;">
+                <span style="margin: auto; color: #ffffff; font-weight: bold;">COMPRAR AHORA</span>
+            </div>
+        `;
     });
 }
 
@@ -591,7 +664,19 @@ function vista_rapida(producto) {
 /**Comprar ahora */
 var carrito = [];
 
+function crear_carrito() {
+    if (!store.getItem("carrito")) { store.setItem("carrito", JSON.stringify(carrito)); } else {
+        carrito = JSON.parse(store.getItem("carrito"));
+        document.getElementById("cantidad_carrito").innerText = carrito.length;
+    }
+}
+
 function comprar_ahora(codigo, cantidad, stock) {
+    carrito = JSON.parse(store.getItem("carrito"));
+    if (!store.getItem("carrito")) { store.setItem("carrito", JSON.stringify(carrito)); } else {
+        carrito = JSON.parse(store.getItem("carrito"));
+        document.getElementById("cantidad_carrito").innerText = carrito.length;
+    }
     parametros = {
         metodo: "LeerProducto",
         producto: codigo
@@ -629,6 +714,7 @@ function comprar_ahora(codigo, cantidad, stock) {
                 document.getElementById("close_vista_rapida").click();
                 if (carrito.length === 0) {
                     carrito.push({ producto: producto, cantidad: cantidad, precio: parseFloat(precio) });
+                    store.setItem("carrito", JSON.stringify(carrito));
                     document.getElementById("cantidad_carrito").innerText = carrito.length;
                     mostrar_carrito();
                 } else {
@@ -640,6 +726,7 @@ function comprar_ahora(codigo, cantidad, stock) {
                         }
                     }
                     carrito.push({ producto: producto, cantidad: cantidad, precio: precio });
+                    store.setItem("carrito", JSON.stringify(carrito));
                     document.getElementById("cantidad_carrito").innerText = carrito.length;
                     mostrar_carrito();
                 }
@@ -662,7 +749,12 @@ function comprar_ahora(codigo, cantidad, stock) {
 function plus(codigo, stock) {
     var cantidad_actual = parseInt(document.getElementById("cantidad_a_comprar").value);
     cantidad_actual = cantidad_actual + 1;
-    document.getElementById("vr_ca").innerHTML = `<span onclick="comprar_ahora(${codigo}, ${cantidad_actual}, ${stock});" style="cursor: pointer; margin: auto; color: #ffffff; font-weight: bold;">COMPRAR AHORA</span>`
+    document.getElementById("vr_ca").innerHTML =
+        `
+            <div onclick="comprar_ahora(${codigo}, ${cantidad_actual}, ${stock});" style="cursor: pointer; border: 1px solid #1461a3; background: #1461a3; display: inline-flex; border-radius: 30px; height: 40px; width: 160px;">
+                <span style="margin: auto; color: #ffffff; font-weight: bold;">COMPRAR AHORA</span>
+            </div>
+        `;
     document.getElementById("cantidad_a_comprar").value = cantidad_actual;
 }
 
@@ -673,15 +765,20 @@ function less(codigo, stock) {
         return;
     }
     cantidad_actual = cantidad_actual - 1;
-    document.getElementById("vr_ca").innerHTML = `<span onclick="comprar_ahora(${codigo}, ${cantidad_actual}, ${stock});" style="cursor: pointer; margin: auto; color: #ffffff; font-weight: bold;">COMPRAR AHORA</span>`
+    document.getElementById("vr_ca").innerHTML =
+        `
+            <div onclick="comprar_ahora(${codigo}, ${cantidad_actual}, ${stock});" style="cursor: pointer; border: 1px solid #1461a3; background: #1461a3; display: inline-flex; border-radius: 30px; height: 40px; width: 160px;">
+                <span style="margin: auto; color: #ffffff; font-weight: bold;">COMPRAR AHORA</span>
+            </div>
+        `;
     document.getElementById("cantidad_a_comprar").value = cantidad_actual;
 }
 
 /**Mostrar el carrito */
 
 function mostrar_carrito() {
-    console.log(carrito);
-    document.getElementById("subtotal").innerHTML = "<b>Subtotal:</b> S/" + calcular_total();
+    carrito = JSON.parse(store.getItem("carrito"));
+    document.getElementById("subtotal").innerHTML = "<b>Subtotal:</b> S/" + calcular_subtotal();
     $("#items_carrito").html("");
     if (carrito.length === 0) {
         $("#checkout").addClass("hide");
@@ -719,14 +816,14 @@ function mostrar_carrito() {
                                             <button class="less_plus" onclick="_less_item(${carrito[i].producto.prod_id}, ${carrito[i].producto.prod_stock}, ${i}, ${carrito[i].precio})">
                                                 <i class="material-icons" style="cursor: pointer;">remove</i>
                                             </button>
-                                            <input type="number" class="cantidad_a_comprar" id="cantidad_${carrito[i].producto.prod_id}" value="${carrito[i].cantidad}" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                                            <input type="number" readonly class="cantidad_a_comprar" id="cantidad_${carrito[i].producto.prod_id}" value="${carrito[i].cantidad}" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
                                             <button class="less_plus" onclick="_plus_item(${carrito[i].producto.prod_id}, ${carrito[i].producto.prod_stock}, ${i}, ${carrito[i].precio})">
                                                 <i class="material-icons" style="cursor: pointer;">add</i>
                                             </button>
                                         </div>
                                     </div>
                                     <div class="col s12 center-align" style="padding: unset;">
-                                        <button class="less_plus"><i class="material-icons" style="cursor: pointer; color: red;" onclick="eliminar_item(${carrito[i].producto.prod_id});">delete</i></button>
+                                        <button class="less_plus" onclick="eliminar_item(${carrito[i].producto.prod_id});"><i class="material-icons" style="cursor: pointer; color: red;">delete</i></button>
                                     </div>
                                 </div>
                             </div>
@@ -747,6 +844,7 @@ function _plus_item(codigo, stock, index, precio) {
     if (cantidad_actual <= stock) {
         document.getElementById("cantidad_" + codigo).value = cantidad_actual;
         carrito.splice(index, 1, { producto: carrito[index].producto, cantidad: cantidad_actual, precio: precio });
+        store.setItem("carrito", JSON.stringify(carrito));
         mostrar_carrito();
         setTimeout(function() {
             $("#loader").addClass("hide_loader");
@@ -785,6 +883,7 @@ function _less_item(codigo, stock, index, precio) {
     cantidad_actual = cantidad_actual - 1;
     document.getElementById("cantidad_" + codigo).value = cantidad_actual;
     carrito.splice(index, 1, { producto: carrito[index].producto, cantidad: cantidad_actual, precio: precio });
+    store.setItem("carrito", JSON.stringify(carrito));
     mostrar_carrito();
     setTimeout(function() {
         $("#loader").addClass("hide_loader");
@@ -799,6 +898,7 @@ function eliminar_item(codigo) {
     for (var i = 0; i < carrito.length; i++) {
         if (carrito[i].producto.prod_id == codigo) {
             carrito.splice(i, 1);
+            store.setItem("carrito", JSON.stringify(carrito));
             document.getElementById("cantidad_carrito").innerText = carrito.length;
             mostrar_carrito();
             setTimeout(function() {
@@ -811,10 +911,156 @@ function eliminar_item(codigo) {
 }
 
 /**Calcular total del carrito */
-function calcular_total() {
+function calcular_subtotal() {
+    carrito = JSON.parse(store.getItem("carrito"));
     var total = 0;
     for (var i = 0; i < carrito.length; i++) {
         total += (carrito[i].precio * carrito[i].cantidad);
     }
     return parseFloat(total).toFixed(2);
+}
+
+/**Checkout */
+function checkout() {
+    var usuario = []
+    if (store.getItem("cliente")) {
+        usuario = JSON.parse(store.getItem("cliente"));
+        window.location.href = "http://192.168.1.4/piidelo/piidelo_tienda/view/checkout";
+    } else {
+        signup();
+    }
+}
+
+/**Mostrar el carrito en el checkout */
+function mostrar_carrito_checkout() {
+    $("#carrito_checkout").html("");
+    carrito = JSON.parse(store.getItem("carrito"));
+    for (var i = 0; i < carrito.length; i++) {
+        document.getElementById("carrito_checkout").innerHTML +=
+            `
+                <li class="collection-item avatar" style="border: unset;">
+                    <img src="${carrito[i].producto.prod_foto}" alt="${carrito[i].producto.prod_nombre}" title="${carrito[i].producto.prod_nombre}"class="circle">
+                    <span style="font-weight: bold;">${carrito[i].producto.prod_nombre}</span>
+                    <p>Cantidad: ${carrito[i].cantidad}</p>
+                    <p class="secondary-content" style="color: #000000;">S/${parseFloat(carrito[i].precio).toFixed(2)}</i></p>
+                </li>
+                <li class="divider"></li>
+            `;
+    }
+    document.getElementById("subtotal_checkout").innerHTML +=
+        `
+            <li class="collection-item" style="border: unset;">
+                <span">Subtotal</span>
+                <span class="secondary-content" style="color: #000000;">S/${calcular_subtotal()}</span>
+            </li>
+            <li class="collection-item" style="border: unset;">
+                <span">Costo de envío</span>
+                <span class="secondary-content" style="color: #000000;">S/<span id="envio_final">0</span></span>
+            </li>
+            <li class="divider"></li>
+        `;
+    document.getElementById("total_checkout").innerHTML +=
+        `
+            <li class="collection-item" style="border: unset;">
+                <span style="font-weight: bold;">Total</span>
+                <span class="secondary-content" style="color: #000000;"><b>S/<span id="total_final">${calcular_subtotal()}</span></b></span>
+            </li>
+        `;
+
+}
+
+/**Mostrar datos del usuario */
+function mostrar_datos_del_usuario() {
+    var cliente = JSON.parse(store.getItem("cliente"));
+    document.getElementById("cliente_nombre").innerText = cliente.razon_social;
+    document.getElementById("cliente_email").innerText = cliente.email;
+}
+
+/**Listar departamentos */
+function listar_departamentos() {
+    parametros = {
+        metodo: "ListarDepartamentos"
+    }
+    $.ajax({
+        url: "../config/dep_pro_dis/listar_dep_pro_dis",
+        data: parametros,
+        type: "post",
+        cache: false,
+        success: function(resultado) {
+            var departamentos = JSON.parse(resultado);
+            departamentos.forEach(departamento => {
+                var select = document.getElementById("select_departamento_add");
+                var option = document.createElement("option");
+                option.appendChild(document.createTextNode(departamento.nombre));
+                option.value = departamento.codigo;
+                select.appendChild(option);
+            });
+
+            $("#select_departamento_add").formSelect();
+            listar_provincias(departamentos[0].codigo);
+        }
+    });
+}
+
+/**Listar provincias */
+function listar_provincias(departamento) {
+    var select = document.getElementById("select_provincia_add");
+    $("#select_provincia_add").html("");
+    parametros = {
+        metodo: "ListarProvincias",
+        departamento: departamento
+    }
+    $.ajax({
+        url: "../config/dep_pro_dis/listar_dep_pro_dis",
+        data: parametros,
+        type: "post",
+        cache: false,
+        success: function(resultado) {
+            var provincias = JSON.parse(resultado);
+            provincias.forEach(provincia => {
+                var option = document.createElement("option");
+                option.appendChild(document.createTextNode(provincia.nombre));
+                option.value = provincia.codigo;
+                select.appendChild(option);
+            });
+
+            $("#select_provincia_add").formSelect();
+            listar_distritos(provincias[0].codigo);
+            // $("#select_distrito_add").change();
+        }
+    });
+}
+
+/**Listar distritos */
+function listar_distritos(provincia) {
+    var select = document.getElementById("select_distrito_add");
+    $("#select_distrito_add").html("");
+    parametros = {
+        metodo: "ListarDistritos",
+        provincia: provincia
+    }
+    $.ajax({
+        url: "../config/dep_pro_dis/listar_dep_pro_dis",
+        data: parametros,
+        type: "post",
+        cache: false,
+        success: function(resultado) {
+            var distritos = JSON.parse(resultado);
+            distritos.forEach(distrito => {
+                var option = document.createElement("option");
+                option.appendChild(document.createTextNode(distrito.nombre));
+                option.value = distrito.codigo;
+                select.appendChild(option);
+            });
+            $("#select_distrito_add").formSelect();
+        }
+    });
+}
+
+/**Calcular toal checkout */
+function calcular_total_checkout() {
+    var subtotal = parseFloat(calcular_subtotal());
+    var envio = parseFloat(document.getElementById("envio_final").innerText);
+    var total = parseFloat(subtotal + envio).toFixed(2);
+    document.getElementById("total_final").innerText = total;
 }

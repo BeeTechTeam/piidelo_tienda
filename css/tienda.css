@@ -2,7 +2,7 @@
 body {
     font-family: "Quicksand", sans-serif;
     background: #00c6ff;
-    background: -webkit-linear-gradient(to top, #0072ff, #00c6ff);
+    background: -webkit-linear-gradient(to top, #1461a3, #00c6ff);
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -15,16 +15,31 @@ input[type="number"]::-webkit-outer-spin-button {
 /* Scrollbar */
 
 ::-webkit-scrollbar {
-    width: 3px;
+    width: 0px;
     height: 0px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #88532b;
+    background-color: transparent;
 }
 
 ::-webkit-scrollbar-corner {
-    background-color: rgba(0, 0, 0, 0.2);
+    /* background-color: rgba(0, 0, 0, 0.2); */
+    background-color: transparent;
+}
+
+.modal::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+}
+
+.modal::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+
+.modal::-webkit-scrollbar-corner {
+    /* background-color: rgba(0, 0, 0, 0.2); */
+    background-color: transparent;
 }
 
 
@@ -100,7 +115,7 @@ input[type="number"]::-webkit-outer-spin-button {
     font-weight: bold;
     position: absolute;
     top: 10px;
-    right: 100px;
+    right: 55px;
     line-height: 1.2;
 }
 
@@ -268,4 +283,11 @@ textarea.materialize-textarea:focus:not([readonly]) {
     -webkit-box-shadow: 0 1px 0 0 #1461a3 !important;
     box-shadow: 0 1px 0 0 #1461a3 !important;
     font-family: 'Quicksand';
+}
+
+
+/* Contenido de los departamentos, provincias y distritos */
+
+.dropdown-content {
+    height: 125px !important;
 }

@@ -42,8 +42,9 @@
                 <div class="col s4 right-align hide-on-med-and-down">
                     <i onclick="mostrar_buscador();" class="material-icons options-header">search</i>
                     <i onclick="mostrar_carrito();" class="material-icons options-header">shopping_cart<h5 id="cantidad_carrito" class="count-items">0</h5></i>
-                    <i onclick="signin();" class="material-icons options-header">account_circle</i>
-                    <i onclick="signup();" class="material-icons options-header">person_add</i>
+                    <!-- <i class="material-icons options-header">favorite</i> -->
+                    <i onclick="signup();" class="material-icons options-header">account_circle</i>
+                    <!-- <i onclick="signup();" class="material-icons options-header">person_add</i> -->
                 </div>
             </div>
         </div>
@@ -52,8 +53,9 @@
     <!-- Desplegable small -->
     <ul class="sidenav" id="opciones_movil">
         <li onclick="mostrar_carrito();"><a href="#"><i class="material-icons options-header">shopping_cart</i>Mi carrito</a></li>
-        <li onclick="signin();"><a href="#"><i class="material-icons options-header">account_circle</i>Iniciar sesi&oacute;n</a></li>
-        <li onclick="signup();"><a href="#"><i class="material-icons options-header">person_add</i>Registrase</a></li>
+        <!-- <li><a href="#"><i class="material-icons options-header">favorite</i>Favoritos</a></li> -->
+        <li onclick="signup();"><a href="#"><i class="material-icons options-header">account_circle</i>Iniciar sesi&oacute;n</a></li>
+        <!-- <li onclick="signup();"><a href="#"><i class="material-icons options-header">person_add</i>Registrase</a></li> -->
     </ul>
 
     <!-- Buscador -->
@@ -123,14 +125,9 @@
                         <div class="col s12 m12 l12 xl12" style="margin-bottom: 20px;">
                             <span id="precio_regular" style="font-size: 1.25rem; font-weight: bold; color: #757575;"></span>
                         </div>
-                        <div class="col s12 m12 l5 xl5 center-align" style="margin-bottom: 15px;">
-                            <div style="display: inline-flex; height: 40px; width: 120px;" id="less_and_add">
-                            </div>
+                        <div class="col s12 m12 l5 xl5 center-align" style="margin-bottom: 15px;" id="less_and_add">
                         </div>
-                        <div class="col s12 m12 l7 xl7 center-align" style="margin-bottom: 5px;">
-                            <div style="border: 1px solid #1461a3; background: #1461a3; display: inline-flex; border-radius: 30px; height: 40px; width: 160px;" id="vr_ca">
-
-                            </div>
+                        <div class="col s12 m12 l7 xl7 center-align" style="margin-bottom: 5px;" id="vr_ca">
                         </div>
                         <div class="col s12">
                             <ul class="collapsible" style="box-shadow: unset; border: unset;">
@@ -656,7 +653,7 @@
                     <h5 id="subtotal" style="font-size: 1.25rem;"></h5>
                 </div>
                 <div class="col s12 center-align">
-                    <button class="btn" style="border: 1px solid #1461a3; background: #1461a3; color: #ffffff; font-weight: bold; width: 80%;">
+                    <button onclick="checkout();" class="btn" style="border: 1px solid #1461a3; background: #1461a3; color: #ffffff; font-weight: bold; width: 80%;">
                         CHECKOUT
                     </button>
                 </div>
@@ -677,32 +674,35 @@
     <a href="#" data-target="side_carrito" class="sidenav-trigger hide" id="abrir_carrito"></a>
 
     <!-- Modal de registrarse -->
-    <div id="modal_registrarse" class="modal" style="border-radius: 30px;">
-        <div style="text-align: end; padding: 10px 25px;">
-            <i class="material-icons modal-close" id="close_vista_rapida">close</i>
-        </div>
-        <div class="row" style="border-radius: 30px; height: 100%;">
-            <div class="col s12 center-align" style="height: 100%; border-radius: 0px 30px 30px 0px;">
-                <h3 style="font-weight: bold; color: #1461a3;">Crear cuenta</h3>
+    <div id="modal_registrarse" class="modal" style="border-radius: 30px; width: 80%; height: 70vh; background: #ffffff;">
+        <i class="material-icons modal-close hide" id="close_modal_registrarse">close</i>
+        <div class="row" style="border-radius: 30px; height: 100%; margin: unset; ">
+            <div class="col l4 xl4 center-align hide-on-med-and-down" style="color: #ffffff; height: 100%; background: #1461a3; border-radius: 30px 0px 0px 30px; padding-top: 17vh; padding-bottom: 17vh;">
+                <h5 style="font-weight: bold; margin-bottom: 5vh;">¡Bienvenido!</h5>
+                <p style="margin-bottom: 5vh;">Para mantenerse conectado con nosotros, inicie sesi&oacute;n con su informaci&oacute;n personal</p>
+                <button onclick="signin();" class="btn" style="background: #1461a3; border: 1px solid #ffffff; ">INICIAR SESI&Oacute;N</button>
+            </div>
+            <div class="col s12 m12 l8 xl8 center-align" style="height: 100%; border-radius: 0px 30px 30px 0px; background: #ffffff;">
+                <h3 style="font-weight: bold; color: #1461a3; margin: 2vh;">Crear cuenta</h3>
                 <p>Completa la informaci&oacute;n solicitada para crear tu cuenta</p>
                 <form class="col s12">
-                    <div class="input-field col s12 m12 l6 xl6">
+                    <div class="input-field col s12 m6 l6 xl6">
                         <i class="material-icons prefix" style="color: #1461a3;">business_center</i>
                         <input id="txt_ruc_dni" type="number" placeholder="RUC o DNI">
                     </div>
-                    <div class="input-field col s12 m12 l6 xl6">
+                    <div class="input-field col s12 m6 l6 xl6">
                         <i class="material-icons prefix" style="color: #1461a3;">business</i>
                         <input id="txt_razon_social_nombres" type="text" placeholder="Razón Social o Nombres">
                     </div>
-                    <div class="input-field col s12 m12 l6 xl6">
+                    <div class="input-field col s12 m6 l6 xl6">
                         <i class="material-icons prefix" style="color: #1461a3;">phone</i>
                         <input id="txt_telefono" type="number" placeholder="Teléfono">
                     </div>
-                    <div class="input-field col s12 m12 l6 xl6">
+                    <div class="input-field col s12 m6 l6 xl6">
                         <i class="material-icons prefix" style="color: #1461a3;">email</i>
                         <input id="txt_email" type="email" placeholder="Email">
                     </div>
-                    <div class="input-field col s12 m12 l6 xl6">
+                    <div class="input-field col s12 m6 l6 xl6">
                         <i class="material-icons prefix" style="color: #1461a3;">lock</i>
                         <input id="txt_password" type="password" placeholder="Contraseña">
                         <i class="material-icons hide" style="position: absolute; right: 11px; top: 11px; cursor: pointer; color: #1461a3;" id="ver_password">remove_red_eye
@@ -710,7 +710,7 @@
                         <i class="material-icons" style="position: absolute; right: 11px; top: 11px; cursor: pointer;" id="ocultar_password">remove_red_eye
                         </i>
                     </div>
-                    <div class="input-field col s12 m12 l6 xl6">
+                    <div class="input-field col s12 m6 l6 xl6">
                         <i class="material-icons prefix" style="color: #1461a3;">lock</i>
                         <input id="txt_repeat_password" type="password" placeholder="Repetir contraseña">
                         <i class="material-icons hide" style="position: absolute; right: 11px; top: 11px; cursor: pointer; color: #1461a3;" id="ver_password_repeat">remove_red_eye
@@ -736,7 +736,10 @@
                         </div>
                     </div>
                     <div class="col s12" style="padding: 5px;">
-                        <button id="btn_signup" onclick="registrarse();" class="btn" style="width: 130px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">REGISTRARSE</button>
+                        <button id="btn_signup" onclick="registrarse();" class="btn" style="width: 145px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">REGISTRARSE</button>
+                    </div>
+                    <div class="col s12 hide-on-large-only" style="padding: 5px;">
+                        <button onclick="signin();" class="btn" style="background: #1461a3; border: 1px solid #ffffff; width: 145px;">INICIAR SESI&Oacute;N</button>
                     </div>
                 </div>
             </div>
@@ -747,14 +750,11 @@
 
     <!-- Modal de iniciar_sesion -->
     <div id="modal_iniciar_sesion" class="modal" style="border-radius: 30px;">
-        <div style="text-align: end; padding: 10px;">
-            <i class="material-icons modal-close" id="close_vista_rapida">close</i>
-        </div>
         <div class="row" style="border-radius: 30px; height: 100%;">
             <div class="col s12 center-align" style="height: 100%; border-radius: 0px 30px 30px 0px;">
                 <h3 style="font-weight: bold; color: #1461a3; margin: 2vh;">Iniciar sesi&oacute;n</h3>
                 <p>Para mantenerse conectado con nosotros, inicie sesi&oacute;n con su informaci&oacute;n personal</p>
-                <form class="row" style="width: 50%; margin: auto;">
+                <form class="row" style="width: 70%; margin: auto;">
                     <div class="input-field col s12">
                         <i class="material-icons prefix" style="color: #1461a3;">email</i>
                         <input id="txt_email_login" type="email" placeholder="Email">
@@ -796,6 +796,7 @@
             </div>
         </div>
     </div>
+
     <!-- Abrir signup -->
     <a class="modal-trigger hide" href="#modal_iniciar_sesion" id="abrir_signin"></a>
 
@@ -856,27 +857,24 @@
 <script src="libraries/materialize.min.js"></script>
 <script src="libraries/sweetalert2@9.js"></script>
 <script>
-    /**Activar el sidenav */
+    /**Creamos el carrito */
+    crear_carrito();
+
+
     $(document).ready(function() {
+        /**Activar el sidenav */
         $(".sidenav").sidenav();
-    });
-    $(document).ready(function() {
         $("#side_carrito").sidenav({
             edge: "right"
         });
-    });
-    /**Activar el modal */
-    $(document).ready(function() {
+        /**Activar el modal */
         $(".modal").modal();
-    });
-    /**Activar media */
-    $(document).ready(function() {
+        /**Activar media */
         $(".materialboxed").materialbox();
-    });
-    /**Activar collapsible */
-    $(document).ready(function() {
+        /**Activar collapsible */
         $(".collapsible").collapsible();
     });
+
     /**Leer los sliders promocionales */
     leer_sliders();
 
@@ -945,6 +943,19 @@
         $("#txt_repeat_password").prop("type", "text")
         $("#ocultar_password_repeat").addClass("hide");
         $("#ver_password_repeat").removeClass("hide");
+    });
+
+    /**Validar entrada de caracteres */
+    /**Limitar el RUC */
+    document.getElementById("txt_ruc_dni").addEventListener("input", function() {
+        if (this.value.length > 11)
+            this.value = this.value.slice(0, 11);
+    });
+
+    /**Limitar el teléfono */
+    document.getElementById("txt_telefono").addEventListener("input", function() {
+        if (this.value.length > 9)
+            this.value = this.value.slice(0, 9);
     });
 </script>
 

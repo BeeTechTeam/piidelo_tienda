@@ -15,8 +15,9 @@ switch ($metodo) {
         $password   = trim($_POST["password"]);
 
         /**Función para el login */
-        function signin($ruc_dni, $razon_social_nombres, $telefono, $email, $password, $connection)
+        function signup($ruc_dni, $razon_social_nombres, $telefono, $email, $password, $connection)
         {
+
             $select = "select * from cliente where cli_ruc = '" . trim($ruc_dni) . "'  and cli_estado = 'ACTIVO'";
             $result = mysqli_query($connection, $select);
             if ($result->num_rows > 0) {
@@ -55,7 +56,7 @@ switch ($metodo) {
                     // );
                     // echo json_encode($response);
                     crear_usuario($cliente, $email, $password, $razon_social_nombres,  $connection);
-                    // $result->close();
+                    $result->close();
                 } else {
                     $response = array(
                         "codigo" => 108,
@@ -69,13 +70,16 @@ switch ($metodo) {
 
         function crear_usuario($cliente, $email, $password, $razon_social_nombres,  $connection)
         {
-            $select = "select * from usuario where usu_usuario = '" . trim($cliente) . "' and usu_estado = 'ACTIVO'";
+            $select = "select * from usuario where usu_usuario = '" . trim($email) . "' and usu_estado = 'ACTIVO'";
             $result = mysqli_query($connection, $select);
             if ($result->num_rows > 0) {
-                $response = array(
-                    "codigo" => 106,
-                    "mensaje" => "Ya existe el usuario"
-                );
+                $delete = "delete from cliente where cli_id = '" . $cliente . "'";
+                if (mysqli_query($connection, $delete) === true) {
+                    $response = array(
+                        "codigo" => 106,
+                        "mensaje" => "El email ingresado ya se encuentra registrado"
+                    );
+                }
                 echo json_encode($response);
                 $result->close();
             } else {
@@ -99,21 +103,22 @@ switch ($metodo) {
                 if (mysqli_query($connection, $insert) === true) {
                     $response = array(
                         "codigo" => 107,
-                        "mensaje" => "Usuario creado correctamente"
+                        "mensaje" => "Cuenta creada correctamente, ya puedes iniciar sesión"
                     );
                     echo json_encode($response);
-                    $result->close();
                 } else {
-                    $response = array(
-                        "codigo" => 108,
-                        "mensaje" => "Error al crear usuario"
-                    );
+                    $delete = "delete from cliente where cli_id = '" . $cliente . "'";
+                    if (mysqli_query($connection, $delete) === true) {
+                        $response = array(
+                            "codigo" => 108,
+                            "mensaje" => "Error al crear cuenta, intente más tarde".$insert 
+                        );
+                    }
                     echo json_encode($response);
-                    $result->close();
                 }
             }
         }
-        /**Ejecutamos la función para el signin */
-        signin($ruc_dni, $razon_social_nombres, $telefono, $email, $password, $connection);
+        /**Ejecutamos la función para el signup */
+        signup($ruc_dni, $razon_social_nombres, $telefono, $email, $password, $connection);
         break;
 }

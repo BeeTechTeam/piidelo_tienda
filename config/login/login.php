@@ -105,8 +105,6 @@ function signin($usuario, $password, $ruta, $connection)
             c.cli_razon_social as 'razon_social',
             c.cli_telefono as 'telefono',
             c.cli_email as 'email',
-            c.cli_foto as 'foto',
-            c.cli_direccion as 'direccion',
             c.cli_estado as 'estado'
                 from cliente c
                     inner join usuario u on c.cli_id = u.usu_cliente
