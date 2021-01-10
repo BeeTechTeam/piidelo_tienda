@@ -779,61 +779,6 @@
 
     /**Activar buscador */
     buscador();
-
-    /**Contraseñas */
-    /**Ver contraseña */
-    $("#ver_password").on("click", function() {
-        $("#ver_password").addClass("hide");
-        $("#ocultar_password").removeClass("hide");
-        $("#txt_password").prop("type", "password");
-    });
-
-    /**Ocultar contraseña */
-    $("#ocultar_password").on("click", function() {
-        $("#txt_password").prop("type", "text")
-        $("#ocultar_password").addClass("hide");
-        $("#ver_password").removeClass("hide");
-    });
-    /**Ver contraseña */
-    $("#ver_password_login").on("click", function() {
-        $("#ver_password_login").addClass("hide");
-        $("#ocultar_password_login").removeClass("hide");
-        $("#txt_password_login").prop("type", "password");
-    });
-
-    /**Ocultar contraseña */
-    $("#ocultar_password_login").on("click", function() {
-        $("#txt_password_login").prop("type", "text")
-        $("#ocultar_password_login").addClass("hide");
-        $("#ver_password_login").removeClass("hide");
-    });
-
-    /**Ver contraseña */
-    $("#ver_password_repeat").on("click", function() {
-        $("#ver_password_repeat").addClass("hide");
-        $("#ocultar_password_repeat").removeClass("hide");
-        $("#txt_repeat_password").prop("type", "password")
-    });
-
-    /**Ocultar contraseña */
-    $("#ocultar_password_repeat").on("click", function() {
-        $("#txt_repeat_password").prop("type", "text")
-        $("#ocultar_password_repeat").addClass("hide");
-        $("#ver_password_repeat").removeClass("hide");
-    });
-
-    /**Validar entrada de caracteres */
-    /**Limitar el RUC */
-    document.getElementById("txt_ruc_dni").addEventListener("input", function() {
-        if (this.value.length > 11)
-            this.value = this.value.slice(0, 11);
-    });
-
-    /**Limitar el tel&eacute;fono */
-    document.getElementById("txt_telefono").addEventListener("input", function() {
-        if (this.value.length > 9)
-            this.value = this.value.slice(0, 9);
-    });
 </script>
 
 </html>
