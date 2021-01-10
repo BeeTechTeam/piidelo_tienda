@@ -19,7 +19,7 @@
 <body style="background-color: unset;">
     <div class="container" style="width: 80%;">
         <diw class="row">
-            <div class="col s1">
+            <div class="col s12 center-align">
                 <img onclick="inicio();" src="../image/logo.png" width="70px" alt="iZiPedidos" title="iZiPedidos" style="cursor: pointer; margin-top: 10px;" />
             </div>
         </diw>
@@ -29,16 +29,14 @@
                     <a class="tooltipped" data-position="bottom" data-tooltip="Inicio" href="#" onclick="inicio();" style="color: #1461a3;"><i class="material-icons">home</i></a>
                     <a class="tooltipped" data-position="bottom" data-tooltip="Cerrar sesión" href="#" onclick="logout();" style="color: #1461a3;"><i class="material-icons">power_settings_new</i></a>
                 </h5>
-                <!-- <h5 style="margin: unset;"> Perfil </h5> -->
             </div>
         </div>
         <div class="row">
             <div class="col s12" style="font-weight: bold;">
                 <ul class="tabs">
-                    <li class="tab col s3"><a class="active" href="#datos_personales">Datos personales</a></li>
-                    <li class="tab col s3"><a href="#pedidos">Pedidos</a></li>
-                    <li class="tab col s3"><a href="#direcciones">Direcciones de env&iacute;o</a></li>
-                    <li class="tab col s3"><a href="#favoritos">Favoritos</a></li>
+                    <li class="tab col s4"><a class="active" href="#datos_personales">Datos personales</a></li>
+                    <li class="tab col s4"><a href="#pedidos">Pedidos</a></li>
+                    <li class="tab col s4"><a href="#direcciones">Direcciones de env&iacute;o</a></li>
                 </ul>
             </div>
             <div id="datos_personales" class="col s12">
@@ -113,7 +111,6 @@
                     </div>
                 </div>
             </div>
-            <div id="favoritos" class="col s12">Favoritos</div>
         </div>
     </div>
 
@@ -765,39 +762,40 @@
             cache: false,
             success: function(resultado) {
                 var pedidos = JSON.parse(resultado);
-                for (var i = 0; i < pedidos.length; i++) {
-                    var fecha_entregado = pedidos[i].fecha_entregado;
-                    var tipo = pedidos[i].tipo;
-                    if (fecha_entregado === null) {
-                        fecha_entregado = "Sin entregar";
-                    };
-                    var estado = pedidos[i].estado;
-                    var color = "";
-                    switch (estado) {
-                        case "EN PROCESO":
-                            // color = "rgb(250, 92, 32, 1)";
-                            color = "#fa5c20";
-                            break;
-                        case "RECIBIDO":
-                            // color = "rgb(42, 98, 247, 1)";
-                            color = "#2a62f7";
-                            break;
-                        case "ATENDIDO":
-                            // color = "rgb(0, 107, 39, 1)";
-                            color = "#4CAF50;"
-                            break;
-                        case "RECHAZADO":
-                            // color = "rgb(255, 51, 51, 1)";
-                            color = "#F44336";
-                            break;
-                        case "ELIMINADO":
-                            // color = "rgb(103, 58, 183, 1)";
-                            color = "#000000";
-                            break;
-                    }
-                    if (tipo === "Programado") {
-                        document.getElementById("lista_pedidos").innerHTML +=
-                            `
+                if (pedidos.length > 0) {
+                    for (var i = 0; i < pedidos.length; i++) {
+                        var fecha_entregado = pedidos[i].fecha_entregado;
+                        var tipo = pedidos[i].tipo;
+                        if (fecha_entregado === null) {
+                            fecha_entregado = "Sin entregar";
+                        };
+                        var estado = pedidos[i].estado;
+                        var color = "";
+                        switch (estado) {
+                            case "EN PROCESO":
+                                // color = "rgb(250, 92, 32, 1)";
+                                color = "#fa5c20";
+                                break;
+                            case "RECIBIDO":
+                                // color = "rgb(42, 98, 247, 1)";
+                                color = "#2a62f7";
+                                break;
+                            case "ATENDIDO":
+                                // color = "rgb(0, 107, 39, 1)";
+                                color = "#4CAF50;"
+                                break;
+                            case "RECHAZADO":
+                                // color = "rgb(255, 51, 51, 1)";
+                                color = "#F44336";
+                                break;
+                            case "ELIMINADO":
+                                // color = "rgb(103, 58, 183, 1)";
+                                color = "#000000";
+                                break;
+                        }
+                        if (tipo === "Programado") {
+                            document.getElementById("lista_pedidos").innerHTML +=
+                                `
                                 <li class="collection-item avatar" style="border: unset;">
                                     <i class="material-icons circle" style="background: ${color};">local_shipping</i>
                                     <span class="title"><b>Pedido N° ${pedidos[i].codigo}</b></span>
@@ -813,9 +811,9 @@
                                 </li>
                                 <li class="divider"></li>
                             `;
-                    } else {
-                        document.getElementById("lista_pedidos").innerHTML +=
-                            `
+                        } else {
+                            document.getElementById("lista_pedidos").innerHTML +=
+                                `
                                 <li class="collection-item avatar" style="border: unset;">
                                     <i class="material-icons circle" style="background: ${color};">local_shipping</i>
                                     <span class="title"><b>Pedido N° ${pedidos[i].codigo}</b></span>
@@ -830,8 +828,17 @@
                                 </li>
                                 <li class="divider"></li>
                             `;
-                    }
+                        }
 
+                    }
+                } else {
+                    document.getElementById("lista_pedidos").innerHTML =
+                        `
+                            <li class="collection-item" style="border: unset; text-align: center;">
+                                <img src="../image/pedidos.png" alt="iZiPedidos" title="iZiPedidos" style="width: 15%; filter: opacity(0.2);"/>
+                                <h5>Aún no has realizado ningún pedido</h5>
+                            </li>
+                        `;
                 }
             }
         });
@@ -1011,6 +1018,14 @@
                             <li class="divider"></li>
                         `;
                     }
+                } else {
+                    document.getElementById("lista_direcciones").innerHTML =
+                        `
+                            <li class="collection-item" style="border: unset; text-align: center;">
+                                <img src="../image/mapa.png" alt="iZiPedidos" title="iZiPedidos" style="width: 15%; filter: opacity(0.2);"/>
+                                <h5>No tienes direcciones registradas</h5>
+                            </li>
+                        `;
                 }
             }
         });
@@ -1410,7 +1425,6 @@
             longitud = marker.position.lng();
         });
     });
-
 
     function listar_departamentos_new() {
         parametros = {

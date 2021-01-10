@@ -41,8 +41,10 @@
                 </div>
                 <div class="col s4 right-align hide-on-med-and-down">
                     <i onclick="mostrar_buscador();" class="material-icons options-header-landing">search</i>
-                    <i onclick="mostrar_carrito();" class="material-icons options-header-landing">shopping_cart<h5 id="cantidad_carrito" class="count-items">0</h5></i>
+                    <i onclick="mostrar_carrito();" class="material-icons options-header-landing">shopping_cart<h5 id="cantidad_carrito" class="count-items-leading">0</h5></i>
                     <i onclick="perfil();" class="material-icons options-header-landing">account_circle</i>
+                    <i onclick="favoritos_usuario();" id="favoritos_icon" class="material-icons options-header-landing">favorite_border</i>
+                    <i onclick="todos();" id="todos_icon" class="material-icons options-header-landing hide" style="color: #f44336;">favorite</i>
                 </div>
             </div>
         </div>
@@ -52,9 +54,8 @@
     <ul class="sidenav" id="opciones_movil">
         <li onclick="mostrar_carrito();"><a href="#"><i class="material-icons options-header-landing">shopping_cart</i>Mi carrito</a></li>
         <li onclick="perfil();"><a href="#"><i class="material-icons options-header-landing">account_circle</i>Perfil</a></li>
-        <li onclick="perfil();"><a href="#"><i class="material-icons options-header-landing">favorite</i>Favoritos</a></li>
-        <li onclick="perfil();"><a href="#"><i class="material-icons options-header-landing">description</i>Historial de pedidos</a></li>
-        <li onclick="perfil();"><a href="#"><i class="material-icons options-header-landing">map</i>Direcciones de env&iacute;o</a></li>
+        <li onclick="favoritos_usuario();" id="favoritos_icon_small"><a href="#"><i class="material-icons options-header-landing">favorite_border</i>Favoritos</a></li>
+        <li onclick="todos();" id="todos_icon_small" class="hide"><a href="#"><i class="material-icons options-header-landing" style="color: #f44336;">favorite</i>Todos</a></li>
         <li onclick="logout();"><a href="#"><i class="material-icons options-header-landing">power_settings_new</i>Cerrar sesi&oacute;n</a></li>
     </ul>
 
@@ -74,7 +75,7 @@
     </nav>
 
     <!-- Favoritos del mes -->
-    <div class="row" style="margin-top: 50px;">
+    <div class="row" style="margin-top: 50px;" id="seccion_favoritos_del_mes">
         <div class="col s12 center-align">
             <h4 style="font-weight: bold;" id="titulo_favoritos"></h4>
         </div>
@@ -85,7 +86,7 @@
     </div>
 
     <!-- Nuevos -->
-    <div class="row" style="margin-top: 50px;">
+    <div class="row" style="margin-top: 50px;" id="seccion_nuevos">
         <div class="col s12 center-align">
             <h4 style="font-weight: bold;" id="titulo_nuevos"></h4>
         </div>
@@ -96,7 +97,7 @@
     </div>
 
     <!-- Ofertas -->
-    <div class="row" style="margin-top: 50px;">
+    <div class="row" style="margin-top: 50px;" id="seccion_ofertas">
         <div class="col s12 center-align">
             <h4 style="font-weight: bold;" id="titulo_ofertas"></h4>
         </div>

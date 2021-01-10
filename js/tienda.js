@@ -311,177 +311,134 @@ function ocultar_buscador() {
 /**Favoritos del mes */
 function imprimir_favoritos(producto) {
     var stock = parseInt(producto.prod_stock);
-    if (stock === 0) {
-        document.getElementById("favoritos_del_mes").innerHTML +=
-            `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
-        
-                <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
-                    <div class="card-image">
-                        <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
-                    </div>
-                    <div class="card-content" style="text-align: center; padding: unset;">
-                        <p style="font-weight: bold;">${producto.prod_nombre}</p>
-                        <p>S/${producto.prod_precio_regular}</p>
-                        <div class="row" style="width: 100%; margin: unset;">
-                            <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                    <i class="material-icons">remove_red_eye</i>
-                                </button>
-                            </div>
-                            <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                <button class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                    AGOTADO
-                                </button>
+    var favorito = producto.prod_favorito;
+    if (store.getItem("cliente")) {
+        if (stock === 0) {
+            if (favorito) {
+                document.getElementById("favoritos_del_mes").innerHTML +=
+                    `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+
+                    <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">               
+                        <div class="card-image">
+                            <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                        </div>
+                        <div class="card-content" style="text-align: center; padding: unset;">
+                            <i id="remove_${producto.prod_id}" class="material-icons" style="cursor: pointer; color: #f44336;" onclick="remove_favorito(${producto.prod_id})">favorite</i>
+                            <i id="add_${producto.prod_id}" class="material-icons hide" style="cursor: pointer; color: #f44336;" onclick="add_favorito(${producto.prod_id})">favorite_border</i>
+                            <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                            <p>S/${producto.prod_precio_regular}</p>
+                            <div class="row" style="width: 100%; margin: unset;">
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        <i class="material-icons">remove_red_eye</i>
+                                    </button>
+                                </div>
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        AGOTADO
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+    
+                </div>`;
+            } else {
+                document.getElementById("favoritos_del_mes").innerHTML +=
+                    `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
 
-            </div>`;
-    } else {
-        document.getElementById("favoritos_del_mes").innerHTML +=
-            `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
-        
-                <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
-                    <div class="card-image">
-                        <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
-                    </div>
-                    <div class="card-content" style="text-align: center; padding: unset;">
-                        <p style="font-weight: bold;">${producto.prod_nombre}</p>
-                        <p>S/${producto.prod_precio_regular}</p>
-                        <div class="row" style="width: 100%; margin: unset;">
-                            <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                    <i class="material-icons">remove_red_eye</i>
-                                </button>
-                            </div>
-                            <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock}, 'nuevo')" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                    <i class="material-icons">add_shopping_cart</i>
-                                </button>
+                    <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">               
+                        <div class="card-image">
+                            <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                        </div>
+                        <div class="card-content" style="text-align: center; padding: unset;">
+                            <i id="remove_${producto.prod_id}" class="material-icons hide" style="cursor: pointer; color: #f44336;" onclick="remove_favorito(${producto.prod_id})">favorite</i>
+                            <i id="add_${producto.prod_id}" class="material-icons" style="cursor: pointer; color: #f44336;" onclick="add_favorito(${producto.prod_id})">favorite_border</i>
+                            <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                            <p>S/${producto.prod_precio_regular}</p>
+                            <div class="row" style="width: 100%; margin: unset;">
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        <i class="material-icons">remove_red_eye</i>
+                                    </button>
+                                </div>
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        AGOTADO
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
             </div>`;
-    }
-}
-
-function favoritos_del_mes() {
-    $("#favoritos_del_mes").html("");
-    parametros = {
-        metodo: "FavoritosDelMes",
-    };
-    $.ajax({
-        url: "config/producto/producto",
-        data: parametros,
-        type: "post",
-        cache: false,
-        success: function(resultado) {
-            var productos = JSON.parse(resultado);
-            for (var i = 0; i < productos.length; i++) {
-                imprimir_favoritos(productos[i])
             }
-            var longitud = productos.length;
-            if (longitud > 0) {
-                $("#titulo_favoritos").html("Favoritos del mes");
-            }
-        }
-    });
-}
-
-/**Productos nuevos */
-function imprimir_nuevos(producto) {
-    var stock = parseInt(producto.prod_stock);
-    if (stock === 0) {
-        document.getElementById("nuevos").innerHTML +=
-            `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
-                    
-                            <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset;">
-                                <div class="card-image">
-                                    <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
-                                </div>
-                                <div class="card-content" style="text-align: center; padding: unset;">
-                                    <p style="font-weight: bold;">${producto.prod_nombre}</p>
-                                    <p>S/${producto.prod_precio_regular}</p>
-                                    <div class="row" style="width: 100%; margin: unset;">
-                                        <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                            <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                                <i class="material-icons">remove_red_eye</i>
-                                            </button>
-                                        </div>
-                                        <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                            <button class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                                AGOTADO
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                
-                        </div>`;
-
-    } else {
-        document.getElementById("nuevos").innerHTML +=
-            `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+        } else {
+            if (favorito) {
+                document.getElementById("favoritos_del_mes").innerHTML +=
+                    `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
                         
-                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset;">
-                            <div class="card-image">
-                                <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
-                            </div>
-                            <div class="card-content" style="text-align: center; padding: unset;">
-                                <p style="font-weight: bold;">${producto.prod_nombre}</p>
-                                <p>S/${producto.prod_precio_regular}</p>
-                                <div class="row" style="width: 100%; margin: unset;">
-                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                        <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                            <i class="material-icons">remove_red_eye</i>
-                                        </button>
-                                    </div>
-                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                        <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock}, 'nuevo')" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
-                                            <i class="material-icons">add_shopping_cart</i>
-                                        </button>
-                                    </div>
+                    <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">
+                        <div class="card-image">
+                            <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                        </div>
+                        <div class="card-content" style="text-align: center; padding: unset;">
+                            <i id="remove_${producto.prod_id}" class="material-icons" style="cursor: pointer; color: #f44336;" onclick="remove_favorito(${producto.prod_id})">favorite</i>
+                            <i id="add_${producto.prod_id}" class="material-icons hide" style="cursor: pointer; color: #f44336;" onclick="add_favorito(${producto.prod_id})">favorite_border</i>
+                            <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                            <p>S/${producto.prod_precio_regular}</p>
+                            <div class="row" style="width: 100%; margin: unset;">
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        <i class="material-icons">remove_red_eye</i>
+                                    </button>
+                                </div>
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock}, 'nuevo')" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        <i class="material-icons">add_shopping_cart</i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
+                    </div>
             
-                    </div>`;
-    }
-}
-
-function productos_nuevos() {
-    $("#nuevos").html("");
-    parametros = {
-        metodo: "Nuevos",
-    };
-    $.ajax({
-        url: "config/producto/producto",
-        data: parametros,
-        type: "post",
-        cache: false,
-        success: function(resultado) {
-            var productos = JSON.parse(resultado);
-            for (var i = 0; i < productos.length; i++) {
-                imprimir_nuevos(productos[i]);
-            }
-            var longitud = productos.length;
-            if (longitud > 0) {
-                $("#titulo_nuevos").html("Nuevos");
+                </div>`;
+            } else {
+                document.getElementById("favoritos_del_mes").innerHTML +=
+                    `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+                    
+                    <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">
+                        <div class="card-image">
+                            <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                        </div>
+                        <div class="card-content" style="text-align: center; padding: unset;">
+                            <i id="remove_${producto.prod_id}" class="material-icons hide" style="cursor: pointer; color: #f44336;" onclick="remove_favorito(${producto.prod_id})">favorite</i>
+                            <i id="add_${producto.prod_id}" class="material-icons" style="cursor: pointer; color: #f44336;" onclick="add_favorito(${producto.prod_id})">favorite_border</i>
+                            <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                            <p>S/${producto.prod_precio_regular}</p>
+                            <div class="row" style="width: 100%; margin: unset;">
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        <i class="material-icons">remove_red_eye</i>
+                                    </button>
+                                </div>
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock}, 'nuevo')" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        <i class="material-icons">add_shopping_cart</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+                </div>`;
             }
         }
-    });
-}
-
-/**Ofertas */
-function imprimir_ofertas(producto) {
-    var stock = parseInt(producto.prod_stock);
-    if (stock === 0) {
-        document.getElementById("ofertas").innerHTML +=
-            `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
-
+    } else {
+        if (stock === 0) {
+            document.getElementById("favoritos_del_mes").innerHTML +=
+                `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+            
                     <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
                         <div class="card-image">
                             <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
@@ -503,12 +460,11 @@ function imprimir_ofertas(producto) {
                             </div>
                         </div>
                     </div>
-        
-            </div>`;
-    } else {
-        document.getElementById("ofertas").innerHTML +=
-            `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
-
+                </div>`;
+        } else {
+            document.getElementById("favoritos_del_mes").innerHTML +=
+                `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+            
                     <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
                         <div class="card-image">
                             <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
@@ -530,70 +486,601 @@ function imprimir_ofertas(producto) {
                             </div>
                         </div>
                     </div>
+                </div>`;
+        }
+    }
+}
+
+function favoritos_del_mes() {
+    if (store.getItem("cliente")) {
+        $("#favoritos_del_mes").html("");
+        parametros = {
+            metodo: "FavoritosDelMes",
+            cliente: JSON.parse(store.getItem("cliente")).codigo
+        };
+        $.ajax({
+            url: "config/producto/producto",
+            data: parametros,
+            type: "post",
+            cache: false,
+            success: function(resultado) {
+                var productos = JSON.parse(resultado);
+                for (var i = 0; i < productos.length; i++) {
+                    imprimir_favoritos(productos[i]);
+                }
+                var longitud = productos.length;
+                if (longitud > 0) {
+                    $("#titulo_favoritos").html("Favoritos del mes");
+                }
+            }
+        });
+    } else {
+        $("#favoritos_del_mes").html("");
+        parametros = {
+            metodo: "FavoritosDelMes",
+            cliente: 0
+        };
+        $.ajax({
+            url: "config/producto/producto",
+            data: parametros,
+            type: "post",
+            cache: false,
+            success: function(resultado) {
+                var productos = JSON.parse(resultado);
+                for (var i = 0; i < productos.length; i++) {
+                    imprimir_favoritos(productos[i]);
+                }
+                var longitud = productos.length;
+                if (longitud > 0) {
+                    $("#titulo_favoritos").html("Favoritos del mes");
+                }
+            }
+        });
+    }
+}
+
+/**Productos nuevos */
+function imprimir_nuevos(producto) {
+    var stock = parseInt(producto.prod_stock);
+    var favorito = producto.prod_favorito;
+    if (store.getItem("cliente")) {
+        if (stock === 0) {
+            if (favorito) {
+                document.getElementById("nuevos").innerHTML +=
+                    `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+    
+                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">               
+                            <div class="card-image">
+                                <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                            </div>
+                            <div class="card-content" style="text-align: center; padding: unset;">
+                                <i id="remove_${producto.prod_id}" class="material-icons" style="cursor: pointer; color: #f44336;" onclick="remove_favorito(${producto.prod_id})">favorite</i>
+                                <i id="add_${producto.prod_id}" class="material-icons hide" style="cursor: pointer; color: #f44336;" onclick="add_favorito(${producto.prod_id})">favorite_border</i>
+                                <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                                <p>S/${producto.prod_precio_regular}</p>
+                                <div class="row" style="width: 100%; margin: unset;">
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            <i class="material-icons">remove_red_eye</i>
+                                        </button>
+                                    </div>
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            AGOTADO
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+        
+                    </div>`;
+            } else {
+                document.getElementById("nuevos").innerHTML +=
+                    `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+    
+                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">               
+                            <div class="card-image">
+                                <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                            </div>
+                            <div class="card-content" style="text-align: center; padding: unset;">
+                                <i id="remove_${producto.prod_id}" class="material-icons hide" style="cursor: pointer; color: #f44336;" onclick="remove_favorito(${producto.prod_id})">favorite</i>
+                                <i id="add_${producto.prod_id}" class="material-icons" style="cursor: pointer; color: #f44336;" onclick="add_favorito(${producto.prod_id})">favorite_border</i>
+                                <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                                <p>S/${producto.prod_precio_regular}</p>
+                                <div class="row" style="width: 100%; margin: unset;">
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            <i class="material-icons">remove_red_eye</i>
+                                        </button>
+                                    </div>
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            AGOTADO
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                    </div>`;
+            }
+        } else {
+            if (favorito) {
+                document.getElementById("nuevos").innerHTML +=
+                    `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+                            
+                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">
+                            <div class="card-image">
+                                <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                            </div>
+                            <div class="card-content" style="text-align: center; padding: unset;">
+                                <i id="remove_${producto.prod_id}" class="material-icons" style="cursor: pointer; color: #f44336;" onclick="remove_favorito(${producto.prod_id})">favorite</i>
+                                <i id="add_${producto.prod_id}" class="material-icons hide" style="cursor: pointer; color: #f44336;" onclick="add_favorito(${producto.prod_id})">favorite_border</i>
+                                <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                                <p>S/${producto.prod_precio_regular}</p>
+                                <div class="row" style="width: 100%; margin: unset;">
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            <i class="material-icons">remove_red_eye</i>
+                                        </button>
+                                    </div>
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock}, 'nuevo')" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            <i class="material-icons">add_shopping_cart</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
+                    </div>`;
+            } else {
+                document.getElementById("nuevos").innerHTML +=
+                    `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+                        
+                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">
+                            <div class="card-image">
+                                <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                            </div>
+                            <div class="card-content" style="text-align: center; padding: unset;">
+                                <i id="remove_${producto.prod_id}" class="material-icons hide" style="cursor: pointer; color: #f44336;" onclick="remove_favorito(${producto.prod_id})">favorite</i>
+                                <i id="add_${producto.prod_id}" class="material-icons" style="cursor: pointer; color: #f44336;" onclick="add_favorito(${producto.prod_id})">favorite_border</i>
+                                <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                                <p>S/${producto.prod_precio_regular}</p>
+                                <div class="row" style="width: 100%; margin: unset;">
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            <i class="material-icons">remove_red_eye</i>
+                                        </button>
+                                    </div>
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock}, 'nuevo')" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            <i class="material-icons">add_shopping_cart</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            
+                    </div>`;
+            }
+        }
+    } else {
+        if (stock === 0) {
+            document.getElementById("nuevos").innerHTML +=
+                `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+                        
+                    <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset;">
+                        <div class="card-image">
+                            <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                        </div>
+                        <div class="card-content" style="text-align: center; padding: unset;">
+                            <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                            <p>S/${producto.prod_precio_regular}</p>
+                            <div class="row" style="width: 100%; margin: unset;">
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        <i class="material-icons">remove_red_eye</i>
+                                    </button>
+                                </div>
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        AGOTADO
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+                </div>`;
+
+        } else {
+            document.getElementById("nuevos").innerHTML +=
+                `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+                            
+                    <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset;">
+                        <div class="card-image">
+                            <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                        </div>
+                        <div class="card-content" style="text-align: center; padding: unset;">
+                            <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                            <p>S/${producto.prod_precio_regular}</p>
+                            <div class="row" style="width: 100%; margin: unset;">
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        <i class="material-icons">remove_red_eye</i>
+                                    </button>
+                                </div>
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock}, 'nuevo')" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        <i class="material-icons">add_shopping_cart</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+                </div>`;
+        }
+    }
+
+}
+
+function productos_nuevos() {
+    if (store.getItem("cliente")) {
+        $("#nuevos").html("");
+        parametros = {
+            metodo: "Nuevos",
+            cliente: JSON.parse(store.getItem("cliente")).codigo
+        };
+        $.ajax({
+            url: "config/producto/producto",
+            data: parametros,
+            type: "post",
+            cache: false,
+            success: function(resultado) {
+                var productos = JSON.parse(resultado);
+                for (var i = 0; i < productos.length; i++) {
+                    imprimir_nuevos(productos[i]);
+                }
+                var longitud = productos.length;
+                if (longitud > 0) {
+                    $("#titulo_nuevos").html("Nuevos");
+                }
+            }
+        });
+    } else {
+        $("#nuevos").html("");
+        parametros = {
+            metodo: "Nuevos",
+            cliente: 0
+        };
+        $.ajax({
+            url: "config/producto/producto",
+            data: parametros,
+            type: "post",
+            cache: false,
+            success: function(resultado) {
+                var productos = JSON.parse(resultado);
+                for (var i = 0; i < productos.length; i++) {
+                    imprimir_nuevos(productos[i]);
+                }
+                var longitud = productos.length;
+                if (longitud > 0) {
+                    $("#titulo_nuevos").html("Nuevos");
+                }
+            }
+        });
+    }
+}
+
+/**Ofertas */
+function imprimir_ofertas(producto) {
+    var stock = parseInt(producto.prod_stock);
+    var favorito = producto.prod_favorito;
+    if (store.getItem("cliente")) {
+        if (stock === 0) {
+            if (favorito) {
+                document.getElementById("ofertas").innerHTML +=
+                    `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+    
+                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">               
+                            <div class="card-image">
+                                <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                            </div>
+                            <div class="card-content" style="text-align: center; padding: unset;">
+                                <i id="remove_${producto.prod_id}" class="material-icons" style="cursor: pointer; color: #f44336;" onclick="remove_favorito(${producto.prod_id})">favorite</i>
+                                <i id="add_${producto.prod_id}" class="material-icons hide" style="cursor: pointer; color: #f44336;" onclick="add_favorito(${producto.prod_id})">favorite_border</i>
+                                <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                                <p>S/${producto.prod_precio_oferta}</p>
+                                <div class="row" style="width: 100%; margin: unset;">
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            <i class="material-icons">remove_red_eye</i>
+                                        </button>
+                                    </div>
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            AGOTADO
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+        
+                    </div>`;
+            } else {
+                document.getElementById("ofertas").innerHTML +=
+                    `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+    
+                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">               
+                            <div class="card-image">
+                                <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                            </div>
+                            <div class="card-content" style="text-align: center; padding: unset;">
+                                <i id="remove_${producto.prod_id}" class="material-icons hide" style="cursor: pointer; color: #f44336;" onclick="remove_favorito(${producto.prod_id})">favorite</i>
+                                <i id="add_${producto.prod_id}" class="material-icons" style="cursor: pointer; color: #f44336;" onclick="add_favorito(${producto.prod_id})">favorite_border</i>
+                                <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                                <p>S/${producto.prod_precio_oferta}</p>
+                                <div class="row" style="width: 100%; margin: unset;">
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            <i class="material-icons">remove_red_eye</i>
+                                        </button>
+                                    </div>
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            AGOTADO
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                    </div>`;
+            }
+        } else {
+            if (favorito) {
+                document.getElementById("ofertas").innerHTML +=
+                    `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+                            
+                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">
+                            <div class="card-image">
+                                <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                            </div>
+                            <div class="card-content" style="text-align: center; padding: unset;">
+                                <i id="remove_${producto.prod_id}" class="material-icons" style="cursor: pointer; color: #f44336;" onclick="remove_favorito(${producto.prod_id})">favorite</i>
+                                <i id="add_${producto.prod_id}" class="material-icons hide" style="cursor: pointer; color: #f44336;" onclick="add_favorito(${producto.prod_id})">favorite_border</i>
+                                <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                                <p>S/${producto.prod_precio_oferta}</p>
+                                <div class="row" style="width: 100%; margin: unset;">
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            <i class="material-icons">remove_red_eye</i>
+                                        </button>
+                                    </div>
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock}, 'nuevo')" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            <i class="material-icons">add_shopping_cart</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
+                    </div>`;
+            } else {
+                document.getElementById("ofertas").innerHTML +=
+                    `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+                        
+                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">
+                            <div class="card-image">
+                                <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                            </div>
+                            <div class="card-content" style="text-align: center; padding: unset;">
+                                <i id="remove_${producto.prod_id}" class="material-icons hide" style="cursor: pointer; color: #f44336;" onclick="remove_favorito(${producto.prod_id})">favorite</i>
+                                <i id="add_${producto.prod_id}" class="material-icons" style="cursor: pointer; color: #f44336;" onclick="add_favorito(${producto.prod_id})">favorite_border</i>
+                                <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                                <p>S/${producto.prod_precio_oferta}</p>
+                                <div class="row" style="width: 100%; margin: unset;">
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            <i class="material-icons">remove_red_eye</i>
+                                        </button>
+                                    </div>
+                                    <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                        <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock}, 'nuevo')" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                            <i class="material-icons">add_shopping_cart</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            
+                    </div>`;
+            }
+        }
+    } else {
+        if (stock === 0) {
+            document.getElementById("ofertas").innerHTML +=
+                `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+
+                    <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
+                        <div class="card-image">
+                            <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                        </div>
+                        <div class="card-content" style="text-align: center; padding: unset;">
+                            <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                            <p>S/${producto.prod_precio_oferta}</p>
+                            <div class="row" style="width: 100%; margin: unset;">
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        <i class="material-icons">remove_red_eye</i>
+                                    </button>
+                                </div>
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        AGOTADO
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
         
             </div>`;
+        } else {
+            document.getElementById("ofertas").innerHTML +=
+                `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
+
+                    <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
+                        <div class="card-image">
+                            <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
+                        </div>
+                        <div class="card-content" style="text-align: center; padding: unset;">
+                            <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                            <p>S/${producto.prod_precio_oferta}</p>
+                            <div class="row" style="width: 100%; margin: unset;">
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button id="btn_vista_rapida${producto.prod_id}" onmouseenter="btn_vista_rapida_enter(${producto.prod_id});" onmouseleave="btn_vista_rapidaleave(${producto.prod_id});" href="#modal_vista_rapida" onclick='vista_rapida(${JSON.stringify(producto)})' class="btn modal-trigger button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        <i class="material-icons">remove_red_eye</i>
+                                    </button>
+                                </div>
+                                <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
+                                    <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock}, 'nuevo')" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        <i class="material-icons">add_shopping_cart</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+            </div>`;
+        }
     }
 }
 
 function ofertas() {
-    $("#ofertas").html("");
-    parametros = {
-        metodo: "Ofertas",
-    };
-    $.ajax({
-        url: "config/producto/producto",
-        data: parametros,
-        type: "post",
-        cache: false,
-        success: function(resultado) {
-            var productos = JSON.parse(resultado);
-            for (var i = 0; i < productos.length; i++) {
-                imprimir_ofertas(productos[i]);
+    if (store.getItem("cliente")) {
+        $("#ofertas").html("");
+        parametros = {
+            metodo: "Ofertas",
+            cliente: JSON.parse(store.getItem("cliente")).codigo
+        };
+        $.ajax({
+            url: "config/producto/producto",
+            data: parametros,
+            type: "post",
+            cache: false,
+            success: function(resultado) {
+                var productos = JSON.parse(resultado);
+                for (var i = 0; i < productos.length; i++) {
+                    imprimir_ofertas(productos[i]);
+                }
+                var longitud = productos.length;
+                if (longitud > 0) {
+                    $("#titulo_ofertas").html("Ofertas");
+                }
             }
-            var longitud = productos.length;
-            if (longitud > 0) {
-                $("#titulo_ofertas").html("Ofertas");
+        });
+    } else {
+        $("#ofertas").html("");
+        parametros = {
+            metodo: "Ofertas",
+            cliente: 0
+        };
+        $.ajax({
+            url: "config/producto/producto",
+            data: parametros,
+            type: "post",
+            cache: false,
+            success: function(resultado) {
+                var productos = JSON.parse(resultado);
+                for (var i = 0; i < productos.length; i++) {
+                    imprimir_ofertas(productos[i]);
+                }
+                var longitud = productos.length;
+                if (longitud > 0) {
+                    $("#titulo_ofertas").html("Ofertas");
+                }
             }
-        }
-    });
+        });
+    }
 }
 
 /**Buscador de productos */
 function buscador() {
     /**Buscar productos */
-    $("#txt_buscar").keydown(function() {
-        if ($("#txt_buscar").val() != "") {
-            $("#favoritos_del_mes").html("");
-            $("#nuevos").html("");
-            $("#ofertas").html("");
-            parametros = {
-                metodo: "BuscarProductos",
-                nombre: $("#txt_buscar").val()
-            };
-            $.ajax({
-                url: "config/producto/producto",
-                data: parametros,
-                type: "post",
-                cache: false,
-                success: function(resultado) {
-                    var productos = JSON.parse(resultado);
-                    for (var i = 0; i < productos.length; i++) {
-                        switch (productos[i].prod_tipo) {
-                            case "Favorito":
-                                imprimir_favoritos(productos[i]);
-                                break;
-                            case "Nuevo":
-                                imprimir_nuevos(productos[i]);
-                                break;
-                            case "Oferta":
-                                imprimir_ofertas(productos[i]);
-                                break;
+    if (store.getItem("cliente")) {
+        $("#txt_buscar").keydown(function() {
+            if ($("#txt_buscar").val() != "") {
+                $("#favoritos_del_mes").html("");
+                $("#nuevos").html("");
+                $("#ofertas").html("");
+                parametros = {
+                    metodo: "BuscarProductos",
+                    nombre: $("#txt_buscar").val(),
+                    cliente: JSON.parse(store.getItem("cliente")).codigo
+                };
+                $.ajax({
+                    url: "config/producto/producto",
+                    data: parametros,
+                    type: "post",
+                    cache: false,
+                    success: function(resultado) {
+                        var productos = JSON.parse(resultado);
+                        for (var i = 0; i < productos.length; i++) {
+                            switch (productos[i].prod_tipo) {
+                                case "Favorito":
+                                    imprimir_favoritos(productos[i]);
+                                    break;
+                                case "Nuevo":
+                                    imprimir_nuevos(productos[i]);
+                                    break;
+                                case "Oferta":
+                                    imprimir_ofertas(productos[i]);
+                                    break;
+                            }
                         }
                     }
-                }
-            });
-        }
-    });
+                });
+            }
+        });
+    } else {
+        $("#txt_buscar").keydown(function() {
+            if ($("#txt_buscar").val() != "") {
+                $("#favoritos_del_mes").html("");
+                $("#nuevos").html("");
+                $("#ofertas").html("");
+                parametros = {
+                    metodo: "BuscarProductos",
+                    nombre: $("#txt_buscar").val(),
+                    cliente: 0
+                };
+                $.ajax({
+                    url: "config/producto/producto",
+                    data: parametros,
+                    type: "post",
+                    cache: false,
+                    success: function(resultado) {
+                        var productos = JSON.parse(resultado);
+                        for (var i = 0; i < productos.length; i++) {
+                            switch (productos[i].prod_tipo) {
+                                case "Favorito":
+                                    imprimir_favoritos(productos[i]);
+                                    break;
+                                case "Nuevo":
+                                    imprimir_nuevos(productos[i]);
+                                    break;
+                                case "Oferta":
+                                    imprimir_ofertas(productos[i]);
+                                    break;
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
 }
 
 /**Cambiar contenido de los botones */
@@ -820,7 +1307,7 @@ function mostrar_carrito() {
         $("#checkout").addClass("hide");
         document.getElementById("items_carrito").innerHTML =
             `
-                <li class="collection-item" style="padding: 10px 0px;">
+                <li class="collection-item" style="padding: 10px 0px; filter: opacity(0.5);">
                     <div class="row" style="margin: unset;">
                         <div class="col s12 center-align">
                             <i class="medium material-icons" style="cursor: pointer; color: #0c489a;">remove_shopping_cart</i>
@@ -961,7 +1448,7 @@ function checkout() {
     var usuario = []
     if (store.getItem("cliente")) {
         usuario = JSON.parse(store.getItem("cliente"));
-        window.location.href = "http://192.168.1.4/piidelo/piidelo_tienda/view/checkout";
+        window.location.href = ruta_servidor + "/view/checkout";
     } else {
         signup();
         origen = "carrito";
@@ -1100,4 +1587,169 @@ function calcular_total_checkout() {
     var envio = parseFloat(document.getElementById("envio_final").innerText);
     var total = parseFloat(subtotal + envio).toFixed(2);
     document.getElementById("total_final").innerText = total;
+}
+
+/**Añaadir a favoritos */
+function add_favorito(producto) {
+    parametros = {
+        metodo: "AgregarFavorito",
+        producto: producto,
+        cliente: JSON.parse(store.getItem("cliente")).codigo,
+    };
+    $.ajax({
+        url: "config/producto/producto",
+        data: parametros,
+        type: "post",
+        cache: false,
+        success: function(resultado) {
+            var response = JSON.parse(resultado);
+            var codigo = response.codigo;
+            var mensaje = response.mensaje;
+            if (codigo === 112) {
+                Swal.fire({
+                    title: "iZi Pedidos",
+                    icon: "error",
+                    text: mensaje,
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                return;
+            }
+            if (codigo === 111) {
+                $("#add_" + producto).addClass("hide");
+                $("#remove_" + producto).removeClass("hide");
+                return;
+            }
+        }
+    });
+}
+
+/**Eliminar de favoritos */
+function remove_favorito(producto) {
+    parametros = {
+        metodo: "EliminarFavorito",
+        producto: producto,
+        cliente: JSON.parse(store.getItem("cliente")).codigo,
+    };
+    $.ajax({
+        url: "config/producto/producto",
+        data: parametros,
+        type: "post",
+        cache: false,
+        success: function(resultado) {
+            var response = JSON.parse(resultado);
+            var codigo = response.codigo;
+            var mensaje = response.mensaje;
+            if (codigo === 112) {
+                console.log(mensaje)
+                Swal.fire({
+                    title: "iZi Pedidos",
+                    icon: "error",
+                    text: mensaje,
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                return;
+            }
+            if (codigo === 111) {
+                $("#remove_" + producto).addClass("hide");
+                $("#add_" + producto).removeClass("hide");
+                return;
+            }
+        }
+    });
+}
+
+/**Función para mostrar favoritos del usuario */
+function favoritos_usuario() {
+    $("#favoritos_icon").addClass("hide");
+    $("#todos_icon").removeClass("hide");
+    $("#favoritos_icon_small").addClass("hide");
+    $("#todos_icon_small").removeClass("hide");
+    favoritos_del_mes_favoritos();
+    productos_nuevos_favoritos();
+    ofertas_favoritos();
+}
+
+function favoritos_del_mes_favoritos() {
+    $("#favoritos_del_mes").html("");
+    parametros = {
+        metodo: "FavoritosDelMes_favoritos",
+        cliente: JSON.parse(store.getItem("cliente")).codigo
+    };
+    $.ajax({
+        url: "config/producto/producto",
+        data: parametros,
+        type: "post",
+        cache: false,
+        success: function(resultado) {
+            var productos = JSON.parse(resultado);
+            for (var i = 0; i < productos.length; i++) {
+                imprimir_favoritos(productos[i]);
+            }
+            var longitud = productos.length;
+            if (longitud > 0) {
+                $("#titulo_favoritos").html("Favoritos del mes");
+            }
+        }
+    });
+}
+
+function productos_nuevos_favoritos() {
+    $("#nuevos").html("");
+    parametros = {
+        metodo: "Nuevos_favoritos",
+        cliente: JSON.parse(store.getItem("cliente")).codigo
+    };
+    $.ajax({
+        url: "config/producto/producto",
+        data: parametros,
+        type: "post",
+        cache: false,
+        success: function(resultado) {
+            var productos = JSON.parse(resultado);
+            for (var i = 0; i < productos.length; i++) {
+                imprimir_nuevos(productos[i]);
+            }
+            var longitud = productos.length;
+            if (longitud > 0) {
+                $("#titulo_nuevos").html("Nuevos");
+            }
+        }
+    });
+}
+
+function ofertas_favoritos() {
+    $("#ofertas").html("");
+    parametros = {
+        metodo: "Ofertas_favoritos",
+        cliente: JSON.parse(store.getItem("cliente")).codigo
+    };
+    $.ajax({
+        url: "config/producto/producto",
+        data: parametros,
+        type: "post",
+        cache: false,
+        success: function(resultado) {
+            var productos = JSON.parse(resultado);
+            for (var i = 0; i < productos.length; i++) {
+                imprimir_ofertas(productos[i]);
+            }
+            var longitud = productos.length;
+            if (longitud > 0) {
+                $("#titulo_ofertas").html("Ofertas");
+            }
+        }
+    });
+}
+
+/**Función para mostrar todos los prodcutos */
+function todos() {
+    $("#todos_icon").addClass("hide");
+    $("#favoritos_icon").removeClass("hide");
+    $("#todos_icon_small").addClass("hide");
+    $("#favoritos_icon_small").removeClass("hide");
+    favoritos_del_mes();
+    productos_nuevos();
+    ofertas();
 }
