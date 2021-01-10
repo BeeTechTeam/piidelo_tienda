@@ -12,7 +12,7 @@
 </head>
 
 <body style="background-color: unset;">
-    <!-- Div de información  -->
+    <!-- Div de informaci&oacute;n  -->
     <div class="container" style="width: 80%;">
         <diw class="row">
             <div class="col s1">
@@ -29,20 +29,20 @@
                                 <form style="display: inline-flex;" id="radio">
                                     <p style="margin: 10px;">
                                         <label>
-                                            <input name="tipo_pedido" type="radio" value="express" checked />
+                                            <input name="tipo_pedido" type="radio" value="Express" checked />
                                             <span>Env&iacute;o express</span>
                                         </label>
                                     </p>
                                     <p style="margin: 10px;">
                                         <label>
-                                            <input name="tipo_pedido" value="programado" type="radio" />
+                                            <input name="tipo_pedido" value="Programado" type="radio" />
                                             <span>Env&iacute;o programado</span>
                                         </label>
                                     </p>
                                 </form>
                             </div>
                             <div class="col s12" style="padding-left: 55px; padding-right: 55px;">
-                                <span id="pedido_express">Tu pedido será entregado dentro las siguientes 48 horas.</span>
+                                <span id="pedido_express">Tu pedido ser&aacute; entregado dentro las siguientes 48 horas.</span>
                                 <div id="pedido_programado" style="text-align: justify;" class="hide">
                                     <p>
                                         Ingresa la fecha y hora en la que deseas recibir tu pedido.
@@ -120,6 +120,9 @@
         $("#select_direcciones").formSelect();
         /**Activar modal */
         $(".modal").modal();
+        if (!store.getItem("cliente") || !store.getItem("carrito") || JSON.parse(store.getItem("carrito")).length === 0) {
+            inicio();
+        }
     });
 
     /**Lanzar funciones */
@@ -127,7 +130,7 @@
     tipo_pedido();
 
     function tipo_pedido() {
-        if ($("input[name=tipo_pedido]:checked", "#radio").val() === "programado") {
+        if ($("input[name=tipo_pedido]:checked", "#radio").val() === "Programado") {
             $("#pedido_express").addClass("hide");
             $("#pedido_programado").removeClass("hide");
         } else {
@@ -196,7 +199,7 @@
 
     /**Verificamos que los datos ingresados cumplan con las reglas del negocio */
     function verificar_datos_de_entrega() {
-        if ($("input[name=tipo_pedido]:checked", "#radio").val() === "programado") {
+        if ($("input[name=tipo_pedido]:checked", "#radio").val() === "Programado") {
             if ($("#fecha_programacion").val() === "") {
                 Swal.fire({
                     title: "iZi Pedidos",
@@ -256,7 +259,7 @@
         $("#loader_verificar").removeClass("hide");
         var tipo = $("input[name=tipo_pedido]:checked", "#radio").val();
         var fecha, hora, fecha_programacion;
-        if (tipo === "programado") {
+        if (tipo === "Programado") {
             fecha = $("#fecha_programacion").val();
             hora = $("#hora_programacion").val();
             fecha_programacion = fecha + "T" + hora;
@@ -287,8 +290,6 @@
                 var resultado = JSON.parse(response);
                 var codigo = resultado.codigo;
                 var mensaje = resultado.mensaje;
-                console.log(resultado)
-                // var cliente = response.cliente;
                 if (codigo === 108) {
                     Swal.fire({
                         title: "iZi Pedidos",
@@ -307,8 +308,8 @@
                         showConfirmButton: false,
                         timer: 2000
                     });
-                    // listar_direcciones();
-                    // document.getElementById("close_modal_direcciones").click();
+                    store.removeItem("carrito");
+                    
                     return;
                 }
             }

@@ -1,20 +1,20 @@
 <?php
 require_once("../../database/connection.php");
 
-/**Creamos la conexión */
+/**Creamos la conexi&oacute;n */
 $connection = mysqli_connect(server, user, password, database) or die("No se pudo conectar a la base de datos");
 
 $metodo = $_POST["metodo"];
 switch ($metodo) {
     case "Signup":
-        /**Recibimos los parámetros a través del método POST */
+        /**Recibimos los par&aacute;metros a trav&eacute;s del m&eacute;todo POST */
         $ruc_dni  = trim($_POST["ruc_dni"]);
         $razon_social_nombres   = trim($_POST["razon_social_nombres"]);
         $telefono   = trim($_POST["telefono"]);
         $email   = trim($_POST["email"]);
         $password   = trim($_POST["password"]);
 
-        /**Función para el login */
+        /**Funci&oacute;n para el login */
         function signup($ruc_dni, $razon_social_nombres, $telefono, $email, $password, $connection)
         {
 
@@ -103,7 +103,7 @@ switch ($metodo) {
                 if (mysqli_query($connection, $insert) === true) {
                     $response = array(
                         "codigo" => 107,
-                        "mensaje" => "Cuenta creada correctamente, ya puedes iniciar sesión"
+                        "mensaje" => "Cuenta creada correctamente, ya puedes iniciar sesi&oacute;n"
                     );
                     echo json_encode($response);
                 } else {
@@ -111,14 +111,14 @@ switch ($metodo) {
                     if (mysqli_query($connection, $delete) === true) {
                         $response = array(
                             "codigo" => 108,
-                            "mensaje" => "Error al crear cuenta, intente más tarde".$insert 
+                            "mensaje" => "Error al crear cuenta, intente m&aacute;s tarde".$insert 
                         );
                     }
                     echo json_encode($response);
                 }
             }
         }
-        /**Ejecutamos la función para el signup */
+        /**Ejecutamos la funci&oacute;n para el signup */
         signup($ruc_dni, $razon_social_nombres, $telefono, $email, $password, $connection);
         break;
 }

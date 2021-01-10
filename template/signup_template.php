@@ -39,11 +39,11 @@
                     </div>
                     <div class="input-field col s12 m6 l6 xl6">
                         <i class="material-icons prefix" style="color: #1461a3;">business</i>
-                        <input id="txt_razon_social" type="text" placeholder="Razón Social o Nombres">
+                        <input id="txt_razon_social" type="text" placeholder="Raz&oacute;n Social o Nombres">
                     </div>
                     <div class="input-field col s12 m6 l6 xl6">
                         <i class="material-icons prefix" style="color: #1461a3;">phone</i>
-                        <input id="txt_telefono" type="number" placeholder="Teléfono">
+                        <input id="txt_telefono" type="number" placeholder="Tel&eacute;fono">
                     </div>
                     <div class="input-field col s12 m6 l6 xl6">
                         <i class="material-icons prefix" style="color: #1461a3;">email</i>
@@ -51,11 +51,11 @@
                     </div>
                     <div class="input-field col s12 m6 l6 xl6">
                         <i class="material-icons prefix" style="color: #1461a3;">lock</i>
-                        <input id="txt_password" type="password" placeholder="Contraseña">
+                        <input id="txt_password" type="password" autocomplete="on" placeholder="Contraseña">
                     </div>
                     <div class="input-field col s12 m6 l6 xl6">
                         <i class="material-icons prefix" style="color: #1461a3;">lock</i>
-                        <input id="txt_repeat_password" type="password" placeholder="Repetir contraseña">
+                        <input id="txt_repeat_password" type="password" autocomplete="on" placeholder="Repetir contraseña">
                     </div>
                 </form>
                 <!-- </div> -->

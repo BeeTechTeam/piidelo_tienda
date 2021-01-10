@@ -1,7 +1,11 @@
 var rutcon = "../config/",
     rutview = "../view/",
-    store = localStorage;
-var parametros, distribuidor;
+    store = localStorage,
+    // ruta_servidor = "http://192.168.1.4/piidelo/piidelo_tienda";
+    ruta_servidor = "http://localhost/piidelo/piidelo_tienda";
+var parametros, distribuidor, origen = "perfil";
+
+// document.getElementById("nav").style.width = window.screen.width;
 
 /**Funcion para obtener el dia de la semana */
 function dia_de_semana(dia, mes, year) {
@@ -10,18 +14,26 @@ function dia_de_semana(dia, mes, year) {
     return dias[dt.getUTCDay()];
 };
 
-/**Función de validar email */
+/**Funci&oacute;n de validar email */
 function validar_email(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 }
 
 function inicio() {
-    window.location.href = "http://192.168.1.4/piidelo/piidelo_tienda/";
+    if (store.getItem("cliente")) {
+        window.location.href = ruta_servidor + "/landing";
+    } else {
+        window.location.href = ruta_servidor;
+    }
+}
+
+function perfil() {
+    window.location.href = ruta_servidor + "/view/perfil";
 }
 
 function logout() {
     store.clear();
-    window.location.href = "http://192.168.1.4/piidelo/piidelo_tienda/";
+    window.location.href = ruta_servidor;
 }
 /**-------------------------------------------- INDEX -------------------------------------------- */
 /**Signup */
@@ -40,7 +52,7 @@ function registrarse() {
         Swal.fire({
             title: "iZi Pedidos",
             icon: "warning",
-            text: "Ingresa el RUC",
+            text: "Ingresa tu RUC",
             showConfirmButton: false,
             timer: 2000
         });
@@ -56,7 +68,7 @@ function registrarse() {
         Swal.fire({
             title: "iZi Pedidos",
             icon: "warning",
-            text: "Ingresa el teléfono",
+            text: "Ingresa tu teléfono",
             showConfirmButton: false,
             timer: 2000
         });
@@ -64,7 +76,7 @@ function registrarse() {
         Swal.fire({
             title: "iZi Pedidos",
             icon: "warning",
-            text: "Ingresa el email",
+            text: "Ingresa tu email",
             showConfirmButton: false,
             timer: 2000
         });
@@ -135,7 +147,7 @@ function registrarse() {
                     //     timer: 2000
                     // });
                     // setTimeout(function() {
-                    login(email, password)
+                    login(email, password, )
                         // }, 500);
 
                     return;
@@ -202,7 +214,11 @@ function login(email, password) {
                     showConfirmButton: false,
                     timer: 3000
                 });
-                window.location.href = "http://192.168.1.4/piidelo/piidelo_tienda/view/checkout";
+                if (origen === "perfil") {
+                    window.location.href = ruta_servidor + "/view/perfil";
+                } else {
+                    window.location.href = ruta_servidor + "/view/checkout";
+                }
             } else if (codigo === 105) {
                 Swal.fire({
                     title: "iZi Pedidos",
@@ -223,7 +239,7 @@ function iniciar_sesion() {
         Swal.fire({
             title: "iZi Pedidos",
             icon: "warning",
-            text: "Ingresa el email",
+            text: "Ingresa tu email",
             showConfirmButton: false,
             timer: 2000
         });
@@ -340,7 +356,7 @@ function imprimir_favoritos(producto) {
                                 </button>
                             </div>
                             <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock})" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock}, 'nuevo')" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
                                     <i class="material-icons">add_shopping_cart</i>
                                 </button>
                             </div>
@@ -363,8 +379,6 @@ function favoritos_del_mes() {
         type: "post",
         cache: false,
         success: function(resultado) {
-
-            // console.log(resultado)
             var productos = JSON.parse(resultado);
             for (var i = 0; i < productos.length; i++) {
                 imprimir_favoritos(productos[i])
@@ -426,7 +440,7 @@ function imprimir_nuevos(producto) {
                                         </button>
                                     </div>
                                     <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                        <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock})" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                        <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock}, 'nuevo')" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
                                             <i class="material-icons">add_shopping_cart</i>
                                         </button>
                                     </div>
@@ -509,7 +523,7 @@ function imprimir_ofertas(producto) {
                                     </button>
                                 </div>
                                 <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
-                                    <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock})" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
+                                    <button id="btn_comprar_ahora${producto.prod_id}" onmouseenter="btn_comprar_ahora_enter(${producto.prod_id});" onmouseleave="btn_comprar_ahora_leave(${producto.prod_id});" onclick="comprar_ahora(${producto.prod_id}, 1, ${producto.prod_stock}, 'nuevo')" class="btn button_vr_ca" style="color: black; font-weight: bold; font-family: 'Quicksand'; text-transform: none;">
                                         <i class="material-icons">add_shopping_cart</i>
                                     </button>
                                 </div>
@@ -548,44 +562,46 @@ function ofertas() {
 function buscador() {
     /**Buscar productos */
     $("#txt_buscar").keydown(function() {
-        $("#favoritos_del_mes").html("");
-        $("#nuevos").html("");
-        $("#ofertas").html("");
-        parametros = {
-            metodo: "BuscarProductos",
-            nombre: $("#txt_buscar").val()
-        };
-        $.ajax({
-            url: "config/producto/producto",
-            data: parametros,
-            type: "post",
-            cache: false,
-            success: function(resultado) {
-                var productos = JSON.parse(resultado);
-                for (var i = 0; i < productos.length; i++) {
-                    switch (productos[i].prod_tipo) {
-                        case "Favorito":
-                            imprimir_favoritos(productos[i]);
-                            break;
-                        case "Nuevo":
-                            imprimir_nuevos(productos[i]);
-                            break;
-                        case "Oferta":
-                            imprimir_ofertas(productos[i]);
-                            break;
+        if ($("#txt_buscar").val() != "") {
+            $("#favoritos_del_mes").html("");
+            $("#nuevos").html("");
+            $("#ofertas").html("");
+            parametros = {
+                metodo: "BuscarProductos",
+                nombre: $("#txt_buscar").val()
+            };
+            $.ajax({
+                url: "config/producto/producto",
+                data: parametros,
+                type: "post",
+                cache: false,
+                success: function(resultado) {
+                    var productos = JSON.parse(resultado);
+                    for (var i = 0; i < productos.length; i++) {
+                        switch (productos[i].prod_tipo) {
+                            case "Favorito":
+                                imprimir_favoritos(productos[i]);
+                                break;
+                            case "Nuevo":
+                                imprimir_nuevos(productos[i]);
+                                break;
+                            case "Oferta":
+                                imprimir_ofertas(productos[i]);
+                                break;
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     });
 }
 
 /**Cambiar contenido de los botones */
-/**Vista rápida */
+/**Vista r&aacute;pida */
 function btn_vista_rapida_enter(id) {
     document.getElementById("btn_vista_rapida" + id).style.background = `#000000`;
     document.getElementById("btn_vista_rapida" + id).style.color = `#ffffff`;
-    document.getElementById("btn_vista_rapida" + id).innerHTML = `Vista rápida `;
+    document.getElementById("btn_vista_rapida" + id).innerHTML = `Vista r&aacute;pida `;
 }
 
 function btn_vista_rapidaleave(id) {
@@ -607,7 +623,7 @@ function btn_comprar_ahora_leave(id) {
     document.getElementById("btn_comprar_ahora" + id).innerHTML = `<i class="material-icons">add_shopping_cart</i>`;
 }
 
-/**Vista rápida */
+/**Vista r&aacute;pida */
 function vista_rapida(producto) {
 
     document.getElementById("foto").src = producto.prod_foto;
@@ -625,7 +641,7 @@ function vista_rapida(producto) {
         
         `;
         document.getElementById("vr_ca").innerHTML = `
-            <div onclick="comprar_ahora(${producto.prod_id}, ${parseInt(document.getElementById("cantidad_a_comprar").value)}, ${producto.prod_stock});" style="cursor: pointer; border: 1px solid #1461a3; background: #1461a3; display: inline-flex; border-radius: 30px; height: 40px; width: 160px;">
+            <div onclick="comprar_ahora(${producto.prod_id}, ${parseInt(document.getElementById("cantidad_a_comprar").value)}, ${producto.prod_stock}, 'nuevo');" style="cursor: pointer; border: 1px solid #1461a3; background: #1461a3; display: inline-flex; border-radius: 30px; height: 40px; width: 160px;">
                 <span style="margin: auto; color: #ffffff; font-weight: bold;">COMPRAR AHORA</span>
             </div>
         `;
@@ -640,7 +656,7 @@ function vista_rapida(producto) {
         if (detalles[i].detalle === "none") {
             document.getElementById("detalles").innerHTML +=
                 `<tr id=${i} style="border: unset;">
-                    <td colspan="2">No hay información adicional sobre este producto</td>
+                    <td colspan="2">No hay informaci&oacute;n adicional sobre este producto</td>
                 </tr>`;
         } else {
             document.getElementById("detalles").innerHTML +=
@@ -653,7 +669,7 @@ function vista_rapida(producto) {
     }
     $("#cantidad_a_comprar").keyup(function() {
         document.getElementById("vr_ca").innerHTML = `
-            <div onclick="comprar_ahora(${producto.prod_id}, ${$("#cantidad_a_comprar").val()}, ${producto.prod_stock});" style="cursor: pointer; border: 1px solid #1461a3; background: #1461a3; display: inline-flex; border-radius: 30px; height: 40px; width: 160px;">
+            <div onclick="comprar_ahora(${producto.prod_id}, ${$("#cantidad_a_comprar").val()}, ${producto.prod_stock}, 'nuevo');" style="cursor: pointer; border: 1px solid #1461a3; background: #1461a3; display: inline-flex; border-radius: 30px; height: 40px; width: 160px;">
                 <span style="margin: auto; color: #ffffff; font-weight: bold;">COMPRAR AHORA</span>
             </div>
         `;
@@ -671,18 +687,31 @@ function crear_carrito() {
     }
 }
 
-function comprar_ahora(codigo, cantidad, stock) {
-    carrito = JSON.parse(store.getItem("carrito"));
-    if (!store.getItem("carrito")) { store.setItem("carrito", JSON.stringify(carrito)); } else {
-        carrito = JSON.parse(store.getItem("carrito"));
-        document.getElementById("cantidad_carrito").innerText = carrito.length;
+function comprar_ahora(codigo, cantidad, stock, origen) {
+    if (origen === "nuevo") {
+        if (!store.getItem("carrito")) {
+            store.setItem("carrito", JSON.stringify([]));
+        } else {
+            carrito = JSON.parse(store.getItem("carrito"));
+            if (origen === "nuevo") {
+                document.getElementById("cantidad_carrito").innerText = carrito.length;
+            }
+        }
+    } else {
+        store.setItem("carrito", JSON.stringify([]));
     }
     parametros = {
         metodo: "LeerProducto",
         producto: codigo
     };
+    var url = "";
+    if (origen === "nuevo") {
+        url = "config/producto/producto";
+    } else {
+        url = "../config/producto/producto";
+    }
     $.ajax({
-        url: "config/producto/producto",
+        url: url,
         data: parametros,
         type: "post",
         cache: false,
@@ -711,24 +740,31 @@ function comprar_ahora(codigo, cantidad, stock) {
                 return;
             }
             if (cantidad <= stock) {
-                document.getElementById("close_vista_rapida").click();
+                if (origen === "nuevo") {
+                    document.getElementById("close_vista_rapida").click();
+                }
                 if (carrito.length === 0) {
                     carrito.push({ producto: producto, cantidad: cantidad, precio: parseFloat(precio) });
                     store.setItem("carrito", JSON.stringify(carrito));
-                    document.getElementById("cantidad_carrito").innerText = carrito.length;
-                    mostrar_carrito();
+                    if (origen === "nuevo") {
+                        document.getElementById("cantidad_carrito").innerText = carrito.length;
+                        mostrar_carrito();
+                    }
                 } else {
                     for (var i = 0; i < carrito.length; i++) {
                         if (carrito[i].producto.prod_id == codigo) {
                             carrito.splice(i, 1, { producto: carrito[i].producto, cantidad: (carrito[i].cantidad + cantidad), precio: precio });
-                            mostrar_carrito();
+                            if (origen === "nuevo") { mostrar_carrito(); }
                             return;
                         }
                     }
                     carrito.push({ producto: producto, cantidad: cantidad, precio: precio });
                     store.setItem("carrito", JSON.stringify(carrito));
-                    document.getElementById("cantidad_carrito").innerText = carrito.length;
-                    mostrar_carrito();
+                    if (origen === "nuevo") {
+                        document.getElementById("cantidad_carrito").innerText = carrito.length;
+                        mostrar_carrito();
+                    }
+
                 }
             } else {
                 Swal.fire({
@@ -751,7 +787,7 @@ function plus(codigo, stock) {
     cantidad_actual = cantidad_actual + 1;
     document.getElementById("vr_ca").innerHTML =
         `
-            <div onclick="comprar_ahora(${codigo}, ${cantidad_actual}, ${stock});" style="cursor: pointer; border: 1px solid #1461a3; background: #1461a3; display: inline-flex; border-radius: 30px; height: 40px; width: 160px;">
+            <div onclick="comprar_ahora(${codigo}, ${cantidad_actual}, ${stock}, 'nuevo');" style="cursor: pointer; border: 1px solid #1461a3; background: #1461a3; display: inline-flex; border-radius: 30px; height: 40px; width: 160px;">
                 <span style="margin: auto; color: #ffffff; font-weight: bold;">COMPRAR AHORA</span>
             </div>
         `;
@@ -767,7 +803,7 @@ function less(codigo, stock) {
     cantidad_actual = cantidad_actual - 1;
     document.getElementById("vr_ca").innerHTML =
         `
-            <div onclick="comprar_ahora(${codigo}, ${cantidad_actual}, ${stock});" style="cursor: pointer; border: 1px solid #1461a3; background: #1461a3; display: inline-flex; border-radius: 30px; height: 40px; width: 160px;">
+            <div onclick="comprar_ahora(${codigo}, ${cantidad_actual}, ${stock}, 'nuevo');" style="cursor: pointer; border: 1px solid #1461a3; background: #1461a3; display: inline-flex; border-radius: 30px; height: 40px; width: 160px;">
                 <span style="margin: auto; color: #ffffff; font-weight: bold;">COMPRAR AHORA</span>
             </div>
         `;
@@ -928,6 +964,7 @@ function checkout() {
         window.location.href = "http://192.168.1.4/piidelo/piidelo_tienda/view/checkout";
     } else {
         signup();
+        origen = "carrito";
     }
 }
 
@@ -954,7 +991,7 @@ function mostrar_carrito_checkout() {
                 <span class="secondary-content" style="color: #000000;">S/${calcular_subtotal()}</span>
             </li>
             <li class="collection-item" style="border: unset;">
-                <span">Costo de envío</span>
+                <span">Costo de env&iacute;o</span>
                 <span class="secondary-content" style="color: #000000;">S/<span id="envio_final">0</span></span>
             </li>
             <li class="divider"></li>

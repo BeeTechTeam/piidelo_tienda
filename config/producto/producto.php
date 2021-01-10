@@ -1,9 +1,9 @@
 <?php
 require_once("../../database/connection.php");
-/**Creamos la conexión */
+/**Creamos la conexi&oacute;n */
 $connection = mysqli_connect(server, user, password, database) or die("No se pudo conectar a la base de datos");
 
-/**Recibimos el método */
+/**Recibimos el m&eacute;todo */
 $metodo = $_POST["metodo"];
 
 /**Ruta de fotos de los productos */
@@ -214,6 +214,7 @@ switch ($metodo) {
         {
             /**Primero, buscamos en los favoritos del mes */
             /**Favoritos del mes */
+            $productos = array();
             $select =
                 "select 
                     p.*,
@@ -231,18 +232,15 @@ switch ($metodo) {
                 where 
                     p.prod_nombre like '%" . $nombre . "%'
                     and
-                    date_format(pe.ped_fecha_solicitud, '%Y-%m') = '2020-12' 
+                    date_format(pe.ped_fecha_solicitud, '%Y-%m') = '" . date("Y-m") . "' 
                     and
                     p.prod_estado = 'ACTIVO'
                     and 
                     (p.prod_nuevo = 'NO' or p.prod_nuevo is NULL)
                     and
                     p.prod_oferta_inicio is NULL
-                group by pe.ped_id 
-                order by cantidad desc
-                limit 12";
+                group by p.prod_id";
             $resultado = mysqli_query($connection, $select);
-            $productos = array();
             if ($resultado->num_rows > 0) {
                 /**Es un favorito del mes */
                 while ($row = $resultado->fetch_assoc()) {
@@ -253,16 +251,13 @@ switch ($metodo) {
                     } else {
                         $ruta_foto = $ruta . $foto;
                     }
-                    $productos[] = array(
+                    $producto = array(
                         "prod_tipo" => "Favorito",
                         "prod_id" => $row["prod_id"],
                         "prod_nombre" => utf8_decode($row["prod_nombre"]),
                         "prod_descripcion" => utf8_decode($row["prod_descripcion"]),
                         "prod_detalles" => utf8_decode($row["prod_detalles"]),
                         "prod_foto" => $ruta_foto,
-                        // "prod_marca" => $row["mar_nombre"],
-                        // "prod_categoria" => $row["cat_nombre"],
-                        // "prod_subcategoria" => $row["subcat_nombre"],
                         "prod_stock" => $row["prod_stock"],
                         "prod_precio_regular" => $row["prod_precio_regular"],
                         "prod_precio_oferta" => $row["prod_precio_oferta"],
@@ -271,11 +266,11 @@ switch ($metodo) {
                         "prod_oferta_especial" => $row["prod_oferta_especial"],
                         "prod_nuevo" => $row["prod_nuevo"]
                     );
+                    array_push($productos, $producto);
                 }
-                echo json_encode($productos);
                 $resultado->close();
-                return;
             }
+
             /**Segundo, buscamos en nuevos */
             $select =
                 "select 
@@ -295,11 +290,8 @@ switch ($metodo) {
                         p.prod_nuevo = 'SI'
                         and
                         p.prod_oferta_inicio is NULL
-                    group by p.prod_id
-                    order by p.prod_nombre asc
-                    limit 12";
+                    group by p.prod_id";
             $resultado = mysqli_query($connection, $select);
-            $productos = array();
             if ($resultado->num_rows > 0) {
                 /**Es un producto nuevo */
                 while ($row = $resultado->fetch_assoc()) {
@@ -310,16 +302,13 @@ switch ($metodo) {
                     } else {
                         $ruta_foto = $ruta . $foto;
                     }
-                    $productos[] = array(
+                    $producto = array(
                         "prod_tipo" => "Nuevo",
                         "prod_id" => $row["prod_id"],
                         "prod_nombre" => utf8_decode($row["prod_nombre"]),
                         "prod_descripcion" => utf8_decode($row["prod_descripcion"]),
                         "prod_detalles" => utf8_decode($row["prod_detalles"]),
                         "prod_foto" => $ruta_foto,
-                        // "prod_marca" => $row["mar_nombre"],
-                        // "prod_categoria" => $row["cat_nombre"],
-                        // "prod_subcategoria" => $row["subcat_nombre"],
                         "prod_stock" => $row["prod_stock"],
                         "prod_precio_regular" => $row["prod_precio_regular"],
                         "prod_precio_oferta" => $row["prod_precio_oferta"],
@@ -329,9 +318,8 @@ switch ($metodo) {
                         "prod_nuevo" => $row["prod_nuevo"]
                     );
                 }
-                echo json_encode($productos);
+                array_push($productos, $producto);
                 $resultado->close();
-                return;
             }
 
             /**Tercero, buscamos en ofertas */
@@ -357,11 +345,9 @@ switch ($metodo) {
                 p.prod_estado = 'ACTIVO'
                 and 
                 p.prod_oferta_inicio is not NULL
-            group by p.prod_id
-            order by p.prod_nombre asc
-            limit 12";
+            group by p.prod_id";
             $resultado = mysqli_query($connection, $select);
-            $productos = array();
+            // $productos = array();
             if ($resultado->num_rows > 0) {
                 /**Es una oferya */
                 while ($row = $resultado->fetch_assoc()) {
@@ -391,10 +377,12 @@ switch ($metodo) {
                         "prod_nuevo" => $row["prod_nuevo"]
                     );
                 }
-                echo json_encode($productos);
+                array_push($productos, $producto);
+                // echo json_encode($productos);
                 $resultado->close();
-                return;
+                // return;
             }
+            echo json_encode($productos);
         }
         lista_productos($nombre, $connection, $ruta, $ruta_producto);
         break;
@@ -425,16 +413,14 @@ switch ($metodo) {
                 where 
                     p.prod_id = '" . $codigo . "'
                     and
-                    date_format(pe.ped_fecha_solicitud, '%Y-%m') = '2020-12' 
+                    date_format(pe.ped_fecha_solicitud, '%Y-%m') = '" . date("Y-m") . "' 
                     and
                     p.prod_estado = 'ACTIVO'
                     and 
                     (p.prod_nuevo = 'NO' or p.prod_nuevo is NULL)
                     and
                     p.prod_oferta_inicio is NULL
-                group by pe.ped_id 
-                order by cantidad desc
-                limit 12";
+                group by p.prod_id";
             $resultado = mysqli_query($connection, $select);
             if ($resultado->num_rows > 0) {
                 /**Es un favorito del mes */
@@ -466,6 +452,7 @@ switch ($metodo) {
                     );
                 }
                 echo json_encode($producto);
+                // echo $select;
                 $resultado->close();
                 return;
             }
@@ -487,10 +474,7 @@ switch ($metodo) {
                         and
                         p.prod_nuevo = 'SI'
                         and
-                        p.prod_oferta_inicio is NULL
-                    group by p.prod_id
-                    order by p.prod_nombre asc
-                    limit 12";
+                        p.prod_oferta_inicio is NULL";
             $resultado = mysqli_query($connection, $select);
             if ($resultado->num_rows > 0) {
                 /**Es un producto nuevo */
@@ -548,10 +532,7 @@ switch ($metodo) {
                 and
                 p.prod_estado = 'ACTIVO'
                 and 
-                p.prod_oferta_inicio is not NULL
-            group by p.prod_id
-            order by p.prod_nombre asc
-            limit 12";
+                p.prod_oferta_inicio is not NULL";
             $resultado = mysqli_query($connection, $select);
             if ($resultado->num_rows > 0) {
                 /**Es una oferya */

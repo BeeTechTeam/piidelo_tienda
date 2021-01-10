@@ -1,6 +1,6 @@
 <?php
 require_once("../../database/connection.php");
-/**Creamos la conexión */
+/**Creamos la conexi&oacute;n */
 $connection = mysqli_connect(server, user, password, database) or die("No se pudo conectar a la base de datos");
 
 /**Recibimos los datos ingresados */
@@ -11,10 +11,10 @@ $password = trim($_POST["password"]);
 $ruta = "http://localhost/piidelo/piidelo_backoffice/images/usuarios/";
 // $ruta = "https://ecommerce.izipedidos.pe/backoffice/images/usuarios/";
 
-/**Ejecutamos la función de inicio de sesión con los parámetros recibidos */
+/**Ejecutamos la funci&oacute;n de inicio de sesi&oacute;n con los par&aacute;metros recibidos */
 signin($usuario, $password, $ruta, $connection);
 
-/**Función de inicio de sesión */
+/**Funci&oacute;n de inicio de sesi&oacute;n */
 function signin($usuario, $password, $ruta, $connection)
 {
     /**Respuesta */
@@ -47,7 +47,7 @@ function signin($usuario, $password, $ruta, $connection)
         return;
     }
 
-    /**Determinamos la función y el estado del usuario */
+    /**Determinamos la funci&oacute;n y el estado del usuario */
     while ($row = $result_usuario->fetch_assoc()) {
         $funcion = $row["usu_funcion"];
         $estado = $row["usu_estado"];
@@ -100,19 +100,23 @@ function signin($usuario, $password, $ruta, $connection)
     /**Usuario de cliente */
     if ($funcion === "CLIENTE") {
         $select_cliente = "select
-            c.cli_id as 'codigo',
-            c.cli_ruc as 'ruc',
-            c.cli_razon_social as 'razon_social',
-            c.cli_telefono as 'telefono',
-            c.cli_email as 'email',
-            c.cli_estado as 'estado'
-                from cliente c
-                    inner join usuario u on c.cli_id = u.usu_cliente
-                    where 
-                        u.usu_usuario = '" . $usuario . "' and 
-                        u.usu_password = '" . $password . "' and 
-                        u.usu_estado = 'ACTIVO' and
-                        c.cli_estado = 'ACTIVO'";
+                                c.cli_id as 'codigo',
+                                c.cli_ruc as 'ruc',
+                                c.cli_razon_social as 'razon_social',
+                                c.cli_telefono as 'telefono',
+                                c.cli_email as 'email',            
+                                c.cli_direccion as 'direccion',
+                                u.usu_id as 'codigo_usuario',
+                                u.usu_nombres as 'nombres',
+                                u.usu_apellidos as 'apellidos', 
+                                u.usu_usuario as 'usuario'
+                            from cliente c
+                                inner join usuario u on c.cli_id = u.usu_cliente
+                                where 
+                                    u.usu_usuario = '" . $usuario . "' and 
+                                    u.usu_password = '" . $password . "' and 
+                                    u.usu_estado = 'ACTIVO' and
+                                    c.cli_estado = 'ACTIVO'";
         $result_cliente = mysqli_query($connection, $select_cliente);
         if ($result_cliente->num_rows > 0) {
             while ($row = $result_cliente->fetch_assoc()) {
@@ -122,7 +126,11 @@ function signin($usuario, $password, $ruta, $connection)
                     "razon_social" => trim($row["razon_social"]),
                     "telefono" => trim($row["telefono"]),
                     "email" => trim($row["email"]),
-                    "estado" => trim($row["estado"]),
+                    "direccion" => trim($row["direccion"]),
+                    "codigo_usuario" => trim($row["codigo_usuario"]),
+                    "nombres" => trim($row["nombres"]),
+                    "apellidos" => trim($row["apellidos"]),
+                    "usuario" => trim($row["usuario"])
                 );
             }
             $response = array(

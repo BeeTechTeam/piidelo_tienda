@@ -12,7 +12,7 @@
 </head>
 
 <body style="background-color: unset;">
-    <!-- Div de información  -->
+    <!-- Div de informaci&oacute;n  -->
     <div class="container" style="width: 80%;">
         <diw class="row">
             <div class="col s1">
@@ -52,7 +52,7 @@
                                 <input readonly id="txt_dni" type="text" placeholder="DNI">
                             </div>
                             <div class="input-field col s12" style=" padding: 0px 5px 0px 0px; margin: unset;">
-                                <input readonly id="txt_direccion" type="text" placeholder="Dirección completa">
+                                <input readonly id="txt_direccion" type="text" placeholder="Direcci&oacute;n completa">
                             </div>
                             <div class="input-field col s12 m6 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
                                 <input readonly id="txt_departamento" type="text" placeholder="Departamento">
@@ -64,7 +64,7 @@
                                 <input readonly id="txt_distrito" type="text" placeholder="Distrito">
                             </div>
                             <div class="input-field col s12 m6 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
-                                <input readonly id="txt_telefono" type="text" placeholder="Teléfono">
+                                <input readonly id="txt_telefono" type="text" placeholder="Tel&eacute;fono">
                             </div>
                         </form>
                         <div class="input-field">
@@ -104,12 +104,12 @@
     </div>
 
     <!-- Modal para agregar direcciones -->
-    <div id="modal_direcciones" class="modal" style="padding: 10px; border-radius: 30px;">
+    <div id="modal_direcciones" class="modal" style="padding: 10px;">
         <i class="material-icons modal-close hide" id="close_modal_direcciones">close</i>
         <div class="row" style="border-radius: 30px; height: 100%; margin: unset; ">
             <div class="col s12 center-align" style="height: 100%; border-radius: 0px 30px 30px 0px; background: #ffffff;">
                 <h5 style="font-weight: bold; color: #1461a3; margin: 2vh;">Crear direcci&oacute;n</h5>
-                <p>Completa la informaci&oacute;n solicitada para crear una nueva dirección, Mueve el marcador en el mapa para obtener la dirección y coordenadas</p>
+                <p>Completa la informaci&oacute;n solicitada para crear una nueva direcci&oacute;n, Mueve el marcador en el mapa para obtener la direcci&oacute;n y coordenadas</p>
                 <form>
                     <div class="input-field col s12 m12 l8 xl8" style=" padding: 0px 5px 0px 0px; margin: unset;">
                         <input id="txt_nombres_add" type="text" placeholder="Nombres">
@@ -118,7 +118,7 @@
                         <input id="txt_dni_add" type="number" placeholder="DNI">
                     </div>
                     <div class="input-field col s12" style=" padding: 0px 5px 0px 0px; margin: unset;">
-                        <input id="txt_direccion_add" type="text" placeholder="Dirección completa">
+                        <input id="txt_direccion_add" type="text" placeholder="Direcci&oacute;n completa">
                     </div>
                     <div class="input-field col s12 m6 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
                         <select id="select_departamento_add">
@@ -133,7 +133,7 @@
                         </select>
                     </div>
                     <div class="input-field col s12 m6 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
-                        <input id="txt_telefono_add" type="number" placeholder="Teléfono">
+                        <input id="txt_telefono_add" type="number" placeholder="Tel&eacute;fono">
                     </div>
                     <div class="input-field col s12" style=" padding: 0px 5px 0px 0px; margin: unset;">
                         <div id="mapa_add" style="width: 100%; height: 150px; border-radius: 10px"></div>
@@ -185,6 +185,9 @@
         $("#select_direcciones").formSelect();
         /**Activar modal */
         $(".modal").modal();
+        if (!store.getItem("cliente") || !store.getItem("carrito") || JSON.parse(store.getItem("carrito")).length === 0) {
+            inicio();
+        }
     });
 
     /**Lanzar funciones */
@@ -223,7 +226,7 @@
             Swal.fire({
                 title: "iZi Pedidos",
                 icon: "warning",
-                text: "Su navegador no es compatible con la geolocalización",
+                text: "Su navegador no es compatible con la geolocalizaci&oacute;n",
                 showConfirmButton: false,
                 timer: 2000
             });
@@ -245,7 +248,7 @@
         console.log("ERROR (" + error.code + "): " + error.message);
     }
 
-    /**Iniciar el mapa de agregar dirección */
+    /**Iniciar el mapa de agregar direcci&oacute;n */
     $("#abrir_modal_direcciones").on("click", function() {
         var current_position = {
             lat: latitud,
@@ -321,7 +324,7 @@
         });
     }
 
-    /**Agregar dirección */
+    /**Agregar direcci&oacute;n */
     function agregar_direccion() {
         var nombres = $("#txt_nombres_add").val();
         var dni = $("#txt_dni_add").val();
@@ -493,7 +496,7 @@
     /**Guardamos la direccion de envio en el localstorage */
     function continuar() {
         store.setItem("direccion_envio", $("#select_direcciones").val());
-        window.location.href = "http://192.168.1.4/piidelo/piidelo_tienda/view/envio_pago";
+        window.location.href = ruta_servidor + "/view/envio_pago";
     }
 </script>
 

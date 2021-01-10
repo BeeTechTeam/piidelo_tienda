@@ -40,9 +40,9 @@
                     <i onclick="mostrar_buscador();" class="material-icons options-header">search</i>
                 </div>
                 <div class="col s4 right-align hide-on-med-and-down">
-                    <i onclick="mostrar_buscador();" class="material-icons options-header">search</i>
-                    <i onclick="mostrar_carrito();" class="material-icons options-header">shopping_cart<h5 id="cantidad_carrito" class="count-items">0</h5></i>
-                    <i onclick="signup();" class="material-icons options-header">account_circle</i>
+                    <i onclick="mostrar_buscador();" class="material-icons options-header-landing">search</i>
+                    <i onclick="mostrar_carrito();" class="material-icons options-header-landing">shopping_cart<h5 id="cantidad_carrito" class="count-items">0</h5></i>
+                    <i onclick="perfil();" class="material-icons options-header-landing">account_circle</i>
                 </div>
             </div>
         </div>
@@ -50,8 +50,12 @@
 
     <!-- Desplegable small -->
     <ul class="sidenav" id="opciones_movil">
-        <li onclick="mostrar_carrito();"><a href="#"><i class="material-icons options-header">shopping_cart</i>Mi carrito</a></li>
-        <li onclick="signup();"><a href="#"><i class="material-icons options-header">account_circle</i>Iniciar sesi&oacute;n</a></li>
+        <li onclick="mostrar_carrito();"><a href="#"><i class="material-icons options-header-landing">shopping_cart</i>Mi carrito</a></li>
+        <li onclick="perfil();"><a href="#"><i class="material-icons options-header-landing">account_circle</i>Perfil</a></li>
+        <li onclick="perfil();"><a href="#"><i class="material-icons options-header-landing">favorite</i>Favoritos</a></li>
+        <li onclick="perfil();"><a href="#"><i class="material-icons options-header-landing">description</i>Historial de pedidos</a></li>
+        <li onclick="perfil();"><a href="#"><i class="material-icons options-header-landing">map</i>Direcciones de env&iacute;o</a></li>
+        <li onclick="logout();"><a href="#"><i class="material-icons options-header-landing">power_settings_new</i>Cerrar sesi&oacute;n</a></li>
     </ul>
 
     <!-- Buscador -->
@@ -669,133 +673,6 @@
     <!-- Abrir carrito -->
     <a href="#" data-target="side_carrito" class="sidenav-trigger hide" id="abrir_carrito"></a>
 
-    <!-- Modal de registrarse -->
-    <div id="modal_registrarse" class="modal" style="width: 80%; height: 70vh; background: #ffffff;">
-        <i class="material-icons modal-close hide" id="close_modal_registrarse">close</i>
-        <div class="row" style="border-radius: 30px; height: 100%; margin: unset; ">
-            <div class="col l4 xl4 center-align hide-on-med-and-down" style="color: #ffffff; height: 100%; background: #1461a3; border-radius: 30px 0px 0px 30px; padding-top: 17vh; padding-bottom: 17vh;">
-                <h5 style="font-weight: bold; margin-bottom: 5vh;">¡Bienvenido!</h5>
-                <p style="margin-bottom: 5vh;">Para mantenerse conectado con nosotros, inicie sesi&oacute;n con su informaci&oacute;n personal</p>
-                <button onclick="signin();" class="btn" style="background: #1461a3; border: 1px solid #ffffff; ">INICIAR SESI&Oacute;N</button>
-            </div>
-            <div class="col s12 m12 l8 xl8 center-align" style="height: 100%; border-radius: 0px 30px 30px 0px; background: #ffffff;">
-                <h3 style="font-weight: bold; color: #1461a3; margin: 2vh;">Crear cuenta</h3>
-                <p>Completa la informaci&oacute;n solicitada para crear tu cuenta</p>
-                <form class="col s12">
-                    <div class="input-field col s12 m6 l6 xl6">
-                        <i class="material-icons prefix" style="color: #1461a3;">business_center</i>
-                        <input id="txt_ruc_dni" type="number" placeholder="RUC o DNI">
-                    </div>
-                    <div class="input-field col s12 m6 l6 xl6">
-                        <i class="material-icons prefix" style="color: #1461a3;">business</i>
-                        <input id="txt_razon_social_nombres" type="text" placeholder="Raz&oacute;n Social o Nombres">
-                    </div>
-                    <div class="input-field col s12 m6 l6 xl6">
-                        <i class="material-icons prefix" style="color: #1461a3;">phone</i>
-                        <input id="txt_telefono" type="number" placeholder="Tel&eacute;fono">
-                    </div>
-                    <div class="input-field col s12 m6 l6 xl6">
-                        <i class="material-icons prefix" style="color: #1461a3;">email</i>
-                        <input id="txt_email" type="email" placeholder="Email">
-                    </div>
-                    <div class="input-field col s12 m6 l6 xl6">
-                        <i class="material-icons prefix" style="color: #1461a3;">lock</i>
-                        <input id="txt_password" type="password" autocomplete="on" placeholder="Contraseña">
-                        <i class="material-icons hide" style="position: absolute; right: 11px; top: 11px; cursor: pointer; color: #1461a3;" id="ver_password">remove_red_eye
-                        </i>
-                        <i class="material-icons" style="position: absolute; right: 11px; top: 11px; cursor: pointer;" id="ocultar_password">remove_red_eye
-                        </i>
-                    </div>
-                    <div class="input-field col s12 m6 l6 xl6">
-                        <i class="material-icons prefix" style="color: #1461a3;">lock</i>
-                        <input id="txt_repeat_password" type="password" autocomplete="on" placeholder="Repetir contraseña">
-                        <i class="material-icons hide" style="position: absolute; right: 11px; top: 11px; cursor: pointer; color: #1461a3;" id="ver_password_repeat">remove_red_eye
-                        </i>
-                        <i class="material-icons" style="position: absolute; right: 11px; top: 11px; cursor: pointer;" id="ocultar_password_repeat">remove_red_eye
-                        </i>
-                    </div>
-                </form>
-                <div class="row">
-                    <div class="col s12" style="text-align: center;">
-                        <div class="preloader-wrapper big active hide" style="width: 50px; height: 50px;" id="loader_signup">
-                            <div class="spinner-layer" style="border-color: #1461a3;">
-                                <div class="circle-clipper left">
-                                    <div class="circle"></div>
-                                </div>
-                                <div class="gap-patch">
-                                    <div class="circle"></div>
-                                </div>
-                                <div class="circle-clipper right">
-                                    <div class="circle"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col s12" style="padding: 5px;">
-                        <button id="btn_signup" onclick="registrarse();" class="btn" style="width: 145px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">REGISTRARSE</button>
-                    </div>
-                    <div class="col s12 hide-on-large-only" style="padding: 5px;">
-                        <button onclick="signin();" class="btn" style="background: #1461a3; border: 1px solid #ffffff; width: 145px;">INICIAR SESI&Oacute;N</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Abrir signup -->
-    <a class="modal-trigger hide" href="#modal_registrarse" id="abrir_signup"></a>
-
-    <!-- Modal de iniciar_sesion -->
-    <div id="modal_iniciar_sesion" class="modal">
-        <div class="row" style="border-radius: 30px; height: 100%;">
-            <div class="col s12 center-align" style="height: 100%; border-radius: 0px 30px 30px 0px;">
-                <h3 style="font-weight: bold; color: #1461a3; margin: 2vh;">Iniciar sesi&oacute;n</h3>
-                <p>Para mantenerse conectado con nosotros, inicie sesi&oacute;n con su informaci&oacute;n personal</p>
-                <form class="row" style="width: 70%; margin: auto;">
-                    <div class="input-field col s12">
-                        <i class="material-icons prefix" style="color: #1461a3;">email</i>
-                        <input id="txt_email_login" type="email" placeholder="Email">
-                    </div>
-                    <div class="input-field col s12">
-                        <i class="material-icons prefix" style="color: #1461a3;">lock</i>
-                        <input id="txt_password_login" type="password" autocomplete="on" placeholder="Contraseña">
-                        <i class="material-icons hide" style="position: absolute; right: 11px; top: 11px; cursor: pointer; color: #1461a3;" id="ver_password_login">remove_red_eye
-                        </i>
-                        <i class="material-icons" style="position: absolute; right: 11px; top: 11px; cursor: pointer;" id="ocultar_password_login">remove_red_eye
-                        </i>
-                    </div>
-                </form>
-                <div class="row">
-                    <div class="col s12" style="text-align: center;">
-                        <div class="preloader-wrapper big active hide" style="width: 50px; height: 50px;" id="loader_login">
-                            <div class="spinner-layer" style="border-color: #1461a3;">
-                                <div class="circle-clipper left">
-                                    <div class="circle"></div>
-                                </div>
-                                <div class="gap-patch">
-                                    <div class="circle"></div>
-                                </div>
-                                <div class="circle-clipper right">
-                                    <div class="circle"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col s12" style="padding: 5px;">
-                        <button id="btn_login" onclick="iniciar_sesion();" class="btn" style="width: 150px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">INICIAR SESI&Oacute;N</button>
-                    </div>
-                    <div class="col s12" style="padding: 5px;">
-                        <a style="color: #1461a3;" href="https://api.whatsapp.com/send?phone=51922944350&text=Vengo%20de%20la%20web%20iZiPedidos,%20quiero%20saber%20sobre%20" target="_blank">
-                            ¿Olvidaste tu contraseña?
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Abrir signup -->
-    <a class="modal-trigger hide" href="#modal_iniciar_sesion" id="abrir_signin"></a>
-
     <!-- Footer -->
     <footer class="page-footer">
         <div class="row">
@@ -869,7 +746,8 @@
         $(".materialboxed").materialbox();
         /**Activar collapsible */
         $(".collapsible").collapsible();
-        if (store.getItem("cliente")) {
+
+        if (!store.getItem("cliente")) {
             inicio();
         }
     });

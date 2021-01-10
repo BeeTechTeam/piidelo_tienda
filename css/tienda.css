@@ -16,7 +16,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 ::-webkit-scrollbar {
     width: 0px;
-    height: 0px;
+    height: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -75,7 +75,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .mostrar_buscador {
     z-index: 3;
-    position: absolute;
+    position: fixed;
     top: 0px;
     -webkit-transition: all 1s;
     -moz-transition: all 1s;
@@ -123,6 +123,13 @@ input[type="number"]::-webkit-outer-spin-button {
 /* Opciones header */
 
 .options-header {
+    cursor: pointer;
+    margin: 0px 8px 0px 8px;
+    color: #000000;
+    display: inline-block !important;
+}
+
+.options-header-landing {
     cursor: pointer;
     margin: 0px 8px 0px 8px;
     color: #000000;
@@ -186,7 +193,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 
-/* Botones de comprar ahora y vista rápida */
+/* Botones de comprar ahora y vista r&aacute;pida */
 
 .button_vr_ca {
     width: 150px !important;
@@ -207,7 +214,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 
-/* Botones de comprar ahora y vista rápida */
+/* Botones de comprar ahora y vista r&aacute;pida */
 
 .less_plus {
     width: 40px !important;
@@ -290,4 +297,11 @@ textarea.materialize-textarea:focus:not([readonly]) {
 
 .dropdown-content {
     height: 125px !important;
+}
+
+
+/* Bordes redondos del moda */
+
+.modal {
+    border-radius: 30px !important;
 }
