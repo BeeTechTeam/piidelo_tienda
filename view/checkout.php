@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../css/materialize.min.css" />
     <link rel="shortcut icon" href="../image/logo.ico" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <title>iZi Pedidos</title>
+    <title>Piidelo.com</title>
 </head>
 
 <body style="background-color: unset;">
@@ -16,7 +16,7 @@
     <div class="container" style="width: 80%;">
         <diw class="row">
             <div class="col s1">
-                <img onclick="inicio();" src="../image/logo.png" width="70px" alt="iZiPedidos" title="iZiPedidos" style="cursor: pointer; margin-top: 10px;" />
+                <img onclick="inicio();" src="../image/logo.png" width="200px" style="cursor: pointer;" />
             </div>
         </diw>
         <diw class="row">
@@ -42,7 +42,8 @@
                             </select>
                             <label>Direcciones guardadas</label>
                             <p><a id="abrir_modal_direcciones" href="#modal_direcciones" class="modal-trigger">Agregar nueva direcci&oacute;n</a></p>
-                            <p><a href="#modal_zonas_cobertura" class="modal-trigger" style="color: #1461a3; font-weight: bold; background: yellow;">Zonas de cobertura</a></p>
+                            <p id="zona_no_disponible" class="hide" style="color: #F44336; font-weight: bold;">Su distrito no está dentro de nuestra zona de cobertura, lamentamos no poder atenderlo por ahora. Revisar nuestras zonas de cobertura disponibles, gracias. </p>
+                            <p><a href="#modal_zonas_cobertura" class="modal-trigger" style="color: #1461a3; font-weight: bold; background: #f8f300;">Zonas de cobertura</a></p>
                         </div>
                         <form>
                             <div class="input-field col s12 m12 l8 xl8" style=" padding: 0px 5px 0px 0px; margin: unset;">
@@ -75,7 +76,7 @@
                                 <button onclick="continuar();" id="btn_continuar" class="btn hide" style="margin: 15px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">Continuar</button>
                             </div>
                             <div class="col s12 center-align">
-                                <a href="#" onclick="inicio();" style="color: #1461a3;"><i class="material-icons">home</i></a>
+                                <a class="tooltipped" data-position="bottom" data-tooltip="Inicio" href="#" onclick="inicio();" style="color: #1461a3;"><i class="material-icons">home</i></a>
                             </div>
                         </div>
                     </div>
@@ -185,6 +186,8 @@
         $("#select_direcciones").formSelect();
         /**Activar modal */
         $(".modal").modal();
+        /**Activar tooltip */
+        $(".tooltipped").tooltip();
         if (!store.getItem("cliente") || !store.getItem("carrito") || JSON.parse(store.getItem("carrito")).length === 0) {
             inicio();
         }
@@ -224,7 +227,7 @@
             navigator.geolocation.getCurrentPosition(success, error, option);
         } else {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Su navegador no es compatible con la geolocalizaci&oacute;n",
                 showConfirmButton: false,
@@ -318,8 +321,10 @@
                     select.appendChild(option);
                 });
                 $("#select_direcciones").formSelect();
-                leer_direccion(direcciones[0].codigo);
-                store.setItem("direccion_envio", direcciones[0].codigo);
+                if (direcciones.length > 0) {
+                    leer_direccion(direcciones[0].codigo);
+                    store.setItem("direccion_envio", direcciones[0].codigo);
+                }
             }
         });
     }
@@ -334,7 +339,7 @@
         var cliente = JSON.parse(store.getItem("cliente")).codigo;
         if (nombres === "") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa los nombres",
                 showConfirmButton: false,
@@ -342,7 +347,7 @@
             });
         } else if (dni === "") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa el DNI",
                 showConfirmButton: false,
@@ -350,7 +355,7 @@
             });
         } else if (direccion === "") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa la dirección",
                 showConfirmButton: false,
@@ -358,7 +363,7 @@
             });
         } else if (distrito === "") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Selecciona un distrito",
                 showConfirmButton: false,
@@ -366,7 +371,7 @@
             });
         } else if (telefono === "") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa el teléfono",
                 showConfirmButton: false,
@@ -374,7 +379,7 @@
             });
         } else if (latitud === 0 || longitud === 0) {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Mueve el marcador en el mapa para obtener la latitud y longitud de tu dirección",
                 showConfirmButton: false,
@@ -408,7 +413,7 @@
                     var cliente = response.cliente;
                     if (codigo === 108) {
                         Swal.fire({
-                            title: "iZi Pedidos",
+                            title: "Piidelo.com",
                             icon: "error",
                             text: mensaje,
                             showConfirmButton: false,
@@ -418,7 +423,7 @@
                     }
                     if (codigo === 107) {
                         Swal.fire({
-                            title: "iZi Pedidos",
+                            title: "Piidelo.com",
                             icon: "success",
                             text: mensaje,
                             showConfirmButton: false,
@@ -450,7 +455,8 @@
             cache: false,
             success: function(resultado) {
                 var direccion = JSON.parse(resultado);
-                $("#envio_final").html(direccion.envio)
+                store.setItem("direccion_envio", direccion.codigo);
+                mostrar_envio(direccion.codigo);
                 calcular_total_checkout();
                 $("#txt_nombres").val(direccion.nombres);
                 $("#txt_dni").val(direccion.dni);
@@ -479,15 +485,17 @@
                 if (direccion.envio === "0.00") {
                     $("#btn_continuar").addClass("hide");
                     Swal.fire({
-                        title: "iZi Pedidos",
+                        title: "Piidelo.com",
                         icon: "error",
                         text: "Envío no disponible a esta dirección, consulte nuestra zona de cobertura",
                         showConfirmButton: false,
                         timer: 2000
                     });
+                    $("#zona_no_disponible").removeClass("hide");
                     return;
                 } else {
                     $("#btn_continuar").removeClass("hide");
+                    $("#zona_no_disponible").addClass("hide");
                 }
             }
         });

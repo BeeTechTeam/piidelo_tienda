@@ -9,7 +9,6 @@ $password = trim($_POST["password"]);
 
 /**Ruta de imagenes */
 $ruta = "http://localhost/piidelo/piidelo_backoffice/images/usuarios/";
-// $ruta = "https://ecommerce.izipedidos.pe/backoffice/images/usuarios/";
 
 /**Ejecutamos la funci&oacute;n de inicio de sesi&oacute;n con los par&aacute;metros recibidos */
 signin($usuario, $password, $ruta, $connection);

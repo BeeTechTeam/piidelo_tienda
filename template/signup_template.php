@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../css/materialize.min.css" />
     <link rel="shortcut icon" href="../image/logo.ico" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <title>iZi Pedidos</title>
+    <title>Piidelo.com</title>
     <style>
         .card-signup {
             box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.8), -10px 10px 20px rgba(0, 0, 0, 0.2);

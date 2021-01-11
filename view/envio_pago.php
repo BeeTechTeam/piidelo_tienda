@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../css/materialize.min.css" />
     <link rel="shortcut icon" href="../image/logo.ico" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <title>iZi Pedidos</title>
+    <title>Piidelo.com</title>
 </head>
 
 <body style="background-color: unset;">
@@ -16,7 +16,7 @@
     <div class="container" style="width: 80%;">
         <diw class="row">
             <div class="col s1">
-                <img onclick="inicio();" src="../image/logo.png" width="70px" alt="iZiPedidos" title="iZiPedidos" style="cursor: pointer; margin-top: 10px;" />
+                <img onclick="inicio();" src="../image/logo.png" width="200px" alt="Piidelo.com" title="Piidelo.com" style="cursor: pointer;" />
             </div>
         </diw>
         <diw class="row">
@@ -126,6 +126,7 @@
     });
 
     /**Lanzar funciones */
+    mostrar_envio(store.getItem("direccion_envio"));
     mostrar_carrito_checkout();
     tipo_pedido();
 
@@ -171,7 +172,7 @@
         var year = $(this).val().substr(0, 4);
         if (dia_de_semana(dia, mes, year) === "domingo" || dia_de_semana(dia, mes, year) === "sabado") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "error",
                 text: "Los días de entrega de pedidos son de lunes a viernes",
                 showConfirmButton: false,
@@ -187,7 +188,7 @@
         var hora_seleccionada = moment($(this).val(), "HH:mm a");
         if (hora_seleccionada.isBetween(hora_inicio, hora_fin) === false) {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "error",
                 text: "La hora entrega de pedidos es de 8:00am a 7:00pm",
                 showConfirmButton: false,
@@ -202,7 +203,7 @@
         if ($("input[name=tipo_pedido]:checked", "#radio").val() === "Programado") {
             if ($("#fecha_programacion").val() === "") {
                 Swal.fire({
-                    title: "iZi Pedidos",
+                    title: "Piidelo.com",
                     icon: "error",
                     text: "Elija la fecha para la entrega de su pedido",
                     showConfirmButton: false,
@@ -211,7 +212,7 @@
                 return;
             } else if ($("#hora_programacion").val() === "") {
                 Swal.fire({
-                    title: "iZi Pedidos",
+                    title: "Piidelo.com",
                     icon: "error",
                     text: "Elija la hora para la entrega de su pedido",
                     showConfirmButton: false,
@@ -224,7 +225,7 @@
                 var year = $("#fecha_programacion").val().substr(0, 4);
                 if (dia_de_semana(dia, mes, year) === "domingo" || dia_de_semana(dia, mes, year) === "sabado") {
                     Swal.fire({
-                        title: "iZi Pedidos",
+                        title: "Piidelo.com",
                         icon: "error",
                         text: "Los días de entrega de pedidos son de lunes a viernes",
                         showConfirmButton: false,
@@ -237,7 +238,7 @@
                 var hora_seleccionada = moment($("#hora_programacion").val(), "HH:mm a");
                 if (hora_seleccionada.isBetween(hora_inicio, hora_fin) === false) {
                     Swal.fire({
-                        title: "iZi Pedidos",
+                        title: "Piidelo.com",
                         icon: "error",
                         text: "La hora entrega de pedidos es de 8:00am a 7:00pm",
                         showConfirmButton: false,
@@ -292,7 +293,7 @@
                 var mensaje = resultado.mensaje;
                 if (codigo === 108) {
                     Swal.fire({
-                        title: "iZi Pedidos",
+                        title: "Piidelo.com",
                         icon: "error",
                         text: mensaje,
                         showConfirmButton: false,
@@ -302,14 +303,15 @@
                 }
                 if (codigo === 107) {
                     Swal.fire({
-                        title: "iZi Pedidos",
+                        title: "Piidelo.com",
                         icon: "success",
                         text: mensaje,
                         showConfirmButton: false,
                         timer: 2000
                     });
                     store.removeItem("carrito");
-                    
+                    store.removeItem("direccion_envio");
+                    window.location.href = ruta_servidor + "/landing";
                     return;
                 }
             }

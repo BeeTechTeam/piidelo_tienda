@@ -9,12 +9,13 @@
     <link rel="stylesheet" href="css/materialize.min.css" />
     <link rel="shortcut icon" href="image/logo.ico" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <title>iZi Pedidos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Piidelo.com</title>
 </head>
 
 <body style="background-color: unset;">
     <!-- WhatsApp -->
-    <a href="https://api.whatsapp.com/send?phone=51922944350&text=Vengo%20de%20la%20web%20iZiPedidos,%20quiero%20saber%20sobre%20" target="_blank">
+    <a href="https://api.whatsapp.com/send?phone=51922944350&text=Vengo%20de%20la%20web%20Piidelo.com,%20quiero%20saber%20sobre%20" target="_blank">
         <img src="image/whatsapp.png" style="width: 50px; position: fixed; z-index: 100; bottom: 10px; left: 10px; cursor: pointer;" />
     </a>
 
@@ -34,7 +35,7 @@
                     <a href="#" data-target="opciones_movil" class="sidenav-trigger"><i class="material-icons" style="color: #003c82">menu</i></a>
                 </div>
                 <div class="col s4 center-align hide-on-med-and-down">
-                    <img onclick="inicio();" src="image/logo.png" width="70px" alt="iZiPedidos" title="iZiPedidos" style="cursor: pointer; margin-top: 10px;" />
+                    <img onclick="inicio();" src="image/logo.png" width="200px" alt="Piidelo.com" title="Piidelo.com" style="cursor: pointer;" />
                 </div>
                 <div class="col s8 right-align hide-on-large-only">
                     <i onclick="mostrar_buscador();" class="material-icons options-header">search</i>
@@ -74,6 +75,17 @@
         </div>
     </nav>
 
+    <!-- Ofertas -->
+    <div class="row" style="margin-top: 50px;" id="seccion_ofertas">
+        <div class="col s12 center-align">
+            <h4 style="font-weight: bold;" id="titulo_ofertas"></h4>
+        </div>
+        <div class="col s12">
+            <div class="row" id="ofertas">
+            </div>
+        </div>
+    </div>
+
     <!-- Favoritos del mes -->
     <div class="row" style="margin-top: 50px;" id="seccion_favoritos_del_mes">
         <div class="col s12 center-align">
@@ -92,17 +104,6 @@
         </div>
         <div class="col s12">
             <div class="row" id="nuevos">
-            </div>
-        </div>
-    </div>
-
-    <!-- Ofertas -->
-    <div class="row" style="margin-top: 50px;" id="seccion_ofertas">
-        <div class="col s12 center-align">
-            <h4 style="font-weight: bold;" id="titulo_ofertas"></h4>
-        </div>
-        <div class="col s12">
-            <div class="row" id="ofertas">
             </div>
         </div>
     </div>
@@ -585,7 +586,7 @@
                     <div class="collapsible-header" style="padding: unset; border: unset; font-weight: bold; color: #1461a3;"> XV. Modificaciones <i class="material-icons">arrow_drop_down</i>
                     </div>
                     <div class="collapsible-body" style="box-shadow: unset; border: unset; padding: unset;">
-                        <p> De producirse cualquier cambio o modificaci&oacute;n de la presente Pol&iacute;tica, el texto vigente de la misma ser&aacute; publicado en nuestro portal web: https://www.piidelo.com en la secci&oacute;n Pol&iacute;tica de Privacidad.</p>
+                        <p> De producirse cualquier cambio o modificaci&oacute;n de la presente Pol&iacute;tica, el texto vigente de la misma ser&aacute; publicado en nuestro portal web: https://www.Piidelo.com en la secci&oacute;n Pol&iacute;tica de Privacidad.</p>
                     </div>
                 </li>
                 <li>
@@ -678,24 +679,25 @@
     <footer class="page-footer">
         <div class="row">
             <div class="col s0 m0 l4 xl4 center-align hide-on-med-and-down">
-                <img onclick="inicio();" src="image/logo.png" width="150px" alt="iZiPedidos" title="iZiPedidos" style="cursor: pointer; margin-top: 10px;" />
+                <img onclick="inicio();" src="image/logo_footer.png" width="300px" alt="Piidelo.com" title="Piidelo.com" style="cursor: pointer;" />
             </div>
             <div class="col s12 m6 l4 xl4 center-align">
                 <h5 class="white-text">Cont&aacute;ctanos</h5>
                 <ul>
                     <li>
                         <span style="display: inline-flex;">
-                            <i class="material-icons">email</i>&nbsp; ventasonline@izipedidos.com.pe
+                            <i class="material-icons">email</i>&nbsp; hola@piidelo.com
                         </span>
                     </li>
                     <li>
                         <span style="display: inline-flex;">
-                            <i class="material-icons">local_phone</i>&nbsp; 924 182 041
+                            <i class="material-icons">local_phone</i>&nbsp; 922 944 350
                         </span>
                     </li>
                     <li>
                         <span style="display: inline-flex;">
-                            <i class="material-icons">map</i>&nbsp; Jr. Alfonso Ugarte #414, Trujillo
+                            <a href="https://www.facebook.com/piidelo/" target="_blank" class="fa fa-facebook" style="color: #1461a3; background: #ffffff; padding: 5px; height: 24px; width: 24px; border-radius: 24px; font-size: 15px; font-weight: bold;"></a>
+                            <a href="https://www.facebook.com/piidelo/" target="_blank" style="color: #ffffff;">&nbsp; Piidelo.com</a>
                         </span>
                     </li>
                 </ul>
@@ -718,7 +720,7 @@
         <div class="footer-copyright">
             <div class="row">
                 <div class="col s12">
-                    iZiPedidos <?php echo date("Y"); ?>
+                    Seven Corpsolutions <?php echo date("Y"); ?>
                 </div>
             </div>
         </div>

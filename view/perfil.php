@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../css/materialize.min.css" />
     <link rel="shortcut icon" href="../image/logo.ico" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <title>iZi Pedidos</title>
+    <title>Piidelo.com</title>
     <style>
         .dropdown-content {
             height: 101px !important;
@@ -20,7 +20,7 @@
     <div class="container" style="width: 80%;">
         <diw class="row">
             <div class="col s12 center-align">
-                <img onclick="inicio();" src="../image/logo.png" width="70px" alt="iZiPedidos" title="iZiPedidos" style="cursor: pointer; margin-top: 10px;" />
+                <img onclick="inicio();" src="../image/logo.png" width="200px" alt="Piidelo.com" title="Piidelo.com" style="cursor: pointer;" />
             </div>
         </diw>
         <div class="row">
@@ -566,7 +566,7 @@
 
         if (nombres === "") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa tu nombre",
                 showConfirmButton: false,
@@ -574,7 +574,7 @@
             });
         } else if (apellidos === "") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa tus apellidos",
                 showConfirmButton: false,
@@ -582,7 +582,7 @@
             });
         } else if (dni === "") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa tu DNI",
                 showConfirmButton: false,
@@ -590,7 +590,7 @@
             });
         } else if (telefono === "") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa tu teléfono",
                 showConfirmButton: false,
@@ -598,7 +598,7 @@
             });
         } else if (email === "") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa tu email",
                 showConfirmButton: false,
@@ -606,7 +606,7 @@
             });
         } else if (!validar_email(email)) {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa un email válido",
                 showConfirmButton: false,
@@ -642,7 +642,7 @@
                     var cliente = response.cliente;
                     if (codigo === 110) {
                         Swal.fire({
-                            title: "iZi Pedidos",
+                            title: "Piidelo.com",
                             icon: "error",
                             text: mensaje,
                             showConfirmButton: false,
@@ -652,7 +652,7 @@
                     }
                     if (codigo === 111) {
                         Swal.fire({
-                            title: "iZi Pedidos",
+                            title: "Piidelo.com",
                             icon: "success",
                             text: mensaje,
                             showConfirmButton: false,
@@ -677,7 +677,7 @@
 
         if (password_old === "") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa tu contraseña actual",
                 showConfirmButton: false,
@@ -685,7 +685,7 @@
             });
         } else if (password_new === "") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa tu nueva contraseña",
                 showConfirmButton: false,
@@ -693,7 +693,7 @@
             });
         } else if (password_repeat != password_new) {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Las contraseñas no coinciden",
                 showConfirmButton: false,
@@ -721,7 +721,7 @@
                     var mensaje = response.mensaje;
                     if (codigo === 110 || codigo === 113) {
                         Swal.fire({
-                            title: "iZi Pedidos",
+                            title: "Piidelo.com",
                             icon: "error",
                             text: mensaje,
                             showConfirmButton: false,
@@ -731,7 +731,7 @@
                     }
                     if (codigo === 109) {
                         Swal.fire({
-                            title: "iZi Pedidos",
+                            title: "Piidelo.com",
                             icon: "success",
                             text: mensaje,
                             showConfirmButton: false,
@@ -835,7 +835,7 @@
                     document.getElementById("lista_pedidos").innerHTML =
                         `
                             <li class="collection-item" style="border: unset; text-align: center;">
-                                <img src="../image/pedidos.png" alt="iZiPedidos" title="iZiPedidos" style="width: 15%; filter: opacity(0.2);"/>
+                                <img src="../image/pedidos.png" alt="Piidelo.com" title="Piidelo.com" style="width: 15%; filter: opacity(0.2);"/>
                                 <h5>Aún no has realizado ningún pedido</h5>
                             </li>
                         `;
@@ -944,7 +944,7 @@
                 var mensaje = response.mensaje;
                 if (codigo === 112) {
                     Swal.fire({
-                        title: "iZi Pedidos",
+                        title: "Piidelo.com",
                         icon: "error",
                         text: mensaje,
                         showConfirmButton: false,
@@ -953,7 +953,7 @@
                     return;
                 } else if (codigo === 111) {
                     Swal.fire({
-                        title: "iZi Pedidos",
+                        title: "Piidelo.com",
                         icon: "success",
                         text: mensaje,
                         showConfirmButton: false,
@@ -1022,7 +1022,7 @@
                     document.getElementById("lista_direcciones").innerHTML =
                         `
                             <li class="collection-item" style="border: unset; text-align: center;">
-                                <img src="../image/mapa.png" alt="iZiPedidos" title="iZiPedidos" style="width: 15%; filter: opacity(0.2);"/>
+                                <img src="../image/mapa.png" alt="Piidelo.com" title="Piidelo.com" style="width: 15%; filter: opacity(0.2);"/>
                                 <h5>No tienes direcciones registradas</h5>
                             </li>
                         `;
@@ -1096,7 +1096,7 @@
             var cliente = JSON.parse(store.getItem("cliente")).codigo;
             if (nombres === "") {
                 Swal.fire({
-                    title: "iZi Pedidos",
+                    title: "Piidelo.com",
                     icon: "warning",
                     text: "Ingresa los nombres",
                     showConfirmButton: false,
@@ -1104,7 +1104,7 @@
                 });
             } else if (dni === "") {
                 Swal.fire({
-                    title: "iZi Pedidos",
+                    title: "Piidelo.com",
                     icon: "warning",
                     text: "Ingresa el DNI",
                     showConfirmButton: false,
@@ -1112,7 +1112,7 @@
                 });
             } else if (direccion === "") {
                 Swal.fire({
-                    title: "iZi Pedidos",
+                    title: "Piidelo.com",
                     icon: "warning",
                     text: "Ingresa la dirección",
                     showConfirmButton: false,
@@ -1120,7 +1120,7 @@
                 });
             } else if (distrito === "") {
                 Swal.fire({
-                    title: "iZi Pedidos",
+                    title: "Piidelo.com",
                     icon: "warning",
                     text: "Selecciona un distrito",
                     showConfirmButton: false,
@@ -1128,7 +1128,7 @@
                 });
             } else if (telefono === "") {
                 Swal.fire({
-                    title: "iZi Pedidos",
+                    title: "Piidelo.com",
                     icon: "warning",
                     text: "Ingresa el teléfono",
                     showConfirmButton: false,
@@ -1136,7 +1136,7 @@
                 });
             } else if (latitud === 0 || longitud === 0) {
                 Swal.fire({
-                    title: "iZi Pedidos",
+                    title: "Piidelo.com",
                     icon: "warning",
                     text: "Mueve el marcador en el mapa para obtener la latitud y longitud de tu dirección",
                     showConfirmButton: false,
@@ -1171,7 +1171,7 @@
                         var cliente = response.cliente;
                         if (codigo === 112) {
                             Swal.fire({
-                                title: "iZi Pedidos",
+                                title: "Piidelo.com",
                                 icon: "error",
                                 text: mensaje,
                                 showConfirmButton: false,
@@ -1181,7 +1181,7 @@
                         }
                         if (codigo === 111) {
                             Swal.fire({
-                                title: "iZi Pedidos",
+                                title: "Piidelo.com",
                                 icon: "success",
                                 text: mensaje,
                                 showConfirmButton: false,
@@ -1313,7 +1313,7 @@
                 var mensaje = response.mensaje;
                 if (codigo === 112) {
                     Swal.fire({
-                        title: "iZi Pedidos",
+                        title: "Piidelo.com",
                         icon: "error",
                         text: mensaje,
                         showConfirmButton: false,
@@ -1322,7 +1322,7 @@
                     return;
                 } else if (codigo === 111) {
                     Swal.fire({
-                        title: "iZi Pedidos",
+                        title: "Piidelo.com",
                         icon: "success",
                         text: mensaje,
                         showConfirmButton: false,
@@ -1349,7 +1349,7 @@
             navigator.geolocation.getCurrentPosition(success, error, option);
         } else {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Su navegador no es compatible con la geolocalización",
                 showConfirmButton: false,
@@ -1524,7 +1524,7 @@
         var cliente = JSON.parse(store.getItem("cliente")).codigo;
         if (nombres === "") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa los nombres",
                 showConfirmButton: false,
@@ -1532,7 +1532,7 @@
             });
         } else if (dni === "") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa el DNI",
                 showConfirmButton: false,
@@ -1540,7 +1540,7 @@
             });
         } else if (direccion === "") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa la dirección",
                 showConfirmButton: false,
@@ -1548,7 +1548,7 @@
             });
         } else if (distrito === "") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Selecciona un distrito",
                 showConfirmButton: false,
@@ -1556,7 +1556,7 @@
             });
         } else if (telefono === "") {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa el teléfono",
                 showConfirmButton: false,
@@ -1564,7 +1564,7 @@
             });
         } else if (latitud === 0 || longitud === 0) {
             Swal.fire({
-                title: "iZi Pedidos",
+                title: "Piidelo.com",
                 icon: "warning",
                 text: "Mueve el marcador en el mapa para obtener la latitud y longitud de tu dirección",
                 showConfirmButton: false,
@@ -1598,7 +1598,7 @@
                     var cliente = response.cliente;
                     if (codigo === 108) {
                         Swal.fire({
-                            title: "iZi Pedidos",
+                            title: "Piidelo.com",
                             icon: "error",
                             text: mensaje,
                             showConfirmButton: false,
@@ -1608,7 +1608,7 @@
                     }
                     if (codigo === 107) {
                         Swal.fire({
-                            title: "iZi Pedidos",
+                            title: "Piidelo.com",
                             icon: "success",
                             text: mensaje,
                             showConfirmButton: false,

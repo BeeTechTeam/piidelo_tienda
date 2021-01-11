@@ -50,7 +50,7 @@ function registrarse() {
     var repeat_password = document.getElementById("txt_repeat_password").value;
     if (ruc_dni === "") {
         Swal.fire({
-            title: "iZi Pedidos",
+            title: "Piidelo.com",
             icon: "warning",
             text: "Ingresa tu RUC",
             showConfirmButton: false,
@@ -58,7 +58,7 @@ function registrarse() {
         });
     } else if (razon_social_nombres === "") {
         Swal.fire({
-            title: "iZi Pedidos",
+            title: "Piidelo.com",
             icon: "warning",
             text: "Ingresa la Razón Social o Nombres",
             showConfirmButton: false,
@@ -66,7 +66,7 @@ function registrarse() {
         });
     } else if (telefono === "") {
         Swal.fire({
-            title: "iZi Pedidos",
+            title: "Piidelo.com",
             icon: "warning",
             text: "Ingresa tu teléfono",
             showConfirmButton: false,
@@ -74,7 +74,7 @@ function registrarse() {
         });
     } else if (email === "") {
         Swal.fire({
-            title: "iZi Pedidos",
+            title: "Piidelo.com",
             icon: "warning",
             text: "Ingresa tu email",
             showConfirmButton: false,
@@ -82,7 +82,7 @@ function registrarse() {
         });
     } else if (password === "") {
         Swal.fire({
-            title: "iZi Pedidos",
+            title: "Piidelo.com",
             icon: "warning",
             text: "Ingresa la contraseña",
             showConfirmButton: false,
@@ -90,7 +90,7 @@ function registrarse() {
         });
     } else if (!validar_email(email)) {
         Swal.fire({
-            title: "iZi Pedidos",
+            title: "Piidelo.com",
             icon: "warning",
             text: "Ingresa un email válido",
             showConfirmButton: false,
@@ -98,7 +98,7 @@ function registrarse() {
         });
     } else if (password !== repeat_password) {
         Swal.fire({
-            title: "iZi Pedidos",
+            title: "Piidelo.com",
             icon: "warning",
             text: "Las contraseñas no coinciden",
             showConfirmButton: false,
@@ -129,7 +129,7 @@ function registrarse() {
                 var cliente = response.cliente;
                 if (codigo === 106 || codigo === 108) {
                     Swal.fire({
-                        title: "iZi Pedidos",
+                        title: "Piidelo.com",
                         icon: "error",
                         text: mensaje,
                         showConfirmButton: false,
@@ -139,7 +139,7 @@ function registrarse() {
                 }
                 if (codigo === 107) {
                     // Swal.fire({
-                    //     title: "iZi Pedidos",
+                    //     title: "Piidelo.com",
                     //     icon: "success",
                     //     // text: mensaje,
                     //     text: "Bienvenido",
@@ -183,7 +183,7 @@ function login(email, password) {
             store.setItem("cliente", JSON.stringify(cliente));
             if (codigo === 100) {
                 Swal.fire({
-                    title: "iZi Pedidos",
+                    title: "Piidelo.com",
                     icon: "error",
                     text: "El usuario ingresado no existe",
                     showConfirmButton: false,
@@ -191,7 +191,7 @@ function login(email, password) {
                 });
             } else if (codigo === 101) {
                 Swal.fire({
-                    title: "iZi Pedidos",
+                    title: "Piidelo.com",
                     icon: "error",
                     text: "La contraseña es incorrecta",
                     showConfirmButton: false,
@@ -199,7 +199,7 @@ function login(email, password) {
                 });
             } else if (codigo === 102) {
                 Swal.fire({
-                    title: "iZi Pedidos",
+                    title: "Piidelo.com",
                     icon: "error",
                     text: "Tu usuario ha sido eliminado",
                     showConfirmButton: false,
@@ -208,7 +208,7 @@ function login(email, password) {
             } else if (codigo === 103) {
                 store.setItem("cliente", JSON.stringify(cliente));
                 Swal.fire({
-                    title: "iZi Pedidos",
+                    title: "Piidelo.com",
                     icon: "success",
                     text: "Bienvenido " + usuario.usu_nombres,
                     showConfirmButton: false,
@@ -221,7 +221,7 @@ function login(email, password) {
                 }
             } else if (codigo === 105) {
                 Swal.fire({
-                    title: "iZi Pedidos",
+                    title: "Piidelo.com",
                     icon: "error",
                     text: "Sólo los clientes pueden ingresar",
                     showConfirmButton: false,
@@ -237,7 +237,7 @@ function iniciar_sesion() {
     var password_login = document.getElementById("txt_password_login").value;
     if (email_login === "") {
         Swal.fire({
-            title: "iZi Pedidos",
+            title: "Piidelo.com",
             icon: "warning",
             text: "Ingresa tu email",
             showConfirmButton: false,
@@ -245,7 +245,7 @@ function iniciar_sesion() {
         });
     } else if (!validar_email(email_login)) {
         Swal.fire({
-            title: "iZi Pedidos",
+            title: "Piidelo.com",
             icon: "warning",
             text: "Ingresa un email válido",
             showConfirmButton: false,
@@ -253,7 +253,7 @@ function iniciar_sesion() {
         });
     } else if (password_login === "") {
         Swal.fire({
-            title: "iZi Pedidos",
+            title: "Piidelo.com",
             icon: "warning",
             text: "Ingresa la contraseña",
             showConfirmButton: false,
@@ -784,7 +784,8 @@ function imprimir_ofertas(producto) {
                 document.getElementById("ofertas").innerHTML +=
                     `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
     
-                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">               
+                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: center;">
+                            <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>
                             <div class="card-image">
                                 <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
                             </div>
@@ -792,6 +793,7 @@ function imprimir_ofertas(producto) {
                                 <i id="remove_${producto.prod_id}" class="material-icons" style="cursor: pointer; color: #f44336;" onclick="remove_favorito(${producto.prod_id})">favorite</i>
                                 <i id="add_${producto.prod_id}" class="material-icons hide" style="cursor: pointer; color: #f44336;" onclick="add_favorito(${producto.prod_id})">favorite_border</i>
                                 <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                                <p style="text-decoration: line-through;"><i>S/${producto.prod_precio_regular}<i></p>
                                 <p>S/${producto.prod_precio_oferta}</p>
                                 <div class="row" style="width: 100%; margin: unset;">
                                     <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
@@ -813,7 +815,8 @@ function imprimir_ofertas(producto) {
                 document.getElementById("ofertas").innerHTML +=
                     `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
     
-                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">               
+                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: center;">       
+                            <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>        
                             <div class="card-image">
                                 <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
                             </div>
@@ -821,6 +824,7 @@ function imprimir_ofertas(producto) {
                                 <i id="remove_${producto.prod_id}" class="material-icons hide" style="cursor: pointer; color: #f44336;" onclick="remove_favorito(${producto.prod_id})">favorite</i>
                                 <i id="add_${producto.prod_id}" class="material-icons" style="cursor: pointer; color: #f44336;" onclick="add_favorito(${producto.prod_id})">favorite_border</i>
                                 <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                                <p style="text-decoration: line-through;"><i>S/${producto.prod_precio_regular}<i></p>
                                 <p>S/${producto.prod_precio_oferta}</p>
                                 <div class="row" style="width: 100%; margin: unset;">
                                     <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
@@ -844,7 +848,8 @@ function imprimir_ofertas(producto) {
                 document.getElementById("ofertas").innerHTML +=
                     `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
                             
-                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">
+                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: center;">
+                            <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>
                             <div class="card-image">
                                 <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
                             </div>
@@ -852,6 +857,7 @@ function imprimir_ofertas(producto) {
                                 <i id="remove_${producto.prod_id}" class="material-icons" style="cursor: pointer; color: #f44336;" onclick="remove_favorito(${producto.prod_id})">favorite</i>
                                 <i id="add_${producto.prod_id}" class="material-icons hide" style="cursor: pointer; color: #f44336;" onclick="add_favorito(${producto.prod_id})">favorite_border</i>
                                 <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                                <p style="text-decoration: line-through;"><i>S/${producto.prod_precio_regular}<i></p>
                                 <p>S/${producto.prod_precio_oferta}</p>
                                 <div class="row" style="width: 100%; margin: unset;">
                                     <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
@@ -873,7 +879,8 @@ function imprimir_ofertas(producto) {
                 document.getElementById("ofertas").innerHTML +=
                     `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
                         
-                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">
+                        <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: center;">
+                            <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>    
                             <div class="card-image">
                                 <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
                             </div>
@@ -881,6 +888,7 @@ function imprimir_ofertas(producto) {
                                 <i id="remove_${producto.prod_id}" class="material-icons hide" style="cursor: pointer; color: #f44336;" onclick="remove_favorito(${producto.prod_id})">favorite</i>
                                 <i id="add_${producto.prod_id}" class="material-icons" style="cursor: pointer; color: #f44336;" onclick="add_favorito(${producto.prod_id})">favorite_border</i>
                                 <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                                <p style="text-decoration: line-through;"><i>S/${producto.prod_precio_regular}<i></p>
                                 <p>S/${producto.prod_precio_oferta}</p>
                                 <div class="row" style="width: 100%; margin: unset;">
                                     <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
@@ -906,11 +914,13 @@ function imprimir_ofertas(producto) {
                 `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
 
                     <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
+                        <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>
                         <div class="card-image">
                             <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
                         </div>
                         <div class="card-content" style="text-align: center; padding: unset;">
                             <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                            <p style="text-decoration: line-through;"><i>S/${producto.prod_precio_regular}<i></p>
                             <p>S/${producto.prod_precio_oferta}</p>
                             <div class="row" style="width: 100%; margin: unset;">
                                 <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
@@ -933,11 +943,13 @@ function imprimir_ofertas(producto) {
                 `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
 
                     <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
+                        <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>
                         <div class="card-image">
                             <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
                         </div>
                         <div class="card-content" style="text-align: center; padding: unset;">
                             <p style="font-weight: bold;">${producto.prod_nombre}</p>
+                            <p style="text-decoration: line-through;"><i>S/${producto.prod_precio_regular}<i></p>
                             <p>S/${producto.prod_precio_oferta}</p>
                             <div class="row" style="width: 100%; margin: unset;">
                                 <div class="col s6 m6 l6 xl6" style="margin: 5px 0px 5px 0px;">
@@ -1218,7 +1230,7 @@ function comprar_ahora(codigo, cantidad, stock, origen) {
             }
             if (!cantidad || cantidad === 0) {
                 Swal.fire({
-                    title: "iZi Pedidos",
+                    title: "Piidelo.com",
                     icon: "error",
                     text: "Ingresa una cantidad válida mayor a 0",
                     showConfirmButton: false,
@@ -1255,7 +1267,7 @@ function comprar_ahora(codigo, cantidad, stock, origen) {
                 }
             } else {
                 Swal.fire({
-                    title: "iZi Pedidos",
+                    title: "Piidelo.com",
                     icon: "error",
                     text: "No hay suficiente stock, sólo quedan " + stock + " unidades",
                     showConfirmButton: false,
@@ -1375,7 +1387,7 @@ function _plus_item(codigo, stock, index, precio) {
         }, 500);
     } else {
         Swal.fire({
-            title: "iZi Pedidos",
+            title: "Piidelo.com",
             icon: "error",
             text: "No hay sufuciente stock, sólo queda(n) " + stock + " unidad(es)",
             showConfirmButton: false,
@@ -1492,6 +1504,24 @@ function mostrar_carrito_checkout() {
         `;
 
 }
+/**Calcular envio */
+function mostrar_envio(codigo) {
+    parametros = {
+        metodo: "LeerDireccion",
+        codigo: codigo
+    }
+    $.ajax({
+        url: "../config/direccion/direccion",
+        data: parametros,
+        type: "post",
+        cache: false,
+        success: function(resultado) {
+            var direccion = JSON.parse(resultado);
+            $("#envio_final").html(direccion.envio);
+            calcular_total_checkout();
+        }
+    });
+}
 
 /**Mostrar datos del usuario */
 function mostrar_datos_del_usuario() {
@@ -1607,7 +1637,7 @@ function add_favorito(producto) {
             var mensaje = response.mensaje;
             if (codigo === 112) {
                 Swal.fire({
-                    title: "iZi Pedidos",
+                    title: "Piidelo.com",
                     icon: "error",
                     text: mensaje,
                     showConfirmButton: false,
@@ -1643,7 +1673,7 @@ function remove_favorito(producto) {
             if (codigo === 112) {
                 console.log(mensaje)
                 Swal.fire({
-                    title: "iZi Pedidos",
+                    title: "Piidelo.com",
                     icon: "error",
                     text: mensaje,
                     showConfirmButton: false,
