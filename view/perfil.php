@@ -804,6 +804,7 @@
                                     <p>Fecha de solicitud: ${pedidos[i].fecha_solicitud}</p>
                                     <p>Fecha de programación: ${pedidos[i].fecha_programacion}</p>
                                     <p>Fecha de entrega: ${fecha_entregado}</p>
+                                    <p>Dirección de entrega: ${pedidos[i].direccion}</p>
                                     <p>Subtotal: S/${pedidos[i].subtotal}</p>
                                     <p>IGV: S/${pedidos[i].igv}</p>
                                     <p>Total: S/${pedidos[i].total}</p>
@@ -821,6 +822,7 @@
                                     <p>Tipo de pedido: ${tipo}</p>
                                     <p>Fecha de solicitud: ${pedidos[i].fecha_solicitud}</p>
                                     <p>Fecha de entrega: ${fecha_entregado}</p>
+                                    <p>Dirección de entrega: ${pedidos[i].direccion}</p>
                                     <p>Subtotal: S/${pedidos[i].subtotal}</p>
                                     <p>IGV: S/${pedidos[i].igv}</p>
                                     <p>Total: S/${pedidos[i].total}</p>

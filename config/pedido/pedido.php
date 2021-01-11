@@ -148,7 +148,7 @@ switch ($metodo) {
                             pe.ped_total 'total',
                             pe.ped_tipo 'tipo',
                             pe.ped_fecha_programacion 'fecha_programacion',
-                            di.dir_direccion 'direccion'
+                            concat(di.dir_direccion, ' (', di.dir_nombres,  ' Cel.:', di.dir_telefono, ', DNI:', di.dir_dni, ')')  as 'direccion'
                         from pedido pe
                             inner join direccion di on pe.ped_direccion = di.dir_id
                         where pe.ped_cliente = '" . $codigo . "'
@@ -167,6 +167,7 @@ switch ($metodo) {
                         "igv" => $row["igv"],
                         "total" => $row["total"],
                         "tipo" => $row["tipo"],
+                        "direccion" => $row["direccion"]
                     );
                 }
                 $resultado->close();
