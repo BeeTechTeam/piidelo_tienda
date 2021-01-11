@@ -913,7 +913,7 @@ function imprimir_ofertas(producto) {
             document.getElementById("ofertas").innerHTML +=
                 `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
 
-                    <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
+                    <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative; text-align: center;"">
                         <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>
                         <div class="card-image">
                             <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
@@ -942,7 +942,7 @@ function imprimir_ofertas(producto) {
             document.getElementById("ofertas").innerHTML +=
                 `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
 
-                    <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
+                    <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative; text-align: center;"">
                         <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>
                         <div class="card-image">
                             <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
