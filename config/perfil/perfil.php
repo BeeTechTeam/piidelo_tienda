@@ -7,6 +7,7 @@ $connection = mysqli_connect(server, user, password, database) or die("No se pud
 $metodo = $_POST["metodo"];
 
 switch ($metodo) {
+        /**Función para actualizar la información personal del usuario */
     case "ActualizarInformacion":
         $apellidos = utf8_encode(trim($_POST["apellidos"]));
         $cliente = trim($_POST["cliente"]);
@@ -20,7 +21,6 @@ switch ($metodo) {
 
         function actualizar_informacion($apellidos, $direccion, $dni, $email, $nombres, $razon_social, $telefono, $cliente, $usuario, $connection)
         {
-            $response = [];
             $update_cliente = "update cliente set 
                 cli_ruc = '" . $dni . "',
                 cli_razon_social = '" . $razon_social . "',
@@ -28,6 +28,7 @@ switch ($metodo) {
                 cli_email = '" . $email . "',
                 cli_direccion = '" . $direccion . "'
                 where cli_id = '" . $cliente . "' and cli_estado = 'ACTIVO'";
+            $response = [];
             if (mysqli_query($connection, $update_cliente) === true) {
                 $update_usuario = "update usuario set 
                 usu_nombres = '" . $nombres . "',
@@ -71,6 +72,7 @@ switch ($metodo) {
         actualizar_informacion($apellidos, $direccion, $dni, $email, $nombres, $razon_social, $telefono, $cliente,  $usuario, $connection);
         break;
 
+        /**Función para cambiar la contraseña */
     case "ActualizarPassword":
         /**Recibimos datos */
         $codigo = $_POST["usuario"];

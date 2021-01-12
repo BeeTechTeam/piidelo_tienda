@@ -7,6 +7,7 @@ $connection = mysqli_connect(server, user, password, database) or die("No se pud
 $metodo = $_POST["metodo"];
 
 switch ($metodo) {
+        /**Función para agregar nuevas direcciones */
     case "AgregarDireccion":
         $nombres = utf8_encode(trim($_POST["nombres"]));
         $dni = trim($_POST["dni"]);
@@ -16,7 +17,7 @@ switch ($metodo) {
         $longitud = trim($_POST["longitud"]);
         $distrito = trim($_POST["distrito"]);
         $cliente = trim($_POST["cliente"]);
-
+        
         function crear_direccion($nombres, $dni, $telefono, $direccion, $latitud, $longitud, $distrito, $cliente, $connection)
         {
             $insert = "insert into direccion(
@@ -57,6 +58,7 @@ switch ($metodo) {
         crear_direccion($nombres, $dni, $telefono, $direccion, $latitud, $longitud, $distrito, $cliente, $connection);
         break;
 
+        /**Función para listar las direcciones ya registradas */
     case "ListarDirecciones":
         $codigo = trim($_POST["codigo"]);
 
@@ -78,7 +80,7 @@ switch ($metodo) {
                             inner join departamento dep on pro.provi_departamento = dep.dep_id
                         where dir_cliente = '" . $codigo . "' and dir_estado = 'ACTIVA'";
             $result = mysqli_query($connection, $select);
-            $direcciones = array();
+            $direcciones = [];
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     $direcciones[] = array(
@@ -107,6 +109,8 @@ switch ($metodo) {
 
         listar_direcciones($codigo, $connection);
         break;
+
+        /**Función para leer una dirección por código */
     case "LeerDireccion":
         $codigo = trim($_POST["codigo"]);
 
@@ -124,7 +128,7 @@ switch ($metodo) {
                                 inner join departamento dep on pro.provi_departamento = dep.dep_id
                             where dir_id = '" . $codigo . "'";
             $result = mysqli_query($connection, $select);
-            $direccion = array();
+            $direccion = [];
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     $direccion = array(
@@ -151,6 +155,7 @@ switch ($metodo) {
         listar_direccion($codigo, $connection);
         break;
 
+        /**Función para editar una dirección ya existente */
     case "EditarDireccion":
         $codigo = trim($_POST["codigo"]);
         $nombres = utf8_encode(trim($_POST["nombres"]));
@@ -192,11 +197,10 @@ switch ($metodo) {
         editar($codigo, $nombres, $dni, $telefono, $direccion, $latitud, $longitud, $distrito, $cliente, $connection);
         break;
 
-
+        /**Función para eliminar una dirección por su código */
     case "EliminarDireccion":
-
         $codigo = trim($_POST["codigo"]);
-
+        
         function eliminar_direccion($codigo, $connection)
         {
             $delete = "update direccion set dir_estado = 'ELIMINADA' where dir_id = '" . $codigo . "'";

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/tienda.css" />
+    <link rel="stylesheet" href="css/piidelo.css" />
     <link rel="stylesheet" href="css/splide.min.css" />
     <link rel="stylesheet" href="css/materialize.min.css" />
     <link rel="shortcut icon" href="image/logo.ico" type="image/x-icon" />
@@ -22,7 +22,7 @@
     <!-- Sliders -->
     <div class="splide" style="position: relative; z-index: 2;">
         <div class="splide__track">
-            <ul class="splide__list">
+            <ul class="splide__list" id="sliders">
             </ul>
         </div>
     </div>
@@ -727,7 +727,7 @@
     </footer>
 </body>
 
-<script src="js/tienda.js"></script>
+<script src="js/piidelo.js"></script>
 <script src="libraries/splide.min.js"></script>
 <script src="libraries/jquery-3.5.1.min.js"></script>
 <script src="libraries/materialize.min.js"></script>
@@ -740,6 +740,7 @@
     $(document).ready(function() {
         /**Activar el sidenav */
         $(".sidenav").sidenav();
+        /**Abrir el carrito en la derecha */
         $("#side_carrito").sidenav({
             edge: "right"
         });
@@ -749,7 +750,7 @@
         $(".materialboxed").materialbox();
         /**Activar collapsible */
         $(".collapsible").collapsible();
-
+        /**Si no hay un cliente logeado, redireccionamos al inicio */
         if (!store.getItem("cliente")) {
             inicio();
         }

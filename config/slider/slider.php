@@ -16,14 +16,22 @@ switch ($metodo) {
 
             $select = "select sli_foto from sliders where '" . date("Y-m-d") . "' between sli_inicio and sli_fin";
             $resultado = mysqli_query($connection, $select);
+            $sliders = [];
             if ($resultado->num_rows > 0) {
                 while ($row = $resultado->fetch_assoc()) {
-                    echo "<li class='splide__slide'><img src='" . $ruta . $row["sli_foto"] . "' style='width: 100%;'></li>";
+                    $sliders[] = array(
+                        "ruta" => $ruta . $row["sli_foto"]
+                    );
+                    // echo "<li class='splide__slide'><img src='" . $ruta . $row["sli_foto"] . "' style='width: 100%;'></li>";
                 }
+                $resultado->close();
             } else {
-                echo "<li class='splide__slide'><img src='image/banner_default.png' style='width: 100%;'></li>";
+                $sliders[] = array(
+                    "ruta" => 'image/banner_default.png'
+                );
+                // echo "<li class='splide__slide'><img src='image/banner_default.png' style='width: 100%;'></li>";
             }
-            $resultado->close();
+            echo json_encode($sliders);
         }
         leer_sliders($ruta, $connection);
         break;

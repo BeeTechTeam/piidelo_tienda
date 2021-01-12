@@ -138,18 +138,7 @@ function registrarse() {
                     return;
                 }
                 if (codigo === 107) {
-                    // Swal.fire({
-                    //     title: "Piidelo.com",
-                    //     icon: "success",
-                    //     // text: mensaje,
-                    //     text: "Bienvenido",
-                    //     showConfirmButton: false,
-                    //     timer: 2000
-                    // });
-                    // setTimeout(function() {
-                    login(email, password, )
-                        // }, 500);
-
+                    login(email, password);
                     return;
                 }
             }
@@ -180,7 +169,6 @@ function login(email, password) {
             var codigo = response.codigo;
             var usuario = response.usuario;
             var cliente = response.cliente;
-            store.setItem("cliente", JSON.stringify(cliente));
             if (codigo === 100) {
                 Swal.fire({
                     title: "Piidelo.com",
@@ -189,6 +177,8 @@ function login(email, password) {
                     showConfirmButton: false,
                     timer: 2000
                 });
+                return;
+
             } else if (codigo === 101) {
                 Swal.fire({
                     title: "Piidelo.com",
@@ -197,6 +187,7 @@ function login(email, password) {
                     showConfirmButton: false,
                     timer: 2000
                 });
+                return;
             } else if (codigo === 102) {
                 Swal.fire({
                     title: "Piidelo.com",
@@ -205,6 +196,7 @@ function login(email, password) {
                     showConfirmButton: false,
                     timer: 2000
                 });
+                return;
             } else if (codigo === 103) {
                 store.setItem("cliente", JSON.stringify(cliente));
                 Swal.fire({
@@ -218,6 +210,7 @@ function login(email, password) {
                     window.location.href = ruta_servidor + "/view/perfil";
                 } else {
                     window.location.href = ruta_servidor + "/view/checkout";
+                    return;
                 }
             } else if (codigo === 105) {
                 Swal.fire({
@@ -227,6 +220,7 @@ function login(email, password) {
                     showConfirmButton: false,
                     timer: 2000
                 });
+                return;
             }
         }
     });
@@ -277,7 +271,14 @@ function leer_sliders() {
         type: "post",
         cache: false,
         success: function(resultado) {
-            $(".splide__list").html(resultado);
+            var sliders = JSON.parse(resultado);
+            for (var i = 0; i < sliders.length; i++) {
+                document.getElementById("sliders").innerHTML +=
+                    `
+                        <li class='splide__slide'><img src=${sliders[i].ruta} style='width: 100%;'></li>
+
+                    `;
+            }
             new Splide(".splide", {
                 type: "loop",
                 perPage: 1,

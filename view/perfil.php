@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/tienda.css" />
+    <link rel="stylesheet" href="../css/piidelo.css" />
     <link rel="stylesheet" href="../css/materialize.min.css" />
     <link rel="shortcut icon" href="../image/logo.ico" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -456,7 +456,7 @@
     <a class="modal-trigger hide" href="#modal_confirmacion_eliminacion_direccion" id="abrir_confirmacion_eliminacion_direccion"></a>
 </body>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAocjUvXvZ17oARl290-1eQbtuMQvt1WzA"></script>
-<script src="../js/tienda.js"></script>
+<script src="../js/piidelo.js"></script>
 <script src="../libraries/jquery-3.5.1.min.js"></script>
 <script src="../libraries/materialize.min.js"></script>
 <script src="../libraries/sweetalert2@9.js"></script>

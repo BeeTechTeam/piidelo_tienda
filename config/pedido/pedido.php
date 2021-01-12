@@ -12,13 +12,14 @@ $ruta_producto = "http://192.168.1.4/piidelo/piidelo_backoffice/images/interface
 $metodo = $_POST["metodo"];
 
 switch ($metodo) {
+        /**Función para registrar un pedido en la base de datos */
     case "FinalizarPedido":
         /**Recibimos los par&aacute;metros a trav&eacute;s del m&eacute;todo POST */
-        $carrito  = $_POST["carrito"];
-        $total  = $_POST["total"];
-        $cliente  = $_POST["cliente"];
-        $direccion  = $_POST["direccion"];
-        $tipo  = $_POST["tipo"];
+        $carrito = $_POST["carrito"];
+        $total = $_POST["total"];
+        $cliente = $_POST["cliente"];
+        $direccion = $_POST["direccion"];
+        $tipo = $_POST["tipo"];
         $fecha_programacion  = $_POST["fecha_programacion"];
 
         /**Funci&oacute;n para insertar el pedido */
@@ -83,6 +84,7 @@ switch ($metodo) {
                     /**Traemos el pedido creado */
                     $pedido = trim($row["pedido"]);
                 }
+                /**Insertamos las líneas del pedido en la base de datos */
                 for ($i = 0; $i < count($carrito); $i++) {
                     $subtotal = floatval($carrito[$i]["cantidad"] * $carrito[$i]["precio"]);
                     $insert_linea = "insert into linea_de_pedido(
@@ -109,14 +111,13 @@ switch ($metodo) {
                         } else {
                             $response = array(
                                 "codigo" => 108,
-                                "mensaje" => "Error al actualizar stock" . $update
+                                "mensaje" => "Error al actualizar stock"
                             );
-                            $registrado = false;
                         }
                     } else {
                         $response = array(
                             "codigo" => 108,
-                            "mensaje" => "Error al guardar linea de pedido" . $insert_linea
+                            "mensaje" => "Error al guardar linea de pedido"
                         );
                     }
                 }
@@ -133,9 +134,10 @@ switch ($metodo) {
         finalizar_pedido($carrito, $total, $cliente, $direccion, $tipo, $fecha_programacion, $connection);
         break;
 
+
+        /**Función para listar pedidos */
     case "ListarPedidos":
         $codigo = trim($_POST["codigo"]);
-        /**Función para listar pedidos */
         function listar_pedidos($codigo, $connection)
         {
             $select = "select 
@@ -181,10 +183,10 @@ switch ($metodo) {
         listar_pedidos($codigo, $connection);
         break;
 
+        /**Función para leer el detalle de un pedido */
     case "LeerPedido":
         $pedido = trim($_POST["codigo"]);
 
-        /**Función para leer el detalle de un pedido */
         function leer_pedido($pedido, $connection, $ruta_producto,  $ruta)
         {
             $select = "select 
@@ -232,6 +234,7 @@ switch ($metodo) {
         leer_pedido($pedido, $connection, $ruta_producto,  $ruta);
         break;
 
+        /**Función para eliminar un pedido */
     case "EliminarPedido":
 
         /**Recibimos los datos */

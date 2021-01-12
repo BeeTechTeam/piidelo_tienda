@@ -19,7 +19,7 @@ function signin($usuario, $password, $ruta, $connection)
     /**Respuesta */
     $response = array();
     /**Buscamos el documento ingresado */
-    $select_usuario = "select * from usuario
+    $select_usuario = "select usu_id from usuario
         where usu_usuario = '" . $usuario . "' and usu_estado = 'ACTIVO'";
     $result_usuario = mysqli_query($connection, $select_usuario);
     if ($result_usuario->num_rows < 1) {
@@ -33,8 +33,7 @@ function signin($usuario, $password, $ruta, $connection)
     }
 
     /**Verificamos que la contraseña sea la correcta */
-    $select_usuario = "select * from usuario
-        where usu_usuario = '" . $usuario . "' and usu_password = '" . $password . "' and usu_estado = 'ACTIVO'";
+    $select_usuario = "select usu_id from usuario where usu_usuario = '" . $usuario . "' and usu_password = '" . $password . "' and usu_estado = 'ACTIVO'";
     $result_usuario = mysqli_query($connection, $select_usuario);
     if ($result_usuario->num_rows < 1) {
         $response = array(
@@ -85,7 +84,7 @@ function signin($usuario, $password, $ruta, $connection)
     }
 
     /**Usuario proveedor */
-    if ($funcion === "PROVEEDOR") {
+    if ($funcion === "ADMINISTRADOR") {
         $response = array(
             "codigo" => 105,
             "usuario" => [],
