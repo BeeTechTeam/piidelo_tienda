@@ -3,7 +3,7 @@
 setlocale(LC_ALL, "es_ES");
 date_default_timezone_set("UTC");
 date_default_timezone_set("America/Lima");
-$develop = "on";
+$develop = "off";
 if ($develop === "on") {
     define("server", "localhost");
     define("user", "root");
