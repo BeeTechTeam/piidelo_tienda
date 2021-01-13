@@ -15,5 +15,5 @@ if ($develop === "on") {
     define("user", "piidelo_root");
     define("password", "vlmA}Pn#ty?C");
     define("database", "piidelo_ecommerce");
-    define("ruta_imagenes", "https://admin.pidelo.com/images/");
+    define("ruta_imagenes", "https://admin.piidelo.com/images/");
 }
