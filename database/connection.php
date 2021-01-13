@@ -11,8 +11,9 @@ if ($develop === "on") {
     define("database", "ecommerce");
     define("ruta_imagenes", "localhost/piidelo/piidelo_backoffice/images/");
 } else {
-    define("server", "https://piidelo.com/");
+    define("server", "https://www.piidelo.com/");
     define("user", "piidelo_root");
     define("password", "vlmA}Pn#ty?C");
     define("database", "piidelo_ecommerce");
+    define("ruta_imagenes", "https://www.piidelo.com/admin/images/");
 }

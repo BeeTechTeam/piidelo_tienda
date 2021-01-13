@@ -2,7 +2,7 @@ var rutcon = "../config/",
     rutview = "../view/",
     store = localStorage,
     // ruta_servidor = "http://localhost/piidelo/piidelo_tienda";
-    ruta_servidor = "http://www.piidelo.pe";
+    ruta_servidor = "https://www.piidelo.com";
 var parametros, distribuidor, origen = "perfil";
 
 // document.getElementById("nav").style.width = window.screen.width;
