@@ -19,8 +19,8 @@ function signin($usuario, $password, $ruta, $connection)
     /**Respuesta */
     $response = array();
     /**Buscamos el documento ingresado */
-    $select_usuario = "select usu_id from usuario
-        where usu_usuario = '" . $usuario . "' and usu_estado = 'ACTIVO'";
+    $select_usuario = "select usu_id, usu_nombres, usu_apellidos, usu_usuario, usu_password, usu_foto, usu_estado, usu_funcion from usuario
+        where usu_usuario = BINARY '" . $usuario . "' and usu_estado = 'ACTIVO'";
     $result_usuario = mysqli_query($connection, $select_usuario);
     if ($result_usuario->num_rows < 1) {
         $response = array(
@@ -33,7 +33,7 @@ function signin($usuario, $password, $ruta, $connection)
     }
 
     /**Verificamos que la contraseña sea la correcta */
-    $select_usuario = "select usu_id from usuario where usu_usuario = '" . $usuario . "' and usu_password = '" . $password . "' and usu_estado = 'ACTIVO'";
+    $select_usuario = "select usu_id, usu_nombres, usu_apellidos, usu_usuario, usu_password, usu_foto, usu_estado, usu_funcion from usuario where usu_usuario = BINARY '" . $usuario . "' and usu_password = BINARY '" . $password . "' and usu_estado = 'ACTIVO'";
     $result_usuario = mysqli_query($connection, $select_usuario);
     if ($result_usuario->num_rows < 1) {
         $response = array(
