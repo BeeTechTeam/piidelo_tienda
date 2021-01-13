@@ -302,7 +302,7 @@ function ocultar_buscador() {
     $("#buscador").addClass("ocultar_buscador");
     $("#txt_buscar").val("");
     /**Favoritos del mes */
-    favoritos_del_mes();
+    todos_general();
     /**Productos nuevos */
     productos_nuevos();
     /**Ofertas */
@@ -310,13 +310,13 @@ function ocultar_buscador() {
 }
 
 /**Favoritos del mes */
-function imprimir_favoritos(producto) {
+function imprimir_todos(producto) {
     var stock = parseInt(producto.prod_stock);
     var favorito = producto.prod_favorito;
     if (store.getItem("cliente")) {
         if (stock === 0) {
             if (favorito) {
-                document.getElementById("favoritos_del_mes").innerHTML +=
+                document.getElementById("todos").innerHTML +=
                     `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
 
                     <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">               
@@ -345,7 +345,7 @@ function imprimir_favoritos(producto) {
     
                 </div>`;
             } else {
-                document.getElementById("favoritos_del_mes").innerHTML +=
+                document.getElementById("todos").innerHTML +=
                     `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
 
                     <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">               
@@ -376,7 +376,7 @@ function imprimir_favoritos(producto) {
             }
         } else {
             if (favorito) {
-                document.getElementById("favoritos_del_mes").innerHTML +=
+                document.getElementById("todos").innerHTML +=
                     `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
                         
                     <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">
@@ -405,7 +405,7 @@ function imprimir_favoritos(producto) {
             
                 </div>`;
             } else {
-                document.getElementById("favoritos_del_mes").innerHTML +=
+                document.getElementById("todos").innerHTML +=
                     `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
                     
                     <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: end;">
@@ -437,7 +437,7 @@ function imprimir_favoritos(producto) {
         }
     } else {
         if (stock === 0) {
-            document.getElementById("favoritos_del_mes").innerHTML +=
+            document.getElementById("todos").innerHTML +=
                 `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
             
                     <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
@@ -463,7 +463,7 @@ function imprimir_favoritos(producto) {
                     </div>
                 </div>`;
         } else {
-            document.getElementById("favoritos_del_mes").innerHTML +=
+            document.getElementById("todos").innerHTML +=
                 `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
             
                     <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative;">
@@ -492,11 +492,11 @@ function imprimir_favoritos(producto) {
     }
 }
 
-function favoritos_del_mes() {
+function todos_general() {
     if (store.getItem("cliente")) {
-        $("#favoritos_del_mes").html("");
+        $("#todos").html("");
         parametros = {
-            metodo: "FavoritosDelMes",
+            metodo: "Todos",
             cliente: JSON.parse(store.getItem("cliente")).codigo
         };
         $.ajax({
@@ -507,18 +507,18 @@ function favoritos_del_mes() {
             success: function(resultado) {
                 var productos = JSON.parse(resultado);
                 for (var i = 0; i < productos.length; i++) {
-                    imprimir_favoritos(productos[i]);
+                    imprimir_todos(productos[i]);
                 }
                 var longitud = productos.length;
                 if (longitud > 0) {
-                    $("#titulo_favoritos").html("Favoritos del mes");
+                    $("#titulo_todos").html("Todos");
                 }
             }
         });
     } else {
-        $("#favoritos_del_mes").html("");
+        $("#todos").html("");
         parametros = {
-            metodo: "FavoritosDelMes",
+            metodo: "Todos",
             cliente: 0
         };
         $.ajax({
@@ -529,11 +529,11 @@ function favoritos_del_mes() {
             success: function(resultado) {
                 var productos = JSON.parse(resultado);
                 for (var i = 0; i < productos.length; i++) {
-                    imprimir_favoritos(productos[i]);
+                    imprimir_todos(productos[i]);
                 }
                 var longitud = productos.length;
                 if (longitud > 0) {
-                    $("#titulo_favoritos").html("Favoritos del mes");
+                    $("#titulo_todos").html("Todos");
                 }
             }
         });
@@ -1026,7 +1026,7 @@ function buscador() {
     if (store.getItem("cliente")) {
         $("#txt_buscar").keydown(function() {
             if ($("#txt_buscar").val() != "") {
-                $("#favoritos_del_mes").html("");
+                $("#todos").html("");
                 $("#nuevos").html("");
                 $("#ofertas").html("");
                 parametros = {
@@ -1040,16 +1040,22 @@ function buscador() {
                     type: "post",
                     cache: false,
                     success: function(resultado) {
+                        $("#titulo_todos").html("");
+                        $("#titulo_nuevos").html("");
+                        $("#titulo_ofertas").html("");
                         var productos = JSON.parse(resultado);
                         for (var i = 0; i < productos.length; i++) {
                             switch (productos[i].prod_tipo) {
-                                case "Favorito":
-                                    imprimir_favoritos(productos[i]);
+                                case "Todos":
+                                    $("#titulo_todos").html("Todos");
+                                    imprimir_todos(productos[i]);
                                     break;
                                 case "Nuevo":
+                                    $("#titulo_nuevos").html("Nuevos");
                                     imprimir_nuevos(productos[i]);
                                     break;
                                 case "Oferta":
+                                    $("#titulo_ofertas").html("Ofertas");
                                     imprimir_ofertas(productos[i]);
                                     break;
                             }
@@ -1061,7 +1067,7 @@ function buscador() {
     } else {
         $("#txt_buscar").keydown(function() {
             if ($("#txt_buscar").val() != "") {
-                $("#favoritos_del_mes").html("");
+                $("#todos").html("");
                 $("#nuevos").html("");
                 $("#ofertas").html("");
                 parametros = {
@@ -1075,16 +1081,22 @@ function buscador() {
                     type: "post",
                     cache: false,
                     success: function(resultado) {
+                        $("#titulo_todos").html("");
+                        $("#titulo_nuevos").html("");
+                        $("#titulo_ofertas").html("");
                         var productos = JSON.parse(resultado);
                         for (var i = 0; i < productos.length; i++) {
                             switch (productos[i].prod_tipo) {
-                                case "Favorito":
-                                    imprimir_favoritos(productos[i]);
+                                case "Todos":
+                                    $("#titulo_todos").html("Todos");
+                                    imprimir_todos(productos[i]);
                                     break;
                                 case "Nuevo":
+                                    $("#titulo_nuevos").html("Nuevos");
                                     imprimir_nuevos(productos[i]);
                                     break;
                                 case "Oferta":
+                                    $("#titulo_ofertas").html("Ofertas");
                                     imprimir_ofertas(productos[i]);
                                     break;
                             }
@@ -1697,15 +1709,15 @@ function favoritos_usuario() {
     $("#todos_icon").removeClass("hide");
     $("#favoritos_icon_small").addClass("hide");
     $("#todos_icon_small").removeClass("hide");
-    favoritos_del_mes_favoritos();
+    todos_favoritos();
     productos_nuevos_favoritos();
     ofertas_favoritos();
 }
 
-function favoritos_del_mes_favoritos() {
-    $("#favoritos_del_mes").html("");
+function todos_favoritos() {
+    $("#todos").html("");
     parametros = {
-        metodo: "FavoritosDelMes_favoritos",
+        metodo: "Todos_favoritos",
         cliente: JSON.parse(store.getItem("cliente")).codigo
     };
     $.ajax({
@@ -1716,11 +1728,15 @@ function favoritos_del_mes_favoritos() {
         success: function(resultado) {
             var productos = JSON.parse(resultado);
             for (var i = 0; i < productos.length; i++) {
-                imprimir_favoritos(productos[i]);
+                imprimir_todos(productos[i]);
             }
             var longitud = productos.length;
             if (longitud > 0) {
-                $("#titulo_favoritos").html("Favoritos del mes");
+                $("#titulo_todos").html("Todos");
+                $("#sin_favoritos").addClass("hide");
+            } else {
+                $("#titulo_todos").html("");
+                $("#sin_favoritos").removeClass("hide");
             }
         }
     });
@@ -1745,7 +1761,12 @@ function productos_nuevos_favoritos() {
             var longitud = productos.length;
             if (longitud > 0) {
                 $("#titulo_nuevos").html("Nuevos");
+                $("#sin_favoritos").addClass("hide");
+            } else {
+                $("#titulo_nuevos").html("");
+                $("#sin_favoritos").removeClass("hide");
             }
+
         }
     });
 }
@@ -1769,6 +1790,10 @@ function ofertas_favoritos() {
             var longitud = productos.length;
             if (longitud > 0) {
                 $("#titulo_ofertas").html("Ofertas");
+                $("#sin_favoritos").addClass("hide");
+            } else {
+                $("#titulo_ofertas").html("");
+                $("#sin_favoritos").removeClass("hide");
             }
         }
     });
@@ -1776,11 +1801,12 @@ function ofertas_favoritos() {
 
 /**Función para mostrar todos los prodcutos */
 function todos() {
+    $("#sin_favoritos").addClass("hide");
     $("#todos_icon").addClass("hide");
     $("#favoritos_icon").removeClass("hide");
     $("#todos_icon_small").addClass("hide");
     $("#favoritos_icon_small").removeClass("hide");
-    favoritos_del_mes();
+    todos_general();
     productos_nuevos();
     ofertas();
 }

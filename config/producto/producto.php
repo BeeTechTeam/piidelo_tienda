@@ -12,30 +12,22 @@ $ruta_producto = "http://192.168.1.4/piidelo/piidelo_backoffice/images/interface
 
 switch ($metodo) {
         /**Función para listar los productos más vendidos del mes */
-    case "FavoritosDelMes":
+    case "Todos":
         $cliente = $_POST["cliente"];
 
-        function favoritos_del_mes($cliente, $connection, $ruta, $ruta_producto)
+        function todos($cliente, $connection, $ruta, $ruta_producto)
         {
             /**Favoritos del mes */
             $select =
-                "select 
-                    p.*,
-                    date_format(pe.ped_fecha_solicitud, '%Y-%m') mes,
-                    sum(lp.lp_cantidad) cantidad 
-                from producto p
-                inner join linea_de_pedido lp on p.prod_id = lp.lp_producto
-                inner join pedido pe on lp.lp_pedido = pe.ped_id
-                where 
-                    date_format(pe.ped_fecha_solicitud, '%Y-%m') = '" . date("Y-m") . "' 
-                    and
-                    p.prod_estado = 'ACTIVO'
-                    and 
-                    (p.prod_nuevo = 'NO' or p.prod_nuevo is NULL)
-                    and
-                    p.prod_oferta_inicio is NULL
-                group by p.prod_id
-                order by cantidad desc";
+                "select p.* from producto p 
+                    where 
+                        p.prod_estado = 'ACTIVO'
+                        and 
+                        (p.prod_nuevo = 'NO' or p.prod_nuevo is NULL)
+                        and
+                        p.prod_oferta_inicio is NULL
+                    group by p.prod_id
+                    order by p.prod_nombre asc";
             $resultado = mysqli_query($connection, $select);
             $productos = [];
             if ($resultado->num_rows > 0) {
@@ -79,7 +71,7 @@ switch ($metodo) {
             echo json_encode($productos);
             $resultado->close();
         }
-        favoritos_del_mes($cliente, $connection, $ruta, $ruta_producto);
+        todos($cliente, $connection, $ruta, $ruta_producto);
         break;
 
         /**Función para listar los productos nuevos */
@@ -158,6 +150,8 @@ switch ($metodo) {
                     and
                     p.prod_estado = 'ACTIVO'
                     and 
+                    (p.prod_nuevo is NULL or p.prod_nuevo = 'NO')
+                    and
                     p.prod_oferta_inicio is not NULL
                 group by p.prod_id
                 order by p.prod_nombre asc";
@@ -213,31 +207,25 @@ switch ($metodo) {
 
         function lista_productos($nombre, $connection, $ruta, $ruta_producto, $cliente)
         {
-            /**Primero, buscamos en los favoritos del mes */
-            /**Favoritos del mes */
+            /**Primero, buscamos en todos los productos */
+            /**Todos */
             $productos = [];
             $select =
-                "select 
-                    p.*,
-                    date_format(pe.ped_fecha_solicitud, '%Y-%m') mes,
-                    sum(lp.lp_cantidad) cantidad 
-                from producto p
-                inner join linea_de_pedido lp on p.prod_id = lp.lp_producto
-                inner join pedido pe on lp.lp_pedido = pe.ped_id
-                where 
-                    p.prod_nombre like '%" . $nombre . "%'
-                    and
-                    date_format(pe.ped_fecha_solicitud, '%Y-%m') = '" . date("Y-m") . "' 
-                    and
-                    p.prod_estado = 'ACTIVO'
-                    and 
-                    (p.prod_nuevo = 'NO' or p.prod_nuevo is NULL)
-                    and
-                    p.prod_oferta_inicio is NULL
-                group by p.prod_id";
+                "select p.* from producto p 
+                    where 
+                        p.prod_nombre like '%" . $nombre . "%'
+                        and
+                        p.prod_estado = 'ACTIVO'
+                        and 
+                        (p.prod_nuevo = 'NO' or p.prod_nuevo is NULL)
+                        and
+                        p.prod_oferta_inicio is NULL
+                    group by p.prod_id
+                    order by p.prod_nombre asc
+                ";
             $resultado = mysqli_query($connection, $select);
             if ($resultado->num_rows > 0) {
-                /**Es un favorito del mes */
+                /**Es parte de todos los productos */
                 while ($row = $resultado->fetch_assoc()) {
                     $ruta_foto = "";
                     $foto = utf8_decode($row["prod_foto"]);
@@ -256,7 +244,7 @@ switch ($metodo) {
                         $favorito = false;
                     }
                     $producto = array(
-                        "prod_tipo" => "Favorito",
+                        "prod_tipo" => "Todos",
                         "prod_id" => $row["prod_id"],
                         "prod_nombre" => utf8_decode($row["prod_nombre"]),
                         "prod_descripcion" => utf8_decode($row["prod_descripcion"]),
@@ -365,7 +353,7 @@ switch ($metodo) {
                     } else {
                         $favorito = false;
                     }
-                    $productos[] = array(
+                    $producto = array(
                         "prod_tipo" => "Oferta",
                         "prod_id" => $row["prod_id"],
                         "prod_nombre" => utf8_decode($row["prod_nombre"]),
@@ -397,30 +385,23 @@ switch ($metodo) {
         function leer_producto($codigo, $connection, $ruta, $ruta_producto)
         {
             /**Traemos el producto */
-            /**Primero, buscamos en los favoritos del mes */
-            /**Favoritos del mes */
+            /**Primero, buscamos en todos los productos */
+            /**Todos */
             $select =
-                "select 
-                    p.*,
-                    date_format(pe.ped_fecha_solicitud, '%Y-%m') mes,
-                    sum(lp.lp_cantidad) cantidad 
-                from producto p
-                inner join linea_de_pedido lp on p.prod_id = lp.lp_producto
-                inner join pedido pe on lp.lp_pedido = pe.ped_id
-                where 
-                    p.prod_id = '" . $codigo . "'
-                    and
-                    date_format(pe.ped_fecha_solicitud, '%Y-%m') = '" . date("Y-m") . "' 
-                    and
-                    p.prod_estado = 'ACTIVO'
-                    and 
-                    (p.prod_nuevo = 'NO' or p.prod_nuevo is NULL)
-                    and
-                    p.prod_oferta_inicio is NULL
-                group by p.prod_id";
+                "select p.* from producto p 
+                    where 
+                        p.prod_id = '" . $codigo . "'
+                        and
+                        p.prod_estado = 'ACTIVO'
+                        and 
+                        (p.prod_nuevo = 'NO' or p.prod_nuevo is NULL)
+                        and
+                        p.prod_oferta_inicio is NULL
+                    group by p.prod_id
+                    order by p.prod_nombre asc";
             $resultado = mysqli_query($connection, $select);
             if ($resultado->num_rows > 0) {
-                /**Es un favorito del mes */
+                /**Es parte de todos los productos*/
                 while ($row = $resultado->fetch_assoc()) {
                     $ruta_foto = "";
                     $foto = utf8_decode($row["prod_foto"]);
@@ -594,25 +575,17 @@ switch ($metodo) {
         break;
 
         /**Listar los favoritos del mes favoritos del usuario*/
-    case "FavoritosDelMes_favoritos":
+    case "Todos_favoritos":
         $cliente = $_POST["cliente"];
 
         function favoritos_del_mes_favoritos($cliente, $connection, $ruta, $ruta_producto)
         {
             /**Favoritos del mes */
             $select =
-                "select 
-                        p.*,
-                        date_format(pe.ped_fecha_solicitud, '%Y-%m') mes,
-                        sum(lp.lp_cantidad) cantidad 
-                    from producto p
-                    inner join favoritos f on p.prod_id = f.fav_prod_id
-                    inner join linea_de_pedido lp on p.prod_id = lp.lp_producto
-                    inner join pedido pe on lp.lp_pedido = pe.ped_id
+                "select p.* from producto p
+                    inner join favoritos f on p.prod_id = f.fav_prod_id 
                     where 
                         f.fav_cli_id = '" . $cliente . "'
-                        and
-                        date_format(pe.ped_fecha_solicitud, '%Y-%m') = '" . date("Y-m") . "' 
                         and
                         p.prod_estado = 'ACTIVO'
                         and 
@@ -620,7 +593,7 @@ switch ($metodo) {
                         and
                         p.prod_oferta_inicio is NULL
                     group by p.prod_id
-                    order by cantidad desc";
+                    order by p.prod_nombre asc";
             $resultado = mysqli_query($connection, $select);
             $productos = [];
             if ($resultado->num_rows > 0) {

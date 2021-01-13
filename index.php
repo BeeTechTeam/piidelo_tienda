@@ -81,17 +81,6 @@
         </div>
     </div>
 
-    <!-- Favoritos del mes -->
-    <div class="row" style="margin-top: 50px;">
-        <div class="col s12 center-align">
-            <h4 style="font-weight: bold;" id="titulo_favoritos"></h4>
-        </div>
-        <div class="col s12">
-            <div class="row" id="favoritos_del_mes">
-            </div>
-        </div>
-    </div>
-
     <!-- Nuevos -->
     <div class="row" style="margin-top: 50px;">
         <div class="col s12 center-align">
@@ -102,6 +91,18 @@
             </div>
         </div>
     </div>
+
+    <!-- Todos los productos -->
+    <div class="row" style="margin-top: 50px;">
+        <div class="col s12 center-align">
+            <h4 style="font-weight: bold;" id="titulo_todos"></h4>
+        </div>
+        <div class="col s12">
+            <div class="row" id="todos">
+            </div>
+        </div>
+    </div>
+
 
     <!-- Modal de vista r&aacute;pida -->
     <div id="modal_vista_rapida" class="modal">
@@ -819,7 +820,7 @@
                     <li>
                         <span style="display: inline-flex;">
                             <a href="https://www.facebook.com/piidelo/" target="_blank" class="fa fa-facebook" style="color: #1461a3; background: #ffffff; padding: 5px; height: 24px; width: 24px; border-radius: 24px; font-size: 15px; font-weight: bold;"></a>
-                            <a href="https://www.facebook.com/piidelo/"target="_blank" style="color: #ffffff;">&nbsp; Piidelo.com</a>
+                            <a href="https://www.facebook.com/piidelo/" target="_blank" style="color: #ffffff;">&nbsp; Piidelo.com</a>
                         </span>
                     </li>
                 </ul>
@@ -892,14 +893,14 @@
         });
     });
 
-    /**Favoritos del mes */
-    favoritos_del_mes();
+    /**Ofertas */
+    ofertas();
 
     /**Productos nuevos */
     productos_nuevos();
 
-    /**Ofertas */
-    ofertas();
+    /**Todos */
+    todos_general();
 
     /**Activar buscador */
     buscador();

@@ -44,12 +44,12 @@ switch ($metodo) {
             if (mysqli_query($connection, $insert) === true) {
                 $response = array(
                     "codigo" => 107,
-                    "mensaje" => "Direcci&oacute;n agregada correctamente"
+                    "mensaje" => "Dirección agregada correctamente"
                 );
             } else {
                 $response = array(
                     "codigo" => 108,
-                    "mensaje" => "Error al agregar direcci&oacute;n"
+                    "mensaje" => "Error al agregar dirección"
                 );
             }
             echo  json_encode($response);

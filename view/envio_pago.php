@@ -307,11 +307,13 @@
                         icon: "success",
                         text: mensaje,
                         showConfirmButton: false,
-                        timer: 2000
+                        timer: 3000
                     });
-                    store.removeItem("carrito");
-                    store.removeItem("direccion_envio");
-                    window.location.href = ruta_servidor + "/landing";
+                    setTimeout(function() {
+                        store.removeItem("carrito");
+                        store.removeItem("direccion_envio");
+                        window.location.href = ruta_servidor + "/landing";
+                    }, 3000);
                     return;
                 }
             }

@@ -75,6 +75,17 @@
         </div>
     </nav>
 
+
+    <div class="row hide" id="sin_favoritos">
+        <div class="col s12 center-align" style="padding: 10%;">
+            <img src="image/no_favorite.png" alt="Piidelo.com" title="Piidelo.com" style="width: 15%; filter: opacity(0.2);" />
+            <h5>
+                A&uacute;n no has marcado ningún producto como favorito, para hacerlo debes hacer clic sobre el coraz&oacute;n en el producto y para eliminar
+                un producto de tus favoritos, debes volver a hacer clic sobre el coraz&oacute;n en el producto
+            </h5>
+        </div>
+    </div>
+
     <!-- Ofertas -->
     <div class="row" style="margin-top: 50px;" id="seccion_ofertas">
         <div class="col s12 center-align">
@@ -86,17 +97,6 @@
         </div>
     </div>
 
-    <!-- Favoritos del mes -->
-    <div class="row" style="margin-top: 50px;" id="seccion_favoritos_del_mes">
-        <div class="col s12 center-align">
-            <h4 style="font-weight: bold;" id="titulo_favoritos"></h4>
-        </div>
-        <div class="col s12">
-            <div class="row" id="favoritos_del_mes">
-            </div>
-        </div>
-    </div>
-
     <!-- Nuevos -->
     <div class="row" style="margin-top: 50px;" id="seccion_nuevos">
         <div class="col s12 center-align">
@@ -104,6 +104,17 @@
         </div>
         <div class="col s12">
             <div class="row" id="nuevos">
+            </div>
+        </div>
+    </div>
+
+    <!-- Todos los productos -->
+    <div class="row" style="margin-top: 50px;">
+        <div class="col s12 center-align">
+            <h4 style="font-weight: bold;" id="titulo_todos"></h4>
+        </div>
+        <div class="col s12">
+            <div class="row" id="todos">
             </div>
         </div>
     </div>
@@ -772,14 +783,14 @@
         });
     });
 
-    /**Favoritos del mes */
-    favoritos_del_mes();
+    /**Ofertas */
+    ofertas();
 
     /**Productos nuevos */
     productos_nuevos();
 
-    /**Ofertas */
-    ofertas();
+    /**Todos los productos */
+    todos_general();
 
     /**Activar buscador */
     buscador();
