@@ -7,8 +7,8 @@ $connection = mysqli_connect(server, user, password, database) or die("No se pud
 $metodo = $_POST["metodo"];
 
 /**Ruta de fotos de los productos */
-$ruta = "http://192.168.1.4/piidelo/piidelo_backoffice/images/productos/";
-$ruta_producto = "http://192.168.1.4/piidelo/piidelo_backoffice/images/interface/producto.png";
+$ruta = ruta_imagenes . "productos/";
+$ruta_producto = ruta_imagenes . "interface/producto.png";
 
 switch ($metodo) {
         /**Función para listar los productos más vendidos del mes */
@@ -319,7 +319,7 @@ switch ($metodo) {
 
             /**Tercero, buscamos en ofertas */
             $select =
-                    "select p.* from producto p
+                "select p.* from producto p
                         where 
                             p.prod_nombre like '%" . $nombre . "%'
                             and
@@ -636,7 +636,7 @@ switch ($metodo) {
         function nuevos_favoritos($connection, $cliente, $ruta, $ruta_producto)
         {
             $select =
-                        "select p.* from producto p
+                "select p.* from producto p
                         inner join favoritos f on p.prod_id = f.fav_prod_id
                         where 
                             f.fav_cli_id = '" . $cliente . "'
@@ -690,7 +690,7 @@ switch ($metodo) {
         function ofertas_favoritos($cliente, $connection, $ruta, $ruta_producto)
         {
             $select =
-                    "select p.*from producto p
+                "select p.*from producto p
                         inner join favoritos f on p.prod_id = f.fav_prod_id
                         where 
                             f.fav_cli_id = '" . $cliente . "'

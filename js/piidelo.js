@@ -1,8 +1,8 @@
 var rutcon = "../config/",
     rutview = "../view/",
     store = localStorage,
-    // ruta_servidor = "http://192.168.1.4/piidelo/piidelo_tienda";
-    ruta_servidor = "http://localhost/piidelo/piidelo_tienda";
+    // ruta_servidor = "http://localhost/piidelo/piidelo_tienda";
+    ruta_servidor = "http://www.piidelo.pe";
 var parametros, distribuidor, origen = "perfil";
 
 // document.getElementById("nav").style.width = window.screen.width;

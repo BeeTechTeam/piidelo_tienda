@@ -7,7 +7,7 @@ $connection = mysqli_connect(server, user, password, database) or die("No se pud
 $metodo = $_POST["metodo"];
 
 /**Ruta de fotos de los sliders */
-$ruta = "http://192.168.1.4/piidelo/piidelo_backoffice/images/sliders/";
+$ruta = ruta_imagenes . "sliders/";
 
 switch ($metodo) {
     case "LeerSliders":

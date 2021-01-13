@@ -5,8 +5,8 @@ require_once("../../database/connection.php");
 $connection = mysqli_connect(server, user, password, database) or die("No se pudo conectar a la base de datos");
 
 /**Ruta de fotos de los productos */
-$ruta = "http://192.168.1.4/piidelo/piidelo_backoffice/images/productos/";
-$ruta_producto = "http://192.168.1.4/piidelo/piidelo_backoffice/images/interface/producto.png";
+$ruta = ruta_imagenes . "productos/";
+$ruta_producto = ruta_imagenes . "interface/producto.png";
 
 /**Recibimos el m&eacute;todo */
 $metodo = $_POST["metodo"];
