@@ -78,7 +78,7 @@ create table if not exists usuario(
     usu_apellidos varchar(100) not null,
     usu_usuario varchar(100) not null,
     usu_password varchar(20) not null,
-    usu_foto varchar(100) not null,
+    usu_foto varchar(100) null,
     usu_estado varchar(10) not null,
     usu_funcion varchar(20) not null,
     usu_proveedor int(10),

@@ -38,9 +38,9 @@ switch ($metodo) {
                             values(
                                 '" . $fecha_solicitud . "', 
                                     'EN PROCESO', 
-                                    '" . $subtotal . "', 
-                                    '" . $igv . "', 
-                                    '" . $total . "', 
+                                    '" . str_replace(",", ".", $subtotal) . "', 
+                                    '" . str_replace(",", ".", $igv) . "', 
+                                    '" . str_replace(",", ".", $total) . "', 
                                     '" . $cliente . "', 
                                     '" . $direccion . "', 
                                     '" . $tipo . "'
@@ -60,9 +60,9 @@ switch ($metodo) {
                             values(
                                 '" . $fecha_solicitud . "', 
                                     'EN PROCESO', 
-                                    '" . $subtotal . "', 
-                                    '" . $igv . "', 
-                                    '" . $total . "', 
+                                    '" . str_replace(",", ".", $subtotal) . "', 
+                                    '" . str_replace(",", ".", $igv) . "', 
+                                    '" . str_replace(",", ".", $total) . "', 
                                     '" . $cliente . "', 
                                     '" . $direccion . "', 
                                     '" . $tipo . "',
@@ -117,7 +117,7 @@ switch ($metodo) {
             } else {
                 $response = array(
                     "codigo" => 108,
-                    "mensaje" => "Error al guardar pedido" . $insert
+                    "mensaje" => "Error al guardar pedido"
                 );
             }
             echo json_encode($response);
