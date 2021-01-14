@@ -1,21 +1,15 @@
 <?php
 require_once("../../database/connection.php");
-/**Creamos la conexi&oacute;n */
-$connection = mysqli_connect(server, user, password, database) or die("No se pudo conectar a la base de datos");
 
 /**Recibimos el m&eacute;todo */
 $metodo = $_POST["metodo"];
-
-/**Ruta de fotos de los productos */
-$ruta = ruta_imagenes . "productos/";
-$ruta_producto = ruta_imagenes . "interface/producto.png";
 
 switch ($metodo) {
         /**Función para listar los productos más vendidos del mes */
     case "Todos":
         $cliente = $_POST["cliente"];
 
-        function todos($cliente, $connection, $ruta, $ruta_producto)
+        function todos($cliente, $connection)
         {
             /**Favoritos del mes */
             $select =
@@ -41,20 +35,12 @@ switch ($metodo) {
                     } else {
                         $favorito = false;
                     }
-
-                    $ruta_foto = "";
-                    $foto = utf8_decode($row["prod_foto"]);
-                    if (!utf8_decode($row["prod_foto"])) {
-                        $ruta_foto = $ruta_producto;
-                    } else {
-                        $ruta_foto = $ruta . $foto;
-                    }
                     $productos[] = array(
                         "prod_id" => $row["prod_id"],
                         "prod_nombre" => utf8_decode($row["prod_nombre"]),
                         "prod_descripcion" => utf8_decode($row["prod_descripcion"]),
                         "prod_detalles" => utf8_decode($row["prod_detalles"]),
-                        "prod_foto" => $ruta_foto,
+                        "prod_foto" => ruta_imagenes . "productos/" . utf8_decode($row["prod_foto"]),
                         "prod_stock" => $row["prod_stock"],
                         "prod_precio_regular" => $row["prod_precio_regular"],
                         "prod_precio_oferta" => $row["prod_precio_oferta"],
@@ -71,13 +57,13 @@ switch ($metodo) {
             echo json_encode($productos);
             $resultado->close();
         }
-        todos($cliente, $connection, $ruta, $ruta_producto);
+        todos($cliente, $connection);
         break;
 
         /**Función para listar los productos nuevos */
     case "Nuevos":
         $cliente = $_POST["cliente"];
-        function nuevos($connection, $cliente, $ruta, $ruta_producto)
+        function nuevos($connection, $cliente)
         {
             $select =
                 "select p.* from producto p
@@ -102,19 +88,13 @@ switch ($metodo) {
                     } else {
                         $favorito = false;
                     }
-                    $ruta_foto = "";
-                    $foto = utf8_decode($row["prod_foto"]);
-                    if (!utf8_decode($row["prod_foto"])) {
-                        $ruta_foto = $ruta_producto;
-                    } else {
-                        $ruta_foto = $ruta . $foto;
-                    }
+
                     $productos[] = array(
                         "prod_id" => $row["prod_id"],
                         "prod_nombre" => utf8_decode($row["prod_nombre"]),
                         "prod_descripcion" => utf8_decode($row["prod_descripcion"]),
                         "prod_detalles" => utf8_decode($row["prod_detalles"]),
-                        "prod_foto" => $ruta_foto,
+                        "prod_foto" => ruta_imagenes . "productos/" . utf8_decode($row["prod_foto"]),
                         "prod_stock" => $row["prod_stock"],
                         "prod_precio_regular" => $row["prod_precio_regular"],
                         "prod_precio_oferta" => $row["prod_precio_oferta"],
@@ -131,13 +111,13 @@ switch ($metodo) {
             echo json_encode($productos);
             $resultado->close();
         }
-        nuevos($connection, $cliente, $ruta, $ruta_producto);
+        nuevos($connection, $cliente);
         break;
 
         /**Función para listar las ofetas */
     case "Ofertas":
         $cliente = $_POST["cliente"];
-        function ofertas($cliente, $connection, $ruta, $ruta_producto)
+        function ofertas($cliente, $connection)
         {
             $select =
                 "select p.* from producto p
@@ -168,19 +148,13 @@ switch ($metodo) {
                     } else {
                         $favorito = false;
                     }
-                    $ruta_foto = "";
-                    $foto = utf8_decode($row["prod_foto"]);
-                    if (!utf8_decode($row["prod_foto"])) {
-                        $ruta_foto = $ruta_producto;
-                    } else {
-                        $ruta_foto = $ruta . $foto;
-                    }
+
                     $productos[] = array(
                         "prod_id" => $row["prod_id"],
                         "prod_nombre" => utf8_decode($row["prod_nombre"]),
                         "prod_descripcion" => utf8_decode($row["prod_descripcion"]),
                         "prod_detalles" => utf8_decode($row["prod_detalles"]),
-                        "prod_foto" => $ruta_foto,
+                        "prod_foto" => ruta_imagenes . "productos/" . utf8_decode($row["prod_foto"]),
                         "prod_stock" => $row["prod_stock"],
                         "prod_precio_regular" => $row["prod_precio_regular"],
                         "prod_precio_oferta" => $row["prod_precio_oferta"],
@@ -197,7 +171,7 @@ switch ($metodo) {
             echo json_encode($productos);
             $resultado->close();
         }
-        ofertas($cliente, $connection, $ruta, $ruta_producto);
+        ofertas($cliente, $connection);
         break;
 
         /**Función para buscar productos */
@@ -205,7 +179,7 @@ switch ($metodo) {
         $nombre = trim($_POST["nombre"]);
         $cliente = trim($_POST["cliente"]);
 
-        function lista_productos($nombre, $connection, $ruta, $ruta_producto, $cliente)
+        function buscar_productos($nombre, $connection, $cliente)
         {
             /**Primero, buscamos en todos los productos */
             /**Todos */
@@ -227,13 +201,6 @@ switch ($metodo) {
             if ($resultado->num_rows > 0) {
                 /**Es parte de todos los productos */
                 while ($row = $resultado->fetch_assoc()) {
-                    $ruta_foto = "";
-                    $foto = utf8_decode($row["prod_foto"]);
-                    if (!utf8_decode($row["prod_foto"])) {
-                        $ruta_foto = $ruta_producto;
-                    } else {
-                        $ruta_foto = $ruta . $foto;
-                    }
                     /**Verificar si es favorito */
                     $favorito = false;
                     $select_favorito = "select fav_cli_id, fav_prod_id from favoritos f where f.fav_cli_id = '" . $cliente . "' and f.fav_prod_id = '" . $row["prod_id"] . "'";
@@ -249,7 +216,7 @@ switch ($metodo) {
                         "prod_nombre" => utf8_decode($row["prod_nombre"]),
                         "prod_descripcion" => utf8_decode($row["prod_descripcion"]),
                         "prod_detalles" => utf8_decode($row["prod_detalles"]),
-                        "prod_foto" => $ruta_foto,
+                        "prod_foto" => ruta_imagenes . "productos/" . utf8_decode($row["prod_foto"]),
                         "prod_stock" => $row["prod_stock"],
                         "prod_precio_regular" => $row["prod_precio_regular"],
                         "prod_precio_oferta" => $row["prod_precio_oferta"],
@@ -280,13 +247,6 @@ switch ($metodo) {
             if ($resultado->num_rows > 0) {
                 /**Es un producto nuevo */
                 while ($row = $resultado->fetch_assoc()) {
-                    $ruta_foto = "";
-                    $foto = utf8_decode($row["prod_foto"]);
-                    if (!utf8_decode($row["prod_foto"])) {
-                        $ruta_foto = $ruta_producto;
-                    } else {
-                        $ruta_foto = $ruta . $foto;
-                    }
                     /**Verificar si es favorito */
                     $favorito = false;
                     $select_favorito = "select fav_cli_id, fav_prod_id from favoritos f where f.fav_cli_id = '" . $cliente . "' and f.fav_prod_id = '" . $row["prod_id"] . "'";
@@ -302,7 +262,7 @@ switch ($metodo) {
                         "prod_nombre" => utf8_decode($row["prod_nombre"]),
                         "prod_descripcion" => utf8_decode($row["prod_descripcion"]),
                         "prod_detalles" => utf8_decode($row["prod_detalles"]),
-                        "prod_foto" => $ruta_foto,
+                        "prod_foto" => ruta_imagenes . "productos/" . utf8_decode($row["prod_foto"]),
                         "prod_stock" => $row["prod_stock"],
                         "prod_precio_regular" => $row["prod_precio_regular"],
                         "prod_precio_oferta" => $row["prod_precio_oferta"],
@@ -337,13 +297,6 @@ switch ($metodo) {
             if ($resultado->num_rows > 0) {
                 /**Es una oferya */
                 while ($row = $resultado->fetch_assoc()) {
-                    $ruta_foto = "";
-                    $foto = utf8_decode($row["prod_foto"]);
-                    if (!utf8_decode($row["prod_foto"])) {
-                        $ruta_foto = $ruta_producto;
-                    } else {
-                        $ruta_foto = $ruta . $foto;
-                    }
                     /**Verificar si es favorito */
                     $favorito = false;
                     $select_favorito = "select fav_cli_id, fav_prod_id from favoritos f where f.fav_cli_id = '" . $cliente . "' and f.fav_prod_id = '" . $row["prod_id"] . "'";
@@ -359,7 +312,7 @@ switch ($metodo) {
                         "prod_nombre" => utf8_decode($row["prod_nombre"]),
                         "prod_descripcion" => utf8_decode($row["prod_descripcion"]),
                         "prod_detalles" => utf8_decode($row["prod_detalles"]),
-                        "prod_foto" => $ruta_foto,
+                        "prod_foto" => ruta_imagenes . "productos/" . utf8_decode($row["prod_foto"]),
                         "prod_stock" => $row["prod_stock"],
                         "prod_precio_regular" => $row["prod_precio_regular"],
                         "prod_precio_oferta" => $row["prod_precio_oferta"],
@@ -375,14 +328,14 @@ switch ($metodo) {
             }
             echo json_encode($productos);
         }
-        lista_productos($nombre, $connection, $ruta, $ruta_producto, $cliente);
+        buscar_productos($nombre, $connection, $cliente);
         break;
 
         /**Función para leer producto por su código */
     case "LeerProducto":
         $codigo = trim($_POST["producto"]);
 
-        function leer_producto($codigo, $connection, $ruta, $ruta_producto)
+        function leer_producto($codigo, $connection)
         {
             /**Traemos el producto */
             /**Primero, buscamos en todos los productos */
@@ -403,20 +356,13 @@ switch ($metodo) {
             if ($resultado->num_rows > 0) {
                 /**Es parte de todos los productos*/
                 while ($row = $resultado->fetch_assoc()) {
-                    $ruta_foto = "";
-                    $foto = utf8_decode($row["prod_foto"]);
-                    if (!utf8_decode($row["prod_foto"])) {
-                        $ruta_foto = $ruta_producto;
-                    } else {
-                        $ruta_foto = $ruta . $foto;
-                    }
                     $producto = array(
                         "prod_tipo" => "Favorito",
                         "prod_id" => $row["prod_id"],
                         "prod_nombre" => utf8_decode($row["prod_nombre"]),
                         "prod_descripcion" => utf8_decode($row["prod_descripcion"]),
                         "prod_detalles" => utf8_decode($row["prod_detalles"]),
-                        "prod_foto" => $ruta_foto,
+                        "prod_foto" => ruta_imagenes . "productos/" . utf8_decode($row["prod_foto"]),
                         "prod_stock" => $row["prod_stock"],
                         "prod_precio_regular" => $row["prod_precio_regular"],
                         "prod_precio_oferta" => $row["prod_precio_oferta"],
@@ -427,7 +373,6 @@ switch ($metodo) {
                     );
                 }
                 echo json_encode($producto);
-                // echo $select;
                 $resultado->close();
                 return;
             }
@@ -446,20 +391,13 @@ switch ($metodo) {
             if ($resultado->num_rows > 0) {
                 /**Es un producto nuevo */
                 while ($row = $resultado->fetch_assoc()) {
-                    $ruta_foto = "";
-                    $foto = utf8_decode($row["prod_foto"]);
-                    if (!utf8_decode($row["prod_foto"])) {
-                        $ruta_foto = $ruta_producto;
-                    } else {
-                        $ruta_foto = $ruta . $foto;
-                    }
                     $producto = array(
                         "prod_tipo" => "Nuevo",
                         "prod_id" => $row["prod_id"],
                         "prod_nombre" => utf8_decode($row["prod_nombre"]),
                         "prod_descripcion" => utf8_decode($row["prod_descripcion"]),
                         "prod_detalles" => utf8_decode($row["prod_detalles"]),
-                        "prod_foto" => $ruta_foto,
+                        "prod_foto" => ruta_imagenes . "productos/" . utf8_decode($row["prod_foto"]),
                         "prod_stock" => $row["prod_stock"],
                         "prod_precio_regular" => $row["prod_precio_regular"],
                         "prod_precio_oferta" => $row["prod_precio_oferta"],
@@ -493,20 +431,13 @@ switch ($metodo) {
             if ($resultado->num_rows > 0) {
                 /**Es una oferta */
                 while ($row = $resultado->fetch_assoc()) {
-                    $ruta_foto = "";
-                    $foto = utf8_decode($row["prod_foto"]);
-                    if (!utf8_decode($row["prod_foto"])) {
-                        $ruta_foto = $ruta_producto;
-                    } else {
-                        $ruta_foto = $ruta . $foto;
-                    }
                     $producto = array(
                         "prod_tipo" => "Oferta",
                         "prod_id" => $row["prod_id"],
                         "prod_nombre" => utf8_decode($row["prod_nombre"]),
                         "prod_descripcion" => utf8_decode($row["prod_descripcion"]),
                         "prod_detalles" => utf8_decode($row["prod_detalles"]),
-                        "prod_foto" => $ruta_foto,
+                        "prod_foto" => ruta_imagenes . "productos/" . utf8_decode($row["prod_foto"]),
                         "prod_stock" => $row["prod_stock"],
                         "prod_precio_regular" => $row["prod_precio_regular"],
                         "prod_precio_oferta" => $row["prod_precio_oferta"],
@@ -521,7 +452,7 @@ switch ($metodo) {
                 return;
             }
         }
-        leer_producto($codigo, $connection, $ruta, $ruta_producto);
+        leer_producto($codigo, $connection);
         break;
 
         /**Función para marcar un producto como favorito */
@@ -578,7 +509,7 @@ switch ($metodo) {
     case "Todos_favoritos":
         $cliente = $_POST["cliente"];
 
-        function favoritos_del_mes_favoritos($cliente, $connection, $ruta, $ruta_producto)
+        function todos_favoritos($cliente, $connection)
         {
             /**Favoritos del mes */
             $select =
@@ -598,19 +529,12 @@ switch ($metodo) {
             $productos = [];
             if ($resultado->num_rows > 0) {
                 while ($row = $resultado->fetch_assoc()) {
-                    $ruta_foto = "";
-                    $foto = utf8_decode($row["prod_foto"]);
-                    if (!utf8_decode($row["prod_foto"])) {
-                        $ruta_foto = $ruta_producto;
-                    } else {
-                        $ruta_foto = $ruta . $foto;
-                    }
                     $productos[] = array(
                         "prod_id" => $row["prod_id"],
                         "prod_nombre" => utf8_decode($row["prod_nombre"]),
                         "prod_descripcion" => utf8_decode($row["prod_descripcion"]),
                         "prod_detalles" => utf8_decode($row["prod_detalles"]),
-                        "prod_foto" => $ruta_foto,
+                        "prod_foto" => ruta_imagenes . "productos/" . utf8_decode($row["prod_foto"]),
                         "prod_stock" => $row["prod_stock"],
                         "prod_precio_regular" => $row["prod_precio_regular"],
                         "prod_precio_oferta" => $row["prod_precio_oferta"],
@@ -627,13 +551,13 @@ switch ($metodo) {
             echo json_encode($productos);
             $resultado->close();
         }
-        favoritos_del_mes_favoritos($cliente, $connection, $ruta, $ruta_producto);
+        todos_favoritos($cliente, $connection);
         break;
 
         /**Función para listar los productos nuevos favoritos del usuario */
     case "Nuevos_favoritos":
         $cliente = $_POST["cliente"];
-        function nuevos_favoritos($connection, $cliente, $ruta, $ruta_producto)
+        function nuevos_favoritos($connection, $cliente)
         {
             $select =
                 "select p.* from producto p
@@ -652,19 +576,12 @@ switch ($metodo) {
             $productos = [];
             if ($resultado->num_rows > 0) {
                 while ($row = $resultado->fetch_assoc()) {
-                    $ruta_foto = "";
-                    $foto = utf8_decode($row["prod_foto"]);
-                    if (!utf8_decode($row["prod_foto"])) {
-                        $ruta_foto = $ruta_producto;
-                    } else {
-                        $ruta_foto = $ruta . $foto;
-                    }
                     $productos[] = array(
                         "prod_id" => $row["prod_id"],
                         "prod_nombre" => utf8_decode($row["prod_nombre"]),
                         "prod_descripcion" => utf8_decode($row["prod_descripcion"]),
                         "prod_detalles" => utf8_decode($row["prod_detalles"]),
-                        "prod_foto" => $ruta_foto,
+                        "prod_foto" => ruta_imagenes . "productos/" . utf8_decode($row["prod_foto"]),
                         "prod_stock" => $row["prod_stock"],
                         "prod_precio_regular" => $row["prod_precio_regular"],
                         "prod_precio_oferta" => $row["prod_precio_oferta"],
@@ -681,13 +598,13 @@ switch ($metodo) {
             echo json_encode($productos);
             $resultado->close();
         }
-        nuevos_favoritos($connection, $cliente, $ruta, $ruta_producto);
+        nuevos_favoritos($connection, $cliente);
         break;
 
         /**Función para listar las ofertas favoritos del uusario */
     case "Ofertas_favoritos":
         $cliente = $_POST["cliente"];
-        function ofertas_favoritos($cliente, $connection, $ruta, $ruta_producto)
+        function ofertas_favoritos($cliente, $connection)
         {
             $select =
                 "select p.*from producto p
@@ -710,19 +627,12 @@ switch ($metodo) {
             $productos = [];
             if ($resultado->num_rows > 0) {
                 while ($row = $resultado->fetch_assoc()) {
-                    $ruta_foto = "";
-                    $foto = utf8_decode($row["prod_foto"]);
-                    if (!utf8_decode($row["prod_foto"])) {
-                        $ruta_foto = $ruta_producto;
-                    } else {
-                        $ruta_foto = $ruta . $foto;
-                    }
                     $productos[] = array(
                         "prod_id" => $row["prod_id"],
                         "prod_nombre" => utf8_decode($row["prod_nombre"]),
                         "prod_descripcion" => utf8_decode($row["prod_descripcion"]),
                         "prod_detalles" => utf8_decode($row["prod_detalles"]),
-                        "prod_foto" => $ruta_foto,
+                        "prod_foto" => ruta_imagenes . "productos/" . utf8_decode($row["prod_foto"]),
                         "prod_stock" => $row["prod_stock"],
                         "prod_precio_regular" => $row["prod_precio_regular"],
                         "prod_precio_oferta" => $row["prod_precio_oferta"],
@@ -739,6 +649,6 @@ switch ($metodo) {
             echo json_encode($productos);
             $resultado->close();
         }
-        ofertas_favoritos($cliente, $connection, $ruta, $ruta_producto);
+        ofertas_favoritos($cliente, $connection);
         break;
 }

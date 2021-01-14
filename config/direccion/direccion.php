@@ -1,7 +1,5 @@
 <?php
 require_once("../../database/connection.php");
-/**Creamos la conexi&oacute;n */
-$connection = mysqli_connect(server, user, password, database) or die("No se pudo conectar a la base de datos");
 
 /**Recibimos el m&eacute;todo */
 $metodo = $_POST["metodo"];
@@ -17,7 +15,7 @@ switch ($metodo) {
         $longitud = trim($_POST["longitud"]);
         $distrito = trim($_POST["distrito"]);
         $cliente = trim($_POST["cliente"]);
-        
+
         function crear_direccion($nombres, $dni, $telefono, $direccion, $latitud, $longitud, $distrito, $cliente, $connection)
         {
             $insert = "insert into direccion(
@@ -200,7 +198,7 @@ switch ($metodo) {
         /**Función para eliminar una dirección por su código */
     case "EliminarDireccion":
         $codigo = trim($_POST["codigo"]);
-        
+
         function eliminar_direccion($codigo, $connection)
         {
             $delete = "update direccion set dir_estado = 'ELIMINADA' where dir_id = '" . $codigo . "'";

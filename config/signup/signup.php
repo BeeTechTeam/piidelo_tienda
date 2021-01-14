@@ -1,9 +1,6 @@
 <?php
 require_once("../../database/connection.php");
 
-/**Creamos la conexión */
-$connection = mysqli_connect(server, user, password, database) or die("No se pudo conectar a la base de datos");
-
 $metodo = $_POST["metodo"];
 switch ($metodo) {
         /**Función para registra al usuario en la base de datos */

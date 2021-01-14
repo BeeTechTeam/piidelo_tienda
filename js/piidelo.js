@@ -1,8 +1,8 @@
 var rutcon = "../config/",
     rutview = "../view/",
     store = localStorage;
-// var ruta_servidor = "http://localhost/piidelo/piidelo_tienda";
-var ruta_servidor = "https://tienda.piidelo.com";
+var ruta_servidor = "http://localhost/piidelo/piidelo_tienda";
+// var ruta_servidor = "https://tienda.piidelo.com";
 var parametros, distribuidor, origen = "perfil";
 
 // document.getElementById("nav").style.width = window.screen.width;
@@ -206,12 +206,14 @@ function login(email, password) {
                     showConfirmButton: false,
                     timer: 3000
                 });
-                if (origen === "perfil") {
-                    window.location.href = ruta_servidor + "/view/perfil";
-                } else {
-                    window.location.href = ruta_servidor + "/view/checkout";
-                    return;
-                }
+                setTimeout(function() {
+                    if (origen === "perfil") {
+                        window.location.href = ruta_servidor + "/view/perfil";
+                    } else {
+                        window.location.href = ruta_servidor + "/view/checkout";
+                        return;
+                    }
+                }, 3000);
             } else if (codigo === 105) {
                 Swal.fire({
                     title: "Piidelo.com",

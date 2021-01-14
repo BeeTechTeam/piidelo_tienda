@@ -1,13 +1,6 @@
 <?php
 require_once("../../database/connection.php");
 
-/**Creamos la conexi&oacute;n */
-$connection = mysqli_connect(server, user, password, database) or die("No se pudo conectar a la base de datos");
-
-/**Ruta de fotos de los productos */
-$ruta = ruta_imagenes . "productos/";
-$ruta_producto = ruta_imagenes . "interface/producto.png";
-
 /**Recibimos el m&eacute;todo */
 $metodo = $_POST["metodo"];
 
@@ -187,7 +180,7 @@ switch ($metodo) {
     case "LeerPedido":
         $pedido = trim($_POST["codigo"]);
 
-        function leer_pedido($pedido, $connection, $ruta_producto,  $ruta)
+        function leer_pedido($pedido, $connection)
         {
             $select = "select 
                             lp.lp_id 'codigo',
@@ -205,19 +198,12 @@ switch ($metodo) {
             $resultado = mysqli_query($connection, $select);
             if ($resultado->num_rows > 0) {
                 while ($row = $resultado->fetch_assoc()) {
-                    $ruta_foto = "";
-                    $foto = utf8_decode($row["foto"]);
-                    if (!utf8_decode($row["foto"])) {
-                        $ruta_foto = $ruta_producto;
-                    } else {
-                        $ruta_foto = $ruta . $foto;
-                    }
                     $lineas[] = array(
                         "codigo" => $row["codigo"],
                         "codigo_producto" => $row["codigo_producto"],
                         "producto" => utf8_decode($row["producto"]),
                         "stock" => $row["stock"],
-                        "foto" => $ruta_foto,
+                        "foto" => ruta_imagenes . "productos/" . utf8_decode($row["foto"]),
                         "cantidad" => $row["cantidad"],
                         "precio" => $row["precio"],
                         "subtotal" => $row["subtotal"]
@@ -231,7 +217,7 @@ switch ($metodo) {
         }
 
         /**Ejecutamos la función para leer el detalle del pedido */
-        leer_pedido($pedido, $connection, $ruta_producto,  $ruta);
+        leer_pedido($pedido, $connection);
         break;
 
         /**Función para eliminar un pedido */

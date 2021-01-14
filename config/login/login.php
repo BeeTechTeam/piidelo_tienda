@@ -1,20 +1,15 @@
 <?php
 require_once("../../database/connection.php");
-/**Creamos la conexi&oacute;n */
-$connection = mysqli_connect(server, user, password, database) or die("No se pudo conectar a la base de datos");
 
 /**Recibimos los datos ingresados */
 $usuario = trim($_POST["usuario"]);
 $password = trim($_POST["password"]);
 
-/**Ruta de imagenes */
-$ruta = "http://localhost/piidelo/piidelo_backoffice/images/usuarios/";
-
 /**Ejecutamos la funci&oacute;n de inicio de sesi&oacute;n con los par&aacute;metros recibidos */
-signin($usuario, $password, $ruta, $connection);
+signin($usuario, $password, $connection);
 
 /**Funci&oacute;n de inicio de sesi&oacute;n */
-function signin($usuario, $password, $ruta, $connection)
+function signin($usuario, $password, $connection)
 {
     /**Respuesta */
     $response = array();
@@ -55,7 +50,6 @@ function signin($usuario, $password, $ruta, $connection)
             "usu_apellidos" => $row["usu_apellidos"],
             "usu_usuario" => $row["usu_usuario"],
             "usu_password" => $row["usu_password"],
-            "usu_foto" => $ruta . $row["usu_foto"],
             "usu_estado" => $estado,
             "usu_funcion" => $funcion,
         );
@@ -140,7 +134,6 @@ function signin($usuario, $password, $ruta, $connection)
         }
         return;
     }
-
 
     /**Usuario no autorizado */
     $response = array(
