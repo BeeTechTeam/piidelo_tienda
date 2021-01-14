@@ -2,10 +2,8 @@ var rutcon = "../config/",
     rutview = "../view/",
     store = localStorage;
 var ruta_servidor = "http://localhost/piidelo/piidelo_tienda";
-// var ruta_servidor = "https://tienda.piidelo.com";
+// var ruta_servidor = "https:/www.piidelo.com";
 var parametros, distribuidor, origen = "perfil";
-
-// document.getElementById("nav").style.width = window.screen.width;
 
 /**Funcion para obtener el dia de la semana */
 function dia_de_semana(dia, mes, year) {
