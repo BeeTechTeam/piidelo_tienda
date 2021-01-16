@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/piidelo.css" />
     <link rel="stylesheet" href="css/splide.min.css" />
@@ -11,6 +11,11 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Piidelo.com</title>
+    <meta property="og:url" content="https://www.piidelo.com">
+    <meta property="og:title" content="Piidelo.com">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="En Piidelo.com podrás encontrar todos los productos de los principales productores peruanos; con el único propósito de impulsar el consumo nacional y ayudar a la pequeña y mediana empresa." />
+    <meta property="og:image" itemprop="image primaryImageOfPage" content="https://www.piidelo.com/image/banner_default.png">
 </head>
 
 <body style="background-color: unset;">
