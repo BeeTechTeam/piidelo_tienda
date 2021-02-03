@@ -73,7 +73,7 @@
                         </div>
                         <div class="row">
                             <div class="col s12 center-align">
-                                <button onclick="continuar();" id="btn_continuar" class="btn hide" style="margin: 15px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">Continuar</button>
+                                <button onclick="continuar();" id="btn_continuar" class="btn" style="margin: 15px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">Continuar</button>
                             </div>
                             <div class="col s12 center-align">
                                 <a class="tooltipped" data-position="bottom" data-tooltip="Inicio" href="#" onclick="inicio();" style="color: #1461a3;"><i class="material-icons">home</i></a>

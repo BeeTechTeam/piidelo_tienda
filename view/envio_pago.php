@@ -63,6 +63,38 @@
                     </div>
                     <div class="col s12">
                         <h5>Informaci&oacute;n de pago</h5>
+                        <p>Cuentas bancarias de piidelo.com afiliadas a nombre de: <b>Solange Arce Silvera</b></p>
+                        <div class="row" style="border: 2px solid #1461a3;">
+                            <div class="col s12 m6 l6 xl6 center-align">
+                                <p style="color: #1461a3; font-weight: bold;">BANCO DE CR&Eacute;DITO (BCP)</p>
+                                <p style="margin: unset; font-weight: bold;">Cuenta: 194-40034041-0-24</p>
+                                <p style="margin: unset; font-weight: bold;">CCI: 002-19414003404102491</p>
+                            </div>
+                            <div class="col s12 m6 l6 xl6 center-align">
+                                <p style="color: #1461a3; font-weight: bold;">BANCO INTERBANK</p>
+                                <p style="margin: unset; font-weight: bold;">Cuenta: 270-3107391102</p>
+                                <p style="margin: unset; font-weight: bold;">CCI: 003-270-013107391102-69</p>
+                            </div>
+                            <div class="col s12 m6 l6 xl6 center-align">
+                                <p style="color: #1461a3; font-weight: bold;">BANCO CONTINENTAL</p>
+                                <p style="margin: unset; font-weight: bold;">Cuenta: 0011-0564-0200294502</p>
+                                <p style="margin: unset; font-weight: bold;">CCI: 011-564-000200294502-26</p>
+                            </div>
+                            <div class="col s12 m6 l6 xl6 center-align">
+                                <p style="color: #1461a3; font-weight: bold;">MONEDERO DIGITAL</p>
+                                <p style="margin: unset; font-weight: bold;">Celular: 920 545 986</p>
+                                <div>
+                                    <img src="../image/monedero_digital.png" alt="Piidelo.com" title="Piidelo.com" style="width: 200px;">
+                                </div>
+                            </div>
+                        </div>
+                        <p style="text-align: center;"><b>NOTA:</b> Por favor luego de haber realizado el abono, enviar constancia al WhatsApp
+                            <a href="https://api.whatsapp.com/send?phone=51920545986&text=Constancia%20de%20pago" target="_blank">
+                                920545986
+                            </a>
+                        </p>
+                    </div>
+                    <div class="col s12">
                         <div class="row">
                             <div class="col s12 center-align">
                                 <button onclick="verificar_datos_de_entrega();" id="btn_verificar" class="btn" style="margin: 15px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">Finalizar pedido</button>
@@ -296,7 +328,7 @@
                         title: "Piidelo.com",
                         icon: "error",
                         text: mensaje,
-                        showConfirmButton: false,
+                        showConfirmButton: true,
                         timer: 2000
                     });
                     return;
@@ -306,7 +338,7 @@
                         title: "Piidelo.com",
                         icon: "success",
                         text: mensaje,
-                        showConfirmButton: false,
+                        showConfirmButton: true,
                         timer: 3000
                     });
                     setTimeout(function() {

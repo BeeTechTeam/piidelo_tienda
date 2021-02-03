@@ -924,6 +924,7 @@
         $("#ocultar_password").addClass("hide");
         $("#ver_password").removeClass("hide");
     });
+    
     /**Ver contraseña */
     $("#ver_password_login").on("click", function() {
         $("#ver_password_login").addClass("hide");

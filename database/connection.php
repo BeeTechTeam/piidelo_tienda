@@ -12,7 +12,7 @@ if ($develop === "on") {
     define("ruta_imagenes", "http://localhost/piidelo/piidelo_backoffice/images/");
     /**Creamos la conexión */
     $connection = mysqli_connect(server, user, password, database) or die("No se pudo conectar a la base de datos");
-    /**Establecemos el conjutno de  */
+    /**Establecemos el conjunto de  */
     $connection->set_charset("utf8");
 } else {
     define("server", "localhost");
@@ -22,6 +22,6 @@ if ($develop === "on") {
     define("ruta_imagenes", "https://admin.piidelo.com/images/");
     /**Creamos la conexión */
     $connection = mysqli_connect(server, user, password, database) or die("No se pudo conectar a la base de datos");
-    /**Establecemos el conjutno de  */
+    /**Establecemos el conjunto de  */
     $connection->set_charset("utf8");
 }
