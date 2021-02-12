@@ -40,21 +40,22 @@ function signup() {
 }
 
 function registrarse() {
-    var ruc_dni = document.getElementById("txt_ruc_dni").value;
+    // var ruc_dni = document.getElementById("txt_ruc_dni").value;
     var razon_social_nombres = document.getElementById("txt_razon_social_nombres").value;
     var telefono = document.getElementById("txt_telefono").value;
     var email = document.getElementById("txt_email").value;
     var password = document.getElementById("txt_password").value;
     var repeat_password = document.getElementById("txt_repeat_password").value;
-    if (ruc_dni === "") {
-        Swal.fire({
-            title: "Piidelo.com",
-            icon: "warning",
-            text: "Ingresa tu RUC",
-            showConfirmButton: false,
-            timer: 2000
-        });
-    } else if (razon_social_nombres === "") {
+    // if (ruc_dni === "") {
+    //     Swal.fire({
+    //         title: "Piidelo.com",
+    //         icon: "warning",
+    //         text: "Ingresa tu RUC",
+    //         showConfirmButton: false,
+    //         timer: 2000
+    //     });
+    // } else 
+    if (razon_social_nombres === "") {
         Swal.fire({
             title: "Piidelo.com",
             icon: "warning",
@@ -107,7 +108,7 @@ function registrarse() {
         $("#loader_signup").removeClass("hide");
         parametros = {
             metodo: "Signup",
-            ruc_dni: ruc_dni,
+            // ruc_dni: ruc_dni,
             razon_social_nombres: razon_social_nombres,
             telefono: telefono,
             email: email,
@@ -118,7 +119,7 @@ function registrarse() {
             data: parametros,
             type: "post",
             cache: false,
-            success: function(resultado) {
+            success: function (resultado) {
                 $("#btn_signup").removeClass("hide");
                 $("#loader_signup").addClass("hide");
                 var response = JSON.parse(resultado);
@@ -160,7 +161,7 @@ function login(email, password) {
         data: parametros,
         type: "post",
         cache: false,
-        success: function(resultado) {
+        success: function (resultado) {
             $("#btn_login").removeClass("hide");
             $("#loader_login").addClass("hide");
             var response = JSON.parse(resultado);
@@ -204,7 +205,7 @@ function login(email, password) {
                     showConfirmButton: false,
                     timer: 3000
                 });
-                setTimeout(function() {
+                setTimeout(function () {
                     if (origen === "perfil") {
                         window.location.href = ruta_servidor + "/view/perfil";
                     } else {
@@ -270,7 +271,7 @@ function leer_sliders() {
         data: parametros,
         type: "post",
         cache: false,
-        success: function(resultado) {
+        success: function (resultado) {
             var sliders = JSON.parse(resultado);
             for (var i = 0; i < sliders.length; i++) {
                 document.getElementById("sliders").innerHTML +=
@@ -504,7 +505,7 @@ function todos_general() {
             data: parametros,
             type: "post",
             cache: false,
-            success: function(resultado) {
+            success: function (resultado) {
                 var productos = JSON.parse(resultado);
                 for (var i = 0; i < productos.length; i++) {
                     imprimir_todos(productos[i]);
@@ -526,7 +527,7 @@ function todos_general() {
             data: parametros,
             type: "post",
             cache: false,
-            success: function(resultado) {
+            success: function (resultado) {
                 var productos = JSON.parse(resultado);
                 for (var i = 0; i < productos.length; i++) {
                     imprimir_todos(productos[i]);
@@ -739,7 +740,7 @@ function productos_nuevos() {
             data: parametros,
             type: "post",
             cache: false,
-            success: function(resultado) {
+            success: function (resultado) {
                 var productos = JSON.parse(resultado);
                 for (var i = 0; i < productos.length; i++) {
                     imprimir_nuevos(productos[i]);
@@ -761,7 +762,7 @@ function productos_nuevos() {
             data: parametros,
             type: "post",
             cache: false,
-            success: function(resultado) {
+            success: function (resultado) {
                 var productos = JSON.parse(resultado);
                 for (var i = 0; i < productos.length; i++) {
                     imprimir_nuevos(productos[i]);
@@ -984,7 +985,7 @@ function ofertas() {
             data: parametros,
             type: "post",
             cache: false,
-            success: function(resultado) {
+            success: function (resultado) {
                 var productos = JSON.parse(resultado);
                 for (var i = 0; i < productos.length; i++) {
                     imprimir_ofertas(productos[i]);
@@ -1006,7 +1007,7 @@ function ofertas() {
             data: parametros,
             type: "post",
             cache: false,
-            success: function(resultado) {
+            success: function (resultado) {
                 var productos = JSON.parse(resultado);
                 for (var i = 0; i < productos.length; i++) {
                     imprimir_ofertas(productos[i]);
@@ -1024,7 +1025,7 @@ function ofertas() {
 function buscador() {
     /**Buscar productos */
     if (store.getItem("cliente")) {
-        $("#txt_buscar").keydown(function() {
+        $("#txt_buscar").keydown(function () {
             if ($("#txt_buscar").val() != "") {
                 $("#todos").html("");
                 $("#nuevos").html("");
@@ -1039,7 +1040,7 @@ function buscador() {
                     data: parametros,
                     type: "post",
                     cache: false,
-                    success: function(resultado) {
+                    success: function (resultado) {
                         $("#titulo_todos").html("");
                         $("#titulo_nuevos").html("");
                         $("#titulo_ofertas").html("");
@@ -1065,7 +1066,7 @@ function buscador() {
             }
         });
     } else {
-        $("#txt_buscar").keydown(function() {
+        $("#txt_buscar").keydown(function () {
             if ($("#txt_buscar").val() != "") {
                 $("#todos").html("");
                 $("#nuevos").html("");
@@ -1080,7 +1081,7 @@ function buscador() {
                     data: parametros,
                     type: "post",
                     cache: false,
-                    success: function(resultado) {
+                    success: function (resultado) {
                         $("#titulo_todos").html("");
                         $("#titulo_nuevos").html("");
                         $("#titulo_ofertas").html("");
@@ -1179,7 +1180,7 @@ function vista_rapida(producto) {
         }
 
     }
-    $("#cantidad_a_comprar").keyup(function() {
+    $("#cantidad_a_comprar").keyup(function () {
         document.getElementById("vr_ca").innerHTML = `
             <div onclick="comprar_ahora(${producto.prod_id}, ${$("#cantidad_a_comprar").val()}, ${producto.prod_stock}, 'nuevo');" style="cursor: pointer; border: 1px solid #1461a3; background: #1461a3; display: inline-flex; border-radius: 30px; height: 40px; width: 160px;">
                 <span style="margin: auto; color: #ffffff; font-weight: bold;">COMPRAR AHORA</span>
@@ -1227,7 +1228,7 @@ function comprar_ahora(codigo, cantidad, stock, origen) {
         data: parametros,
         type: "post",
         cache: false,
-        success: function(resultado) {
+        success: function (resultado) {
             var producto = JSON.parse(resultado);
             var precio = 0;
             switch (producto.prod_tipo) {
@@ -1394,7 +1395,7 @@ function _plus_item(codigo, stock, index, precio) {
         carrito.splice(index, 1, { producto: carrito[index].producto, cantidad: cantidad_actual, precio: precio });
         store.setItem("carrito", JSON.stringify(carrito));
         mostrar_carrito();
-        setTimeout(function() {
+        setTimeout(function () {
             $("#loader").addClass("hide_loader");
             $("#items_carrito").removeClass("disabled");
         }, 500);
@@ -1407,7 +1408,7 @@ function _plus_item(codigo, stock, index, precio) {
             timer: 2000
         });
         mostrar_carrito();
-        setTimeout(function() {
+        setTimeout(function () {
             $("#loader").addClass("hide_loader");
             $("#items_carrito").removeClass("disabled");
         }, 500);
@@ -1422,7 +1423,7 @@ function _less_item(codigo, stock, index, precio) {
     var cantidad_actual = parseInt(document.getElementById("cantidad_" + codigo).value);
     if (cantidad_actual === 1) {
         mostrar_carrito();
-        setTimeout(function() {
+        setTimeout(function () {
             $("#loader").addClass("hide_loader");
             $("#items_carrito").removeClass("disabled");
         }, 500);
@@ -1433,7 +1434,7 @@ function _less_item(codigo, stock, index, precio) {
     carrito.splice(index, 1, { producto: carrito[index].producto, cantidad: cantidad_actual, precio: precio });
     store.setItem("carrito", JSON.stringify(carrito));
     mostrar_carrito();
-    setTimeout(function() {
+    setTimeout(function () {
         $("#loader").addClass("hide_loader");
         $("#items_carrito").removeClass("disabled");
     }, 500);
@@ -1449,7 +1450,7 @@ function eliminar_item(codigo) {
             store.setItem("carrito", JSON.stringify(carrito));
             document.getElementById("cantidad_carrito").innerText = carrito.length;
             mostrar_carrito();
-            setTimeout(function() {
+            setTimeout(function () {
                 $("#loader").addClass("hide_loader");
                 $("#items_carrito").removeClass("disabled");
             }, 500);
@@ -1482,20 +1483,82 @@ function checkout() {
 
 /**Mostrar el carrito en el checkout */
 function mostrar_carrito_checkout() {
+
+    mostrar_envio(localStorage.getItem("direccion_envio"));
     $("#carrito_checkout").html("");
+    document.getElementById("subtotal_checkout").innerHTML = "";
+    document.getElementById("total_checkout").innerHTML = "";
+
+
     carrito = JSON.parse(store.getItem("carrito"));
-    for (var i = 0; i < carrito.length; i++) {
-        document.getElementById("carrito_checkout").innerHTML +=
+    // for (var i = 0; i < carrito.length; i++) {
+    //     document.getElementById("carrito_checkout").innerHTML +=
+    //         `
+    //             <li class="collection-item avatar" style="border: unset;">
+    //                 <img src="${carrito[i].producto.prod_foto}" alt="${carrito[i].producto.prod_nombre}" title="${carrito[i].producto.prod_nombre}"class="circle">
+    //                 <span style="font-weight: bold;">${carrito[i].producto.prod_nombre}</span>
+    //                 <p>Cantidad: ${carrito[i].cantidad}</p>
+    //                 <p class="secondary-content" style="color: #000000;">S/${parseFloat(carrito[i].precio).toFixed(2)}</i></p>
+    //             </li>
+    //             <li class="divider"></li>
+    //         `;
+    // }
+    if (carrito.length === 0) {
+        // $("#checkout").addClass("hide");
+        document.getElementById("carrito_checkout").innerHTML =
             `
-                <li class="collection-item avatar" style="border: unset;">
-                    <img src="${carrito[i].producto.prod_foto}" alt="${carrito[i].producto.prod_nombre}" title="${carrito[i].producto.prod_nombre}"class="circle">
-                    <span style="font-weight: bold;">${carrito[i].producto.prod_nombre}</span>
-                    <p>Cantidad: ${carrito[i].cantidad}</p>
-                    <p class="secondary-content" style="color: #000000;">S/${parseFloat(carrito[i].precio).toFixed(2)}</i></p>
+                <li class="collection-item" style="padding: 10px 0px; filter: opacity(0.5);">
+                    <div class="row" style="margin: unset;">
+                        <div class="col s12 center-align">
+                            <i class="medium material-icons" style="cursor: pointer; color: #0c489a;">remove_shopping_cart</i>
+                        </div>
+                        <div class="col s12 center-align">
+                            <h5 style="color: #0c489a;">Tu carrito de compras est&aacute; vac&iacute;o</h5>
+                        </div>
+                    </div>                    
                 </li>
-                <li class="divider"></li>
             `;
+        setTimeout(function () {
+            inicio();
+        }, 100);
+    } else {
+
+        for (var i = 0; i < carrito.length; i++) {
+            document.getElementById("carrito_checkout").innerHTML +=
+                `
+                <li class="collection-item" style="padding: 10px 0px;">
+                    <div class="row" style="margin: unset;">
+                        <div class="col s4 center-align">
+                            <img src="${carrito[i].producto.prod_foto}" alt="${carrito[i].producto.prod_nombre}" title="${carrito[i].producto.prod_nombre}" style="width: 120px;">
+                        </div>
+                        <div class="col s8 left-align">
+                            <p style="font-weight: bold; margin: unset;">${carrito[i].producto.prod_nombre}</p>
+                            <p style="margin: unset;">Precio: S/${carrito[i].precio}</p>
+                            <p style="margin: unset;">Cantidad: ${carrito[i].cantidad}</p>
+                            <p style="margin: unset;">Subtotal: S/${parseFloat(carrito[i].cantidad * carrito[i].precio).toFixed(2)}</p>
+                            <div class="row">
+                                <div class="col s12 center-align" style="padding: unset;">
+                                    <div style="display: flex; width: 70%; margin: auto; padding: 10px;">
+                                        <button class="less_plus" onclick="_less_item_checkout(${carrito[i].producto.prod_id}, ${carrito[i].producto.prod_stock}, ${i}, ${carrito[i].precio})">
+                                            <i class="material-icons" style="cursor: pointer;">remove</i>
+                                        </button>
+                                        <input type="number" readonly class="cantidad_a_comprar" id="cantidad_${carrito[i].producto.prod_id}" value="${carrito[i].cantidad}" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                                        <button class="less_plus" onclick="_plus_item_checkout(${carrito[i].producto.prod_id}, ${carrito[i].producto.prod_stock}, ${i}, ${carrito[i].precio})">
+                                            <i class="material-icons" style="cursor: pointer;">add</i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col s12 center-align" style="padding: unset;">
+                                    <button class="less_plus" onclick="eliminar_item_checkout(${carrito[i].producto.prod_id});"><i class="material-icons" style="cursor: pointer; color: red;">delete</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </li>
+            `;
+        }
     }
+
     document.getElementById("subtotal_checkout").innerHTML +=
         `
             <li class="collection-item" style="border: unset;">
@@ -1515,8 +1578,86 @@ function mostrar_carrito_checkout() {
                 <span class="secondary-content" style="color: #000000;"><b>S/<span id="total_final">${calcular_subtotal()}</span></b></span>
             </li>
         `;
-
 }
+
+/**Eliminar item del carrito */
+function eliminar_item_checkout(codigo) {
+    // $("#loader").removeClass("hide_loader");
+    // $("#items_carrito").addClass("disabled");
+    for (var i = 0; i < carrito.length; i++) {
+        if (carrito[i].producto.prod_id == codigo) {
+            carrito.splice(i, 1);
+            store.setItem("carrito", JSON.stringify(carrito));
+            // document.getElementById("cantidad_carrito").innerText = carrito.length;
+            mostrar_carrito_checkout();
+            setTimeout(function () {
+                $("#loader").addClass("hide_loader");
+                $("#items_carrito").removeClass("disabled");
+            }, 500);
+            return;
+        }
+    }
+}
+
+
+/**Aumentar cantidad en el carrito del checkout*/
+function _plus_item_checkout(codigo, stock, index, precio) {
+    // $("#loader").removeClass("hide_loader");
+    // $("#items_carrito").addClass("disabled");
+    var cantidad_actual = parseInt(document.getElementById("cantidad_" + codigo).value);
+    cantidad_actual = cantidad_actual + 1;
+    if (cantidad_actual <= stock) {
+        document.getElementById("cantidad_" + codigo).value = cantidad_actual;
+        carrito.splice(index, 1, { producto: carrito[index].producto, cantidad: cantidad_actual, precio: precio });
+        store.setItem("carrito", JSON.stringify(carrito));
+        mostrar_carrito_checkout();
+        // setTimeout(function () {
+        //     $("#loader").addClass("hide_loader");
+        //     $("#items_carrito").removeClass("disabled");
+        // }, 500);
+    } else {
+        Swal.fire({
+            title: "Piidelo.com",
+            icon: "error",
+            text: "No hay sufuciente stock, sólo queda(n) " + stock + " unidad(es)",
+            showConfirmButton: false,
+            timer: 2000
+        });
+        mostrar_carrito_checkout();
+        // setTimeout(function () {
+        //     $("#loader").addClass("hide_loader");
+        //     $("#items_carrito").removeClass("disabled");
+        // }, 500);
+        return;
+    }
+}
+
+/**Disminuir cantidad en el carrito */
+function _less_item_checkout(codigo, stock, index, precio) {
+    // $("#loader").removeClass("hide_loader");
+    // $("#items_carrito").addClass("disabled");
+    var cantidad_actual = parseInt(document.getElementById("cantidad_" + codigo).value);
+    if (cantidad_actual === 1) {
+        mostrar_carrito_checkout();
+        // setTimeout(function () {
+        //     $("#loader").addClass("hide_loader");
+        //     $("#items_carrito").removeClass("disabled");
+        // }, 500);
+        return;
+    }
+    cantidad_actual = cantidad_actual - 1;
+    document.getElementById("cantidad_" + codigo).value = cantidad_actual;
+    carrito.splice(index, 1, { producto: carrito[index].producto, cantidad: cantidad_actual, precio: precio });
+    store.setItem("carrito", JSON.stringify(carrito));
+    mostrar_carrito_checkout();
+    // setTimeout(function () {
+    //     $("#loader").addClass("hide_loader");
+    //     $("#items_carrito").removeClass("disabled");
+    // }, 500);
+}
+
+
+
 /**Calcular envio */
 function mostrar_envio(codigo) {
     parametros = {
@@ -1528,7 +1669,7 @@ function mostrar_envio(codigo) {
         data: parametros,
         type: "post",
         cache: false,
-        success: function(resultado) {
+        success: function (resultado) {
             var direccion = JSON.parse(resultado);
             $("#envio_final").html(direccion.envio);
             calcular_total_checkout();
@@ -1553,7 +1694,7 @@ function listar_departamentos() {
         data: parametros,
         type: "post",
         cache: false,
-        success: function(resultado) {
+        success: function (resultado) {
             var departamentos = JSON.parse(resultado);
             departamentos.forEach(departamento => {
                 var select = document.getElementById("select_departamento_add");
@@ -1582,7 +1723,7 @@ function listar_provincias(departamento) {
         data: parametros,
         type: "post",
         cache: false,
-        success: function(resultado) {
+        success: function (resultado) {
             var provincias = JSON.parse(resultado);
             provincias.forEach(provincia => {
                 var option = document.createElement("option");
@@ -1611,7 +1752,7 @@ function listar_distritos(provincia) {
         data: parametros,
         type: "post",
         cache: false,
-        success: function(resultado) {
+        success: function (resultado) {
             var distritos = JSON.parse(resultado);
             distritos.forEach(distrito => {
                 var option = document.createElement("option");
@@ -1644,7 +1785,7 @@ function add_favorito(producto) {
         data: parametros,
         type: "post",
         cache: false,
-        success: function(resultado) {
+        success: function (resultado) {
             var response = JSON.parse(resultado);
             var codigo = response.codigo;
             var mensaje = response.mensaje;
@@ -1679,7 +1820,7 @@ function remove_favorito(producto) {
         data: parametros,
         type: "post",
         cache: false,
-        success: function(resultado) {
+        success: function (resultado) {
             var response = JSON.parse(resultado);
             var codigo = response.codigo;
             var mensaje = response.mensaje;
@@ -1725,7 +1866,7 @@ function todos_favoritos() {
         data: parametros,
         type: "post",
         cache: false,
-        success: function(resultado) {
+        success: function (resultado) {
             var productos = JSON.parse(resultado);
             for (var i = 0; i < productos.length; i++) {
                 imprimir_todos(productos[i]);
@@ -1753,7 +1894,7 @@ function productos_nuevos_favoritos() {
         data: parametros,
         type: "post",
         cache: false,
-        success: function(resultado) {
+        success: function (resultado) {
             var productos = JSON.parse(resultado);
             for (var i = 0; i < productos.length; i++) {
                 imprimir_nuevos(productos[i]);
@@ -1782,7 +1923,7 @@ function ofertas_favoritos() {
         data: parametros,
         type: "post",
         cache: false,
-        success: function(resultado) {
+        success: function (resultado) {
             var productos = JSON.parse(resultado);
             for (var i = 0; i < productos.length; i++) {
                 imprimir_ofertas(productos[i]);

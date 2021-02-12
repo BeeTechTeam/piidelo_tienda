@@ -61,6 +61,72 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col s12">
+                        <h5>Elige tu comprobante de pago</h5>
+                        <div class="row">
+                            <div class="col s12">
+                                <form style="display: inline-flex;" id="radio_comprobante">
+                                    <p style="margin: 10px;">
+                                        <label>
+                                            <input name="tipo_comprobante" type="radio" value="Boleta" checked />
+                                            <span>BOLETA</span>
+                                        </label>
+                                    </p>
+                                    <p style="margin: 10px;">
+                                        <label>
+                                            <input name="tipo_comprobante" value="Factura" type="radio" />
+                                            <span>FACTURA</span>
+                                        </label>
+                                    </p>
+                                </form>
+                            </div>
+                            <div class="col s12" style="padding-left: 55px; padding-right: 55px;">
+                                <div id="comprobante_boleta">
+                                    <form class="row">
+                                        <div class="input-field col s12 m12 l12 x12">
+                                            <input id="txt_dni" type="number" placeholder="DNI">
+                                        </div>
+                                        <div class="input-field col s12 m6 l6 xl6">
+                                            <input id="txt_nombres_apellidos" type="text" placeholder="Nombres y apellidos">
+                                        </div>
+                                        <div class="input-field col s12 m6 l6 xl6">
+                                            <input id="txt_direccion_boleta" type="text" placeholder="Dirección">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div id="comprobante_factura" class="hide">
+                                    <form class="row">
+                                        <div class="input-field col s12 m12 l12 x12">
+                                            <input id="txt_ruc" type="number" placeholder="RUC">
+                                        </div>
+                                        <div class="input-field col s12 m6 l6 xl6">
+                                            <input id="txt_razon_social" type="text" placeholder="Razón social">
+                                        </div>
+                                        <div class="input-field col s12 m6 l6 xl6">
+                                            <input id="txt_direccion_factura" type="text" placeholder="Dirección">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col s12">
+                        <h5>Informaci&oacute;n para el repartidor</h5>
+                        <div class="row">
+                            <div class="col s12">
+                                <form class="col s12">
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <textarea id="txt_informacion" class="materialize-textarea"></textarea>
+                                            <label for="txt_informacion">Agrega informaci&oacute;n adicional para el repartidor</label>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col s12">
                         <h5>Informaci&oacute;n de pago</h5>
                         <p>Cuentas bancarias de piidelo.com afiliadas a nombre de: <b>Solange Arce Silvera</b></p>
@@ -98,6 +164,9 @@
                         <div class="row">
                             <div class="col s12 center-align">
                                 <button onclick="verificar_datos_de_entrega();" id="btn_verificar" class="btn" style="margin: 15px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">Finalizar pedido</button>
+                            </div>
+                            <div class="col s12 center-align">
+                                <a href="checkout.php">Regresar</a>
                             </div>
                             <div class="col s12" style="text-align: center;">
                                 <div class="preloader-wrapper big active hide" style="width: 50px; height: 50px;" id="loader_verificar">
@@ -161,6 +230,7 @@
     mostrar_envio(store.getItem("direccion_envio"));
     mostrar_carrito_checkout();
     tipo_pedido();
+    tipo_comprobante();
 
     function tipo_pedido() {
         if ($("input[name=tipo_pedido]:checked", "#radio").val() === "Programado") {
@@ -172,9 +242,30 @@
         }
     }
 
+    function tipo_comprobante() {
+        if ($("input[name=tipo_comprobante]:checked", "#radio_comprobante").val() === "Boleta") {
+            $("#comprobante_factura").addClass("hide");
+            $("#comprobante_boleta").removeClass("hide");
+        } else {
+            $("#comprobante_factura").removeClass("hide");
+            $("#comprobante_boleta").addClass("hide");
+        }
+    }
+
     $(document).ready(function() {
-        $("#radio input").on("change", function() {
+        $("#radio input[name=tipo_pedido]").on("change", function() {
             tipo_pedido();
+        });
+        $("#radio_comprobante input[name=tipo_comprobante]").on("change", function() {
+            tipo_comprobante();
+        });
+        document.getElementById("txt_dni").addEventListener("input", function() {
+            if (this.value.length > 8)
+                this.value = this.value.slice(0, 8);
+        });
+        document.getElementById("txt_ruc").addEventListener("input", function() {
+            if (this.value.length > 11)
+                this.value = this.value.slice(0, 11);
         });
         var today = new Date();
         var min_dd = today.getDate();
@@ -303,6 +394,19 @@
         var direccion = store.getItem("direccion_envio");
         var carrito = JSON.parse(store.getItem("carrito"));
         var total = parseFloat(document.getElementById("total_final").innerText);
+        var informacion = $("#txt_informacion").val();
+        var documento, razon_social_nombres, direccion_comprobante, tipo_comprobante;
+        if ($("input[name=tipo_comprobante]:checked", "#radio_comprobante").val() === "Boleta") {
+            tipo_comprobante = "Boleta";
+            documento = $("#txt_dni").val();
+            razon_social_nombres = $("#txt_nombres_apellidos").val();
+            direccion_comprobante = $("#txt_direccion_boleta").val();
+        } else {
+            tipo_comprobante = "Factura";
+            documento = $("#txt_ruc").val();
+            razon_social_nombres = $("#txt_razon_social").val();
+            direccion_comprobante = $("#txt_direccion_factura").val();
+        }
         parametros = {
             metodo: "FinalizarPedido",
             carrito: carrito,
@@ -310,7 +414,12 @@
             direccion: direccion,
             tipo: tipo,
             fecha_programacion: fecha_programacion,
-            total: total
+            total: total,
+            informacion: informacion,
+            tipo_comprobante: tipo_comprobante,
+            documento: documento,
+            razon_social_nombres: razon_social_nombres,
+            direccion_comprobante: direccion_comprobante
         };
         $.ajax({
             url: "../config/pedido/pedido",
@@ -350,6 +459,18 @@
                 }
             }
         });
+    }
+
+    /**Llenamos la información de facturación */
+    llenar_informacion_facturacion();
+    function llenar_informacion_facturacion() {
+        var cliente = JSON.parse(store.getItem("cliente"))
+        $("#txt_dni").val(cliente.ruc);
+        $("#txt_nombres_apellidos").val(cliente.nombres);
+        $("#txt_direccion_boleta").val(cliente.direccion);
+        $("#txt_ruc").val(cliente.ruc);
+        $("#txt_razon_social").val(cliente.razon_social);
+        $("#txt_direccion_factura").val(cliente.direccion);
     }
 </script>
 

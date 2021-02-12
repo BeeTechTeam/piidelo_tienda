@@ -6,34 +6,35 @@ switch ($metodo) {
         /**Función para registra al usuario en la base de datos */
     case "Signup":
         /**Recibimos los par&aacute;metros a trav&eacute;s del m&eacute;todo POST */
-        $ruc_dni = trim($_POST["ruc_dni"]);
+        // $ruc_dni = trim($_POST["ruc_dni"]);
         $razon_social_nombres = trim($_POST["razon_social_nombres"]);
         $telefono = trim($_POST["telefono"]);
         $email = trim($_POST["email"]);
         $password = trim($_POST["password"]);
 
         /**Función para el login */
-        function signup($ruc_dni, $razon_social_nombres, $telefono, $email, $password, $connection)
+        function signup($razon_social_nombres, $telefono, $email, $password, $connection)
         {
 
-            $select = "select cli_id from cliente where cli_ruc = '" . trim($ruc_dni) . "'  and cli_estado = 'ACTIVO'";
-            $result = mysqli_query($connection, $select);
-            $response = [];
-            if ($result->num_rows > 0) {
-                $response = array(
-                    "codigo" => 106,
-                    "mensaje" => "Ya existe el cliente"
-                );
-                $result->close();
-            } else {
-                $insert = "insert into cliente(
-                        cli_ruc,
+            // $select = "select cli_id from cliente where cli_ruc = '" . trim($ruc_dni) . "'  and cli_estado = 'ACTIVO'";
+            // $result = mysqli_query($connection, $select);
+            // $response = [];
+            // if ($result->num_rows > 0) {
+            //     $response = array(
+            //         "codigo" => 106,
+            //         "mensaje" => "Ya existe el cliente"
+            //     );
+            //     $result->close();
+            // } else {
+                /**
+                 * Se eliminó cli_ruc ('" . trim($ruc_dni) . "',)
+                 */
+                $insert = "insert into cliente(                        
                         cli_razon_social,
                         cli_telefono,
                         cli_email,
                         cli_estado) 
-                        values(
-                            '" . trim($ruc_dni) . "',
+                        values(                            
                             '" . trim($razon_social_nombres) . "',
                             '" . trim($telefono) . "',
                             '" . trim($email) . "',
@@ -99,10 +100,10 @@ switch ($metodo) {
                         "mensaje" => "Error al crear cliente"
                     );
                 }
-            }
+            // }
             echo json_encode($response);
         }
         /**Ejecutamos la función para el signup */
-        signup($ruc_dni, $razon_social_nombres, $telefono, $email, $password, $connection);
+        signup($razon_social_nombres, $telefono, $email, $password, $connection);
         break;
 }

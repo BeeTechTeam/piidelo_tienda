@@ -13,10 +13,15 @@ switch ($metodo) {
         $cliente = $_POST["cliente"];
         $direccion = $_POST["direccion"];
         $tipo = $_POST["tipo"];
-        $fecha_programacion  = $_POST["fecha_programacion"];
+        $fecha_programacion = $_POST["fecha_programacion"];
+        $observacion = $_POST["informacion"];
+        $documento = $_POST["documento"];
+        $razon_social_nombres = $_POST["razon_social_nombres"];
+        $direccion_comprobante = $_POST["direccion_comprobante"];
+        $tipo_comprobante = $_POST["tipo_comprobante"];
 
         /**Funci&oacute;n para insertar el pedido */
-        function finalizar_pedido($carrito, $total, $cliente, $direccion, $tipo, $fecha_programacion, $connection)
+        function finalizar_pedido($carrito, $total, $cliente, $direccion, $tipo, $fecha_programacion, $observacion, $documento, $razon_social_nombres, $direccion_comprobante, $tipo_comprobante, $connection)
         {
             $subtotal = round(floatval($total / 1.18), 2, PHP_ROUND_HALF_UP);
             $igv = round(floatval($total - $subtotal), 2, PHP_ROUND_HALF_UP);
@@ -33,7 +38,12 @@ switch ($metodo) {
                                 ped_total,
                                 ped_cliente,
                                 ped_direccion,
-                                ped_tipo
+                                ped_tipo,
+                                ped_observacion,
+                                ped_comprobante,
+                                ped_documento,
+                                ped_razon_social,
+                                ped_direccion_comprobante
                             ) 
                             values(
                                 '" . $fecha_solicitud . "', 
@@ -43,7 +53,12 @@ switch ($metodo) {
                                     '" . str_replace(",", ".", $total) . "', 
                                     '" . $cliente . "', 
                                     '" . $direccion . "', 
-                                    '" . $tipo . "'
+                                    '" . $tipo . "',
+                                    '" . $observacion . "',
+                                    '" . $tipo_comprobante . "',
+                                    '" . $documento . "',
+                                    '" . $razon_social_nombres . "',
+                                    '" . $direccion_comprobante . "'
                             )";
             } else {
                 $insert = "insert into pedido(
@@ -55,7 +70,12 @@ switch ($metodo) {
                                 ped_cliente,
                                 ped_direccion,
                                 ped_tipo,
-                                ped_fecha_programacion
+                                ped_fecha_programacion,
+                                ped_observacion,
+                                ped_comprobante,
+                                ped_documento,
+                                ped_razon_social,
+                                ped_direccion_comprobante
                             ) 
                             values(
                                 '" . $fecha_solicitud . "', 
@@ -66,7 +86,12 @@ switch ($metodo) {
                                     '" . $cliente . "', 
                                     '" . $direccion . "', 
                                     '" . $tipo . "',
-                                    '" . $fecha_programacion . "'
+                                    '" . $fecha_programacion . "',
+                                    '" . $observacion . "',
+                                    '" . $tipo_comprobante . "',
+                                    '" . $documento . "',
+                                    '" . $razon_social_nombres . "',
+                                    '" . $direccion_comprobante . "'
                             )";
             }
 
@@ -117,14 +142,14 @@ switch ($metodo) {
             } else {
                 $response = array(
                     "codigo" => 108,
-                    "mensaje" => "Error al guardar pedido"
+                    "mensaje" => "Error al guardar pedido" . $connection->error
                 );
             }
             echo json_encode($response);
         }
 
         /**Ejecutamos la funci&oacute;n para el registro del pedido */
-        finalizar_pedido($carrito, $total, $cliente, $direccion, $tipo, $fecha_programacion, $connection);
+        finalizar_pedido($carrito, $total, $cliente, $direccion, $tipo, $fecha_programacion, $observacion, $documento, $razon_social_nombres, $direccion_comprobante, $tipo_comprobante, $connection);
         break;
 
 

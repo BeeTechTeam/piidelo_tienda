@@ -689,11 +689,11 @@
                 <h3 style="font-weight: bold; color: #1461a3; margin: 2vh;">Crear cuenta</h3>
                 <p>Completa la informaci&oacute;n solicitada para crear tu cuenta</p>
                 <form class="col s12">
-                    <div class="input-field col s12 m6 l6 xl6">
+                    <!-- <div class="input-field col s12 m6 l6 xl6">
                         <i class="material-icons prefix" style="color: #1461a3;">business_center</i>
                         <input id="txt_ruc_dni" type="number" placeholder="RUC o DNI">
-                    </div>
-                    <div class="input-field col s12 m6 l6 xl6">
+                    </div> -->
+                    <div class="input-field col s12 m12 l12 x12">
                         <i class="material-icons prefix" style="color: #1461a3;">business</i>
                         <input id="txt_razon_social_nombres" type="text" placeholder="Raz&oacute;n Social o Nombres">
                     </div>
@@ -955,10 +955,10 @@
 
     /**Validar entrada de caracteres */
     /**Limitar el RUC */
-    document.getElementById("txt_ruc_dni").addEventListener("input", function() {
-        if (this.value.length > 11)
-            this.value = this.value.slice(0, 11);
-    });
+    // document.getElementById("txt_ruc_dni").addEventListener("input", function() {
+    //     if (this.value.length > 11)
+    //         this.value = this.value.slice(0, 11);
+    // });
 
     /**Limitar el tel&eacute;fono */
     document.getElementById("txt_telefono").addEventListener("input", function() {

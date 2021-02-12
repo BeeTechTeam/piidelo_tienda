@@ -41,7 +41,11 @@
                             <select id="select_direcciones">
                             </select>
                             <label>Direcciones guardadas</label>
-                            <p><a id="abrir_modal_direcciones" href="#modal_direcciones" class="modal-trigger">Agregar nueva direcci&oacute;n</a></p>
+                            <p>
+                                <button class="btn" style="background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">
+                                    <a id="abrir_modal_direcciones" href="#modal_direcciones" class="modal-trigger" style="color: #1461a3;">Agregar nueva direcci&oacute;n</a>
+                                </button>
+                            </p>
                             <p id="zona_no_disponible" class="hide" style="color: #F44336; font-weight: bold;">Su distrito no está dentro de nuestra zona de cobertura, lamentamos no poder atenderlo por ahora. Revisar nuestras zonas de cobertura disponibles, gracias. </p>
                             <p><a href="#modal_zonas_cobertura" class="modal-trigger" style="color: #1461a3; font-weight: bold; background: #f8f300;">Zonas de cobertura</a></p>
                         </div>
@@ -86,7 +90,14 @@
             <div class="col s12 m12 l5 xl5">
                 <div class="row">
                     <div class="col s12">
-                        <h5>Detalle del carrito</h5>
+                        <div class="row">
+                            <div class="col s12 m12 l7 xl7">
+                                <h5 style="margin: unset;">Detalle del carrito</h5>
+                            </div>
+                            <div class="col s12 m12 l5 xl5">
+                                <a href="#" onclick="inicio();">Seguir comprando</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="col s12">
                         <ul class="collection" id="carrito_checkout" style="border: unset;">

@@ -19,51 +19,62 @@ switch ($metodo) {
 
         function actualizar_informacion($apellidos, $direccion, $dni, $email, $nombres, $razon_social, $telefono, $cliente, $usuario, $connection)
         {
-            $update_cliente = "update cliente set 
+
+            $select = "select cli_id from cliente where cli_ruc = '" . trim($dni) . "'  and cli_estado = 'ACTIVO' and cli_id <> '" . $cliente . "'";
+            $result = mysqli_query($connection, $select);
+            $response = [];
+            if ($result->num_rows > 0) {
+                $response = array(
+                    "codigo" => 110,
+                    "mensaje" => "Ya existe el documento registrado"
+                );
+                $result->close();
+            } else {
+                $update_cliente = "update cliente set 
                 cli_ruc = '" . $dni . "',
                 cli_razon_social = '" . $razon_social . "',
                 cli_telefono = '" . $telefono . "',
                 cli_email = '" . $email . "',
                 cli_direccion = '" . $direccion . "'
                 where cli_id = '" . $cliente . "' and cli_estado = 'ACTIVO'";
-            $response = [];
-            if (mysqli_query($connection, $update_cliente) === true) {
-                $update_usuario = "update usuario set 
+                $response = [];
+                if (mysqli_query($connection, $update_cliente) === true) {
+                    $update_usuario = "update usuario set 
                 usu_nombres = '" . $nombres . "',
                 usu_apellidos = '" . $apellidos . "',
                 usu_usuario = '" . $email . "'
                 where usu_id = '" . $usuario . "' and usu_estado = 'ACTIVO'";
-                if (mysqli_query($connection, $update_usuario) === true) {
-                    $cliente__ = array(
-                        "apellidos" => utf8_decode($apellidos),
-                        "nombres" => utf8_decode($nombres),
-                        "codigo" => $cliente,
-                        "codigo_usuario" => $usuario,
-                        "direccion" => utf8_decode($direccion),
-                        "email" => $email,
-                        "razon_social" => utf8_decode($razon_social),
-                        "ruc" => $dni,
-                        "telefono" => $telefono,
-                        "usuario" => $email,
-                    );
-                    $response = array(
-                        "codigo" => 111,
-                        "mensaje" => "Datos personales actualizados correctamente",
-                        "cliente" => $cliente__
-                    );
+                    if (mysqli_query($connection, $update_usuario) === true) {
+                        $cliente__ = array(
+                            "apellidos" => utf8_decode($apellidos),
+                            "nombres" => utf8_decode($nombres),
+                            "codigo" => $cliente,
+                            "codigo_usuario" => $usuario,
+                            "direccion" => utf8_decode($direccion),
+                            "email" => $email,
+                            "razon_social" => utf8_decode($razon_social),
+                            "ruc" => $dni,
+                            "telefono" => $telefono,
+                            "usuario" => $email,
+                        );
+                        $response = array(
+                            "codigo" => 111,
+                            "mensaje" => "Datos personales actualizados correctamente",
+                            "cliente" => $cliente__
+                        );
+                    } else {
+                        $response = array(
+                            "codigo" => 110,
+                            "mensaje" => "Error al actualizar tus datos personales"
+                        );
+                    }
                 } else {
                     $response = array(
                         "codigo" => 110,
                         "mensaje" => "Error al actualizar tus datos personales"
                     );
                 }
-            } else {
-                $response = array(
-                    "codigo" => 110,
-                    "mensaje" => "Error al actualizar tus datos personales"
-                );
             }
-
             echo json_encode($response);
         }
 
