@@ -753,6 +753,7 @@
 
     <!-- Modal de iniciar_sesion -->
     <div id="modal_iniciar_sesion" class="modal">
+        <i class="material-icons modal-close hide" id="close_modal_iniciar_sesion">close</i>
         <div class="row" style="border-radius: 30px; height: 100%;">
             <div class="col s12 center-align" style="height: 100%; border-radius: 0px 30px 30px 0px;">
                 <h3 style="font-weight: bold; color: #1461a3; margin: 2vh;">Iniciar sesi&oacute;n</h3>
@@ -791,9 +792,10 @@
                         <button id="btn_login" onclick="iniciar_sesion();" class="btn" style="width: 150px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">INICIAR SESI&Oacute;N</button>
                     </div>
                     <div class="col s12" style="padding: 5px;">
-                        <a style="color: #1461a3;" href="https://api.whatsapp.com/send?phone=51922944350&text=Vengo%20de%20la%20web%20Piidelo.com,%20quiero%20saber%20sobre%20" target="_blank">
+                        <!-- <a style="color: #1461a3;" href="https://api.whatsapp.com/send?phone=51922944350&text=Vengo%20de%20la%20web%20Piidelo.com,%20quiero%20saber%20sobre%20" target="_blank">
                             ¿Olvidaste tu contraseña?
-                        </a>
+                        </a> -->
+                        <a class="modal-trigger" href="#modal_recuperar_password" onclick="close_iniciar_sesion();">¿Olvidaste tu contraseña?</a>
                     </div>
                 </div>
             </div>
@@ -802,6 +804,45 @@
 
     <!-- Abrir signup -->
     <a class="modal-trigger hide" href="#modal_iniciar_sesion" id="abrir_signin"></a>
+
+    <!-- Modal de recuperar contraseña -->
+    <div id="modal_recuperar_password" class="modal">
+        <div class="row" style="border-radius: 30px; height: 100%;">
+            <div class="col s12 hide">
+                <i class="material-icons modal-close" id="close_modal_recuperar_password">close</i>
+            </div>
+            <div class="col s12 center-align" style="height: 100%; border-radius: 0px 30px 30px 0px;">
+                <h3 style="font-weight: bold; color: #1461a3; margin: 2vh;">Recuperar contraseña</h3>
+                <p>Por favor ingresa tu email para poder enviarte un mensaje con tu contraseña</p>
+                <form class="row" style="width: 70%; margin: auto;">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix" style="color: #1461a3;">email</i>
+                        <input id="txt_email_recuperar_password" type="email" placeholder="Email">
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col s12" style="text-align: center;">
+                        <div class="preloader-wrapper big active hide" style="width: 50px; height: 50px;" id="loader_recuperar_password">
+                            <div class="spinner-layer" style="border-color: #1461a3;">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12" style="padding: 5px;">
+                        <button id="btn_recuperar_password" onclick="recuperar_password();" class="btn" style="width: 150px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">ENVIAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="page-footer">
@@ -924,7 +965,7 @@
         $("#ocultar_password").addClass("hide");
         $("#ver_password").removeClass("hide");
     });
-    
+
     /**Ver contraseña */
     $("#ver_password_login").on("click", function() {
         $("#ver_password_login").addClass("hide");
@@ -965,6 +1006,70 @@
         if (this.value.length > 9)
             this.value = this.value.slice(0, 9);
     });
+
+    /**Recuperar contraseña */
+    function recuperar_password() {
+        $("#btn_recuperar_password").addClass("hide");
+        $("#loader_recuperar_password").removeClass("hide");
+        var email = document.getElementById("txt_email_recuperar_password").value;
+        if (!validar_email(email)) {
+            Swal.fire({
+                title: "Piidelo.com",
+                icon: "warning",
+                text: "Ingresa un email válido",
+                showConfirmButton: false,
+                timer: 2000
+            });
+            $("#loader_recuperar_password").addClass("hide");
+            $("#btn_recuperar_password").removeClass("hide");
+        } else {
+            parametros = {
+                correo: email
+            }
+            $.ajax({
+                url: "config/recuperar_password/recuperar_password",
+                data: parametros,
+                type: "post",
+                cache: false,
+                success: function(data) {
+                    $("#loader_recuperar_password").addClass("hide");
+                    $("#btn_recuperar_password").removeClass("hide");
+                    const response = JSON.parse(data);
+                    const mensaje = response.mensaje;
+                    const codigo = response.codigo;
+                    if (codigo === 200) {
+                        Swal.fire({
+                            title: "Piidelo.com",
+                            icon: "success",
+                            text: mensaje,
+                            showConfirmButton: true
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                signin();
+                            }
+                        });
+                        $("#close_modal_recuperar_password").click();
+                    } else {
+                        Swal.fire({
+                            title: "Piidelo.com",
+                            icon: "error",
+                            text: mensaje,
+                            showConfirmButton: true
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    /**Funciones para abrir y cerrar el inicio de sesión */
+    function close_iniciar_sesion() {
+        $("#close_modal_iniciar_sesion").click();
+    }
+
+    function open_iniciar_sesion() {
+        $("#abrir_signin").click();
+    }
 </script>
 
 </html>
