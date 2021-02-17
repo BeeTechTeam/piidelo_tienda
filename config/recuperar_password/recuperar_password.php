@@ -23,7 +23,7 @@ function recupear_password($connection, $correo)
                         <meta charset="UTF-8">
                         <meta http-equiv="X-UA-Compatible" content="IE=edge">
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>Document</title>
+                        <title>Recuperar password</title>
                         <style>
                             @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
                             body {
@@ -34,11 +34,11 @@ function recupear_password($connection, $correo)
 
                     <body>
                         <div style="text-align: center;">
-                            <h1>Recuperaci&oacute;n de contraseña de <a href="https://www.piidelo.com">piidelo.com</a> </h1>
-                            <img src="https://www.piidelo.com/image/logo.png" alt="Piidelo.com" title="Piidelo.com" width="400px">
-                            <p>Tu contraseña es: <b>' . $password . '</b></p>
-                            <p>Te recomendamos cambiarla, anotarla y guardarla en un lugar seguro.</p>
-                            <p>Atentamente: Equipo de soporte de Piidelo.com</p>
+                            <h1 style="font-family: Quicksand;">Recuperaci&oacute;n de contraseña de <a href="https://www.piidelo.com">piidelo.com</a> </h1>
+                            <img src="https://www.piidelo.com/image/logo.png" alt="Piidelo.com" title="Piidelo.com" width="200px">
+                            <p style="font-family: Quicksand;">Tu contraseña es: <b>' . $password . '</b></p>
+                            <p style="font-family: Quicksand;">Te recomendamos cambiarla, anotarla y guardarla en un lugar seguro.</p>
+                            <p style="font-family: Quicksand;">Atentamente: Equipo de soporte de Piidelo.com</p>
                         </div>
                     </body>
 
@@ -46,11 +46,11 @@ function recupear_password($connection, $correo)
                                 ';
 
             $email = new \SendGrid\Mail\Mail();
-            $email->setFrom("holapiidelo@gmail.com", "Piidelo.com");
+            $email->setFrom("hola@piidelo.com", "Piidelo.com");
             $email->setSubject("RECUPERAR CONTRASEÑA - PIIDELO.COM");
             $email->addTo($correo, $correo);
             $email->addContent("text/html", $htmlContent);
-            $sendgrid = new \SendGrid("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");
+            $sendgrid = new \SendGrid("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");
             try {
                 $response = $sendgrid->send($email);
                 $codigo =  $response->statusCode();

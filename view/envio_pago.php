@@ -166,7 +166,7 @@
                                 <button onclick="verificar_datos_de_entrega();" id="btn_verificar" class="btn" style="margin: 15px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">Finalizar pedido</button>
                             </div>
                             <div class="col s12 center-align">
-                                <a href="checkout.php">Regresar</a>
+                                <a href="checkout.php" style="font-weight: bold; color: #1461a3;">Regresar</a>
                             </div>
                             <div class="col s12" style="text-align: center;">
                                 <div class="preloader-wrapper big active hide" style="width: 50px; height: 50px;" id="loader_verificar">
@@ -430,6 +430,7 @@
                 $("#btn_verificar").removeClass("hide");
                 $("#loader_verificar").addClass("hide");
                 var resultado = JSON.parse(response);
+                console.log(resultado);  
                 var codigo = resultado.codigo;
                 var mensaje = resultado.mensaje;
                 if (codigo === 108) {

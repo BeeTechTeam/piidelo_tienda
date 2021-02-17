@@ -11,18 +11,20 @@ switch ($metodo) {
         $dni = trim($_POST["dni"]);
         $telefono = trim($_POST["telefono"]);
         $direccion = utf8_encode(trim($_POST["direccion"]));
+        $interior = trim($_POST["interior"]);
         $latitud = trim($_POST["latitud"]);
         $longitud = trim($_POST["longitud"]);
         $distrito = trim($_POST["distrito"]);
         $cliente = trim($_POST["cliente"]);
 
-        function crear_direccion($nombres, $dni, $telefono, $direccion, $latitud, $longitud, $distrito, $cliente, $connection)
+        function crear_direccion($nombres, $dni, $telefono, $direccion, $interior, $latitud, $longitud, $distrito, $cliente, $connection)
         {
             $insert = "insert into direccion(
                 dir_nombres,
                 dir_dni,
                 dir_telefono,
                 dir_direccion,
+                dir_interior,
                 dir_latitud,
                 dir_longitud,
                 dir_estado,
@@ -33,6 +35,7 @@ switch ($metodo) {
                     '" . $dni . "',
                     '" . $telefono . "',
                     '" . $direccion . "',
+                    '" . $interior . "',
                     '" . $latitud . "',
                     '" . $longitud . "',
                     'ACTIVA',
@@ -53,7 +56,7 @@ switch ($metodo) {
             echo  json_encode($response);
         }
 
-        crear_direccion($nombres, $dni, $telefono, $direccion, $latitud, $longitud, $distrito, $cliente, $connection);
+        crear_direccion($nombres, $dni, $telefono, $direccion, $interior, $latitud, $longitud, $distrito, $cliente, $connection);
         break;
 
         /**Función para listar las direcciones ya registradas */
@@ -76,7 +79,8 @@ switch ($metodo) {
                             inner join distrito dis on dir.dir_distrito = dis.dis_id
                             inner join provincia pro on dis.dis_provincia = pro.provi_id
                             inner join departamento dep on pro.provi_departamento = dep.dep_id
-                        where dir_cliente = '" . $codigo . "' and dir_estado = 'ACTIVA'";
+                        where dir_cliente = '" . $codigo . "' and dir_estado = 'ACTIVA'
+                        order by dir_id desc";
             $result = mysqli_query($connection, $select);
             $direcciones = [];
             if ($result->num_rows > 0) {
@@ -87,6 +91,7 @@ switch ($metodo) {
                         "dni" => $row["dir_dni"],
                         "telefono" => $row["dir_telefono"],
                         "direccion" => utf8_decode($row["dir_direccion"]),
+                        "interior" => utf8_decode($row["dir_interior"]),
                         "latitud" => $row["dir_latitud"],
                         "longitud" => $row["dir_longitud"],
                         "distrito" => utf8_decode($row["dir_distrito"]),
@@ -135,6 +140,7 @@ switch ($metodo) {
                         "dni" => $row["dir_dni"],
                         "telefono" => $row["dir_telefono"],
                         "direccion" => utf8_decode($row["dir_direccion"]),
+                        "interior" => utf8_decode($row["dir_interior"]),
                         "latitud" => $row["dir_latitud"],
                         "longitud" => $row["dir_longitud"],
                         "distrito" => utf8_decode($row["dir_distrito"]),
@@ -160,18 +166,20 @@ switch ($metodo) {
         $dni = trim($_POST["dni"]);
         $telefono = trim($_POST["telefono"]);
         $direccion = utf8_encode(trim($_POST["direccion"]));
+        $interior = utf8_encode(trim($_POST["interior"]));
         $latitud = trim($_POST["latitud"]);
         $longitud = trim($_POST["longitud"]);
         $distrito = trim($_POST["distrito"]);
         $cliente = trim($_POST["cliente"]);
 
-        function editar($codigo, $nombres, $dni, $telefono, $direccion, $latitud, $longitud, $distrito, $cliente, $connection)
+        function editar($codigo, $nombres, $dni, $telefono, $direccion, $interior, $latitud, $longitud, $distrito, $cliente, $connection)
         {
             $delete = "update direccion set 
                             dir_nombres = '" . $nombres . "',
                             dir_dni = '" . $dni . "',
                             dir_telefono = '" . $telefono . "',
                             dir_direccion = '" . $direccion . "',
+                            dir_interior = '" . $interior . "',
                             dir_latitud = '" . $latitud . "',
                             dir_longitud = '" . $longitud . "',
                             dir_distrito = '" . $distrito . "',
@@ -192,7 +200,7 @@ switch ($metodo) {
             echo json_encode($response);
         }
 
-        editar($codigo, $nombres, $dni, $telefono, $direccion, $latitud, $longitud, $distrito, $cliente, $connection);
+        editar($codigo, $nombres, $dni, $telefono, $direccion, $interior, $latitud, $longitud, $distrito, $cliente, $connection);
         break;
 
         /**Función para eliminar una dirección por su código */

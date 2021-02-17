@@ -56,8 +56,11 @@
                             <div class="input-field col s12 m12 l4 xl4" style=" padding: 0px 5px 0px 0px; margin: unset;">
                                 <input readonly id="txt_dni" type="text" placeholder="DNI">
                             </div>
-                            <div class="input-field col s12" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                            <div class="input-field col s12 m12 l8 xl8" style=" padding: 0px 5px 0px 0px; margin: unset;">
                                 <input readonly id="txt_direccion" type="text" placeholder="Direcci&oacute;n completa">
+                            </div>
+                            <div class="input-field col s12 m12 l4 xl4" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                                <input readonly id="txt_interior" type="text" placeholder="N&uacute;mero de interior">
                             </div>
                             <div class="input-field col s12 m6 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
                                 <input readonly id="txt_departamento" type="text" placeholder="Departamento">
@@ -73,7 +76,7 @@
                             </div>
                         </form>
                         <div class="input-field">
-                            <div id="mapa_view" style="width: 100%; height: 150px; border-radius: 10px"></div>
+                            <div id="mapa_view" style="width: 100%; height: 250px; border-radius: 10px"></div>
                         </div>
                         <div class="row">
                             <div class="col s12 center-align">
@@ -94,8 +97,10 @@
                             <div class="col s12 m12 l7 xl7">
                                 <h5 style="margin: unset;">Detalle del carrito</h5>
                             </div>
-                            <div class="col s12 m12 l5 xl5">
-                                <a href="#" onclick="inicio();">Seguir comprando</a>
+                            <div class="col s12 m12 l5 xl5 center-align">
+                                <button class="btn" style="background: #1461a3; border: 1px solid #1461a3; color: #ffffff; font-weight: bold; font-size: 10px;" onclick="inicio();">
+                                    Seguir comprando
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -129,8 +134,11 @@
                     <div class="input-field col s12 m12 l4 xl4" style=" padding: 0px 5px 0px 0px; margin: unset;">
                         <input id="txt_dni_add" type="number" placeholder="DNI">
                     </div>
-                    <div class="input-field col s12" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                    <div class="input-field col s12 m12 l8 xl8" style=" padding: 0px 5px 0px 0px; margin: unset;">
                         <input id="txt_direccion_add" type="text" placeholder="Direcci&oacute;n completa">
+                    </div>
+                    <div class="input-field col s12 m12 l4 xl4" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                        <input id="txt_interior_add" type="text" placeholder="N&uacute;mero de interior">
                     </div>
                     <div class="input-field col s12 m6 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
                         <select id="select_departamento_add">
@@ -148,7 +156,7 @@
                         <input id="txt_telefono_add" type="number" placeholder="Tel&eacute;fono">
                     </div>
                     <div class="input-field col s12" style=" padding: 0px 5px 0px 0px; margin: unset;">
-                        <div id="mapa_add" style="width: 100%; height: 150px; border-radius: 10px"></div>
+                        <div id="mapa_add" style="width: 100%; height: 250px; border-radius: 10px"></div>
                     </div>
                 </form>
                 <div class="row">
@@ -169,6 +177,7 @@
                     </div>
                     <div class="col s12" style="padding: 5px;">
                         <button id="btn_direccion" onclick="agregar_direccion();" class="btn" style="width: 145px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">GUARDAR</button>
+                        <button style="bottom: 30px; left: 0px; width: 36px; padding: unset;" class="btn" onclick="my_location()"><i class="material-icons">location_searching</i></button>
                     </div>
                 </div>
             </div>
@@ -262,23 +271,25 @@
     }
 
     /**Iniciar el mapa de agregar direcci&oacute;n */
+    var mapa, current_position, marker, geocoder;
     $("#abrir_modal_direcciones").on("click", function() {
-        var current_position = {
+        current_position = {
             lat: latitud,
             lng: longitud
         };
-        var mapa = new google.maps.Map(
+        mapa = new google.maps.Map(
             document.getElementById("mapa_add"), {
                 zoom: 15,
                 center: current_position,
-                mapTypeControl: false,
+                mapTypeControl: true,
+                zoomControl: true
             });
-        var marker = new google.maps.Marker({
+        marker = new google.maps.Marker({
             position: current_position,
             map: mapa,
             draggable: true
         });
-        var geocoder = new google.maps.Geocoder();
+        geocoder = new google.maps.Geocoder();
         geocoder.geocode({
             "latLng": marker.getPosition()
         }, function(results, status) {
@@ -300,6 +311,20 @@
             longitud = marker.position.lng();
         });
     });
+
+    /**Función para regresar el mapa a la ubicación actual */
+    function my_location() {
+        mapa.setCenter(current_position);
+        marker.setPosition(current_position);
+        geocoder.geocode({
+            "latLng": marker.getPosition()
+        }, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                var address = results[0]["formatted_address"];
+                $("#txt_direccion_add").val(address);
+            }
+        });
+    }
 
     /**Listar direcciones */
     listar_direcciones();
@@ -342,6 +367,7 @@
         var nombres = $("#txt_nombres_add").val();
         var dni = $("#txt_dni_add").val();
         var direccion = $("#txt_direccion_add").val();
+        var interior = $("#txt_interior_add").val();
         var distrito = $("#select_distrito_add").val();
         var telefono = $("#txt_telefono_add").val();
         var cliente = JSON.parse(store.getItem("cliente")).codigo;
@@ -366,6 +392,14 @@
                 title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa la dirección",
+                showConfirmButton: false,
+                timer: 2000
+            });
+        } else if (interior === "") {
+            Swal.fire({
+                title: "Piidelo.com",
+                icon: "warning",
+                text: "Ingresa el número de interior",
                 showConfirmButton: false,
                 timer: 2000
             });
@@ -402,6 +436,7 @@
                 dni: dni,
                 telefono: telefono,
                 direccion: direccion,
+                interior: interior,
                 latitud: latitud,
                 longitud: longitud,
                 distrito: distrito,
@@ -469,6 +504,7 @@
                 $("#txt_nombres").val(direccion.nombres);
                 $("#txt_dni").val(direccion.dni);
                 $("#txt_direccion").val(direccion.direccion);
+                $("#txt_interior").val(direccion.interior);
                 $("#txt_departamento").val(direccion.departamento);
                 $("#txt_provincia").val(direccion.provincia);
                 $("#txt_distrito").val(direccion.distrito);
@@ -481,7 +517,8 @@
                     document.getElementById("mapa_view"), {
                         zoom: 17,
                         center: current_position,
-                        mapTypeControl: false,
+                        mapTypeControl: true,
+                        zoomControl: true
                     });
                 var marker = new google.maps.Marker({
                     position: current_position,

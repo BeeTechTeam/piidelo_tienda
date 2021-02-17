@@ -1,6 +1,6 @@
 <?php
 require_once("../../database/connection.php");
-
+require 'vendor/autoload.php';
 /**Recibimos el m&eacute;todo */
 $metodo = $_POST["metodo"];
 
@@ -122,10 +122,79 @@ switch ($metodo) {
                     if (mysqli_query($connection, $insert_linea) === true) {
                         $update = "update producto set prod_stock = prod_stock - " . $carrito[$i]["cantidad"] . " where prod_id = " . $carrito[$i]["producto"]["prod_id"] . "";
                         if (mysqli_query($connection, $update) === true) {
-                            $response = array(
-                                "codigo" => 107,
-                                "mensaje" => "Su pedido fue registrado satisfactoriamente"
-                            );
+                            /**Al finalizar el pedido se tiene que enviar el resumen al correo */
+                            /**Primero traemos el correo del cliente */
+                            $select_correo = "select usu_usuario email from usuario where usu_cliente = '" . $cliente . "'";
+                            $resultado_correo = mysqli_query($connection, $select_correo);
+                            $correo = "";
+                            while ($row = $resultado_correo->fetch_assoc()) {
+                                /**Guardamos el email en una variable */
+                                $correo = trim($row["email"]);
+                            }
+                            $productos = "";
+                            for ($i = 0; $i < count($carrito); $i++) {
+                                $subtotal = floatval($carrito[$i]["cantidad"] * $carrito[$i]["precio"]);
+                                $productos .=
+                                    "
+                                    <div style='padding: 5px; border-bottom: 1px solid #e5e5e5; width: 50%; margin: auto;'> 
+                                        <img src='" . $carrito[$i]["producto"]["prod_foto"] . "' style='width: 100px;' alt='" . $carrito[$i]["producto"]["prod_nombre"] . "' title='" . $carrito[$i]["producto"]["prod_nombre"] . "'>
+                                        <p style='font-family: Quicksand; margin: unset;'>Producto: " . $carrito[$i]["producto"]["prod_nombre"] . "</p>
+                                        <p style='font-family: Quicksand; margin: unset;'>Cantidad: " . $carrito[$i]["cantidad"] . "</p>
+                                        <p style='font-family: Quicksand; margin: unset;'>Precio: " . $carrito[$i]["precio"] . "</p>
+                                        <p style='font-family: Quicksand; margin: unset;'>Subtotal: S/" . $subtotal . "</p>
+                                    </div>
+                                    ";
+                            }
+
+                            $htmlContent = "
+                            <html lang='en'>
+                                <head>
+                                    <meta charset='UTF-8'>
+                                    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+                                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                                    <title>Resumen de pedido</title>
+                                    <style>
+                                        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
+                                    </style>
+                                </head>
+            
+                                <body>
+                                    <div style='text-align: center;'>
+                                        <h1 style='font-family: Quicksand;'>RESUMEN DE PEDIDO DE <a href='https://www.piidelo.com'>piidelo.com</a> </h1>
+                                        <img src='https://www.piidelo.com/image/logo.png' alt='Piidelo.com' title='Piidelo.com' width='200px'>
+                                        <h3 style='font-family: Quicksand;'>Tu pedido ha sido recibido exitosamente y estaremos atendiéndolo lo antes posible.</h3>
+                                        <h3 style='font-family: Quicksand;'>Lista de productos</h3>
+                                        {$productos}
+                                        <p style='font-family: Quicksand;'>TOTAL: <b>S/{$total}</b></p>
+                                        <p style='font-family: Quicksand;'>Muchas gracias por tu compra</p>
+                                    </div>
+                                </body>
+            
+                            </html>";
+
+                            $email = new \SendGrid\Mail\Mail();
+                            $email->setFrom("hola@piidelo.com", "Piidelo.com");
+                            $email->setSubject("RESUMEN DE PEDIDO - PIIDELO.COM");
+                            $email->addTo($correo, $correo);
+                            $email->addContent("text/html", $htmlContent);
+                            $sendgrid = new \SendGrid("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");
+                            try {
+                                $response_grid = $sendgrid->send($email);
+                                $codigo_response_grid = $response_grid->statusCode();
+                            } catch (Exception $e) {
+                                echo 'Caught exception: ' . $e->getMessage() . "\n";
+                            }
+                            if ($codigo_response_grid === 202) {
+                                $response = array(
+                                    "codigo" => 107,
+                                    "mensaje" => "Su pedido fue registrado satisfactoriamente. Se le ha enviado un resumen de su pedido a su correo"
+                                );
+                            } else {
+                                $response = array(
+                                    "codigo" => 107,
+                                    "mensaje" => "Su pedido fue registrado satisfactoriamente"
+                                );
+                            }
                         } else {
                             $response = array(
                                 "codigo" => 108,

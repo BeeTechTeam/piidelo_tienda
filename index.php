@@ -657,7 +657,7 @@
                 </div>
                 <div class="col s12 center-align">
                     <button onclick="checkout();" class="btn" style="border: 1px solid #1461a3; background: #1461a3; color: #ffffff; font-weight: bold; width: 80%;">
-                        CHECKOUT
+                        Proceder al pago
                     </button>
                 </div>
             </div>

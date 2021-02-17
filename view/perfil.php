@@ -307,8 +307,11 @@
                         <div class="input-field col s12 m12 l4 xl4" style=" padding: 0px 5px 0px 0px; margin: unset;">
                             <input id="txt_dni_new" type="number" placeholder="DNI">
                         </div>
-                        <div class="input-field col s12" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                        <div class="input-field col s12 m12 l8 xl8" style=" padding: 0px 5px 0px 0px; margin: unset;">
                             <input id="txt_direccion_new" type="text" placeholder="Direcci&oacute;n completa">
+                        </div>
+                        <div class="input-field col s12 m12 l4 xl4" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                            <input id="txt_interior_new" type="text" placeholder="N&uacute;mero de interior">
                         </div>
                         <div class="input-field col s12 m6 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
                             <select id="select_departamento_new">
@@ -326,7 +329,7 @@
                             <input id="txt_telefono_new" type="number" placeholder="Tel&eacute;fono">
                         </div>
                         <div class="input-field col s12" style=" padding: 0px 5px 0px 0px; margin: unset;">
-                            <div id="mapa_new" style="width: 100%; height: 150px; border-radius: 10px"></div>
+                            <div id="mapa_new" style="width: 100%; height: 250px; border-radius: 10px"></div>
                         </div>
                     </form>
                     <div class="row">
@@ -347,6 +350,7 @@
                         </div>
                         <div class="col s12" style="padding: 15px;">
                             <button id="btn_direccion" onclick="agregar_direccion();" class="btn" style="width: 145px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">GUARDAR</button>
+                            <button style="bottom: 30px; left: 0px; width: 36px; padding: unset;" class="btn" onclick="my_location()"><i class="material-icons">location_searching</i></button>
                         </div>
                     </div>
                 </div>
@@ -364,14 +368,17 @@
             </div>
             <form>
                 <div class="row">
-                    <div class="input-field col s12 m6 l6 xl6">
+                    <div class="input-field col s12 m12 l8 xl8">
                         <input id="txt_direccion_nombres" type="text" placeholder="Nombres">
                     </div>
-                    <div class="input-field col s12 m6 l6 xl6">
+                    <div class="input-field col s12 m12 l4 xl4">
                         <input id="txt_direccion_dni" type="text" placeholder="DNI">
                     </div>
-                    <div class="input-field col s12">
+                    <div class="input-field col s12 m12 l8 xl8">
                         <input id="txt_direccion_direccion" type="text" placeholder="Direcci&oacute;n completa">
+                    </div>
+                    <div class="input-field col s12 m4 l4 xl4">
+                        <input id="txt_direccion_interior" type="text" placeholder="N&uacute;mero de interior">
                     </div>
                     <div class="input-field col s12 m6 l6 xl6">
                         <select id="select_departamento_add__">
@@ -391,11 +398,12 @@
                 </div>
             </form>
             <div class="input-field">
-                <div id="mapa" style="width: 100%; height: 150px; border-radius: 10px"></div>
+                <div id="mapa" style="width: 100%; height: 250px; border-radius: 10px"></div>
             </div>
             <div class="row">
                 <div class="col s12 center-align">
                     <button id="btn_editar_direccion" class="btn" style="margin: 15px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">Guardar</button>
+                    <button style="bottom: 30px; left: 0px; width: 36px; padding: unset;" class="btn" onclick="my_location_bd()"><i class="material-icons">location_searching</i></button>
                 </div>
                 <div class="col s12" style="text-align: center;">
                     <div class="preloader-wrapper big active hide" style="width: 50px; height: 50px;" id="loader_editar_direccion">
@@ -1001,6 +1009,7 @@
                             <li class="collection-item avatar" style="border: unset;">
                                 <i class="material-icons circle" style="background: #1461a3;">map</i>
                                 <span class="title"><b>${direcciones[i].direccion}</b></span>
+                                <p>Interior: ${direcciones[i].interior}</p>
                                 <p>Nombres: ${direcciones[i].nombres}</p>
                                 <p>DNI: ${direcciones[i].dni}</p>
                                 <p>Teléfono: ${direcciones[i].telefono}</p>
@@ -1035,13 +1044,15 @@
     /**Función para editar direccion */
     listar_departamentos();
 
+    var current_position_bd, mapa_bd, marker_bd, geocoder_bd;
+
     function editar_direccion(direccion) {
         /**Listamos los departamentos */
-        console.log(direccion);
         var codigo = direccion.codigo;
         $("#txt_direccion_nombres").val(direccion.nombres);
         $("#txt_direccion_dni").val(direccion.dni);
         $("#txt_direccion_direccion").val(direccion.direccion);
+        $("#txt_direccion_interior").val(direccion.interior);
         $("#txt_direccion_telefono").val(direccion.telefono);
         $("#select_departamento_add__").find("option[value='" + direccion.departamento_id + "']").prop("selected", true).change();
         $("#select_departamento_add__").formSelect();
@@ -1051,41 +1062,42 @@
         $("#select_distrito_add__").formSelect();
         var latitud = parseFloat(direccion.latitud),
             longitud = parseFloat(direccion.longitud);
-        var current_position = {
+        current_position_bd = {
             lat: parseFloat(direccion.latitud),
             lng: parseFloat(direccion.longitud)
         };
-        var mapa = new google.maps.Map(
+        mapa_bd = new google.maps.Map(
             document.getElementById("mapa"), {
                 zoom: 15,
-                center: current_position,
-                mapTypeControl: false,
+                center: current_position_bd,
+                mapTypeControl: true,
+                zoomControl: true
             });
-        var marker = new google.maps.Marker({
-            position: current_position,
-            map: mapa,
+        marker_bd = new google.maps.Marker({
+            position: current_position_bd,
+            map: mapa_bd,
             draggable: true
         });
-        var geocoder = new google.maps.Geocoder();
-        geocoder.geocode({
-            "latLng": marker.getPosition()
+        geocoder_bd = new google.maps.Geocoder();
+        geocoder_bd.geocode({
+            "latLng": marker_bd.getPosition()
         }, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 var address = results[0]["formatted_address"];
                 $("#txt_direccion_direccion").val(address);
             }
         });
-        marker.addListener("dragend", function(event) {
-            geocoder.geocode({
-                "latLng": marker.getPosition()
+        marker_bd.addListener("dragend", function(event) {
+            geocoder_bd.geocode({
+                "latLng": marker_bd.getPosition()
             }, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                     var address = results[0]["formatted_address"];
                     $("#txt_direccion_direccion").val(address);
                 }
             });
-            latitud = marker.position.lat();
-            longitud = marker.position.lng();
+            latitud = marker_bd.position.lat();
+            longitud = marker_bd.position.lng();
         });
         document.getElementById("abrir_editar_direccion").click();
 
@@ -1093,6 +1105,7 @@
             var nombres = $("#txt_direccion_nombres").val();
             var dni = $("#txt_direccion_dni").val();
             var direccion = $("#txt_direccion_direccion").val();
+            var interior = $("#txt_direccion_interior").val();
             var distrito = $("#select_distrito_add__").val();
             var telefono = $("#txt_direccion_telefono").val();
             var cliente = JSON.parse(store.getItem("cliente")).codigo;
@@ -1117,6 +1130,14 @@
                     title: "Piidelo.com",
                     icon: "warning",
                     text: "Ingresa la dirección",
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            } else if (interior === "") {
+                Swal.fire({
+                    title: "Piidelo.com",
+                    icon: "warning",
+                    text: "Ingresa el número de interior",
                     showConfirmButton: false,
                     timer: 2000
                 });
@@ -1154,6 +1175,7 @@
                     dni: dni,
                     telefono: telefono,
                     direccion: direccion,
+                    interior: interior,
                     latitud: latitud,
                     longitud: longitud,
                     distrito: distrito,
@@ -1195,6 +1217,20 @@
                         }
                     }
                 });
+            }
+        });
+    }
+
+    /**Función para regresar el mapa a la ubicación actual al editar dirección */
+    function my_location_bd() {
+        mapa_bd.setCenter(current_position_bd);
+        marker_bd.setPosition(current_position_bd);
+        geocoder_bd.geocode({
+            "latLng": marker_bd.getPosition()
+        }, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                var address = results[0]["formatted_address"];
+                $("#txt_direccion_direccion").val(address);
             }
         });
     }
@@ -1375,6 +1411,7 @@
         console.log("ERROR (" + error.code + "): " + error.message);
     }
 
+    var mapa, current_position, marker, geocoder;
     $("#agregar_direcciones").on("click", function() {
         /**Limitar entrada de caracteres */
         document.getElementById("txt_telefono_new").addEventListener("input", function() {
@@ -1387,25 +1424,27 @@
         });
 
         listar_departamentos_new();
-        var current_position = {
+        current_position = {
             lat: latitud,
             lng: longitud
             // lat: -8.0827657,
             // lng: -79.0486612
         };
         console.log(current_position);
-        var mapa = new google.maps.Map(
+        mapa = new google.maps.Map(
             document.getElementById("mapa_new"), {
                 zoom: 15,
                 center: current_position,
-                mapTypeControl: false,
+                mapTypeControl: true,
+                zoomControl: true
+
             });
-        var marker = new google.maps.Marker({
+        marker = new google.maps.Marker({
             position: current_position,
             map: mapa,
             draggable: true
         });
-        var geocoder = new google.maps.Geocoder();
+        geocoder = new google.maps.Geocoder();
         geocoder.geocode({
             "latLng": marker.getPosition()
         }, function(results, status) {
@@ -1427,6 +1466,20 @@
             longitud = marker.position.lng();
         });
     });
+
+    /**Función para regresar el mapa a la ubicación actual */
+    function my_location() {
+        mapa.setCenter(current_position);
+        marker.setPosition(current_position);
+        geocoder.geocode({
+            "latLng": marker.getPosition()
+        }, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                var address = results[0]["formatted_address"];
+                $("#txt_direccion_new").val(address);
+            }
+        });
+    }
 
     function listar_departamentos_new() {
         parametros = {
@@ -1521,6 +1574,7 @@
         var nombres = $("#txt_nombres_new").val();
         var dni = $("#txt_dni_new").val();
         var direccion = $("#txt_direccion_new").val();
+        var interior = $("#txt_interior_new").val();
         var distrito = $("#select_distrito_new").val();
         var telefono = $("#txt_telefono_new").val();
         var cliente = JSON.parse(store.getItem("cliente")).codigo;
@@ -1545,6 +1599,14 @@
                 title: "Piidelo.com",
                 icon: "warning",
                 text: "Ingresa la dirección",
+                showConfirmButton: false,
+                timer: 2000
+            });
+        } else if (interior === "") {
+            Swal.fire({
+                title: "Piidelo.com",
+                icon: "warning",
+                text: "Ingresa el número de interior",
                 showConfirmButton: false,
                 timer: 2000
             });
@@ -1581,6 +1643,7 @@
                 dni: dni,
                 telefono: telefono,
                 direccion: direccion,
+                interior: interior,
                 latitud: latitud,
                 longitud: longitud,
                 distrito: distrito,
