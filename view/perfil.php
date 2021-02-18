@@ -34,9 +34,10 @@
         <div class="row">
             <div class="col s12" style="font-weight: bold;">
                 <ul class="tabs">
-                    <li class="tab col s4"><a class="active" href="#datos_personales">Datos personales</a></li>
-                    <li class="tab col s4"><a href="#pedidos">Pedidos</a></li>
-                    <li class="tab col s4"><a href="#direcciones">Direcciones de env&iacute;o</a></li>
+                    <li class="tab col s3"><a class="active" href="#datos_personales">Datos personales</a></li>
+                    <li class="tab col s3"><a href="#pedidos">Pedidos</a></li>
+                    <li class="tab col s3"><a href="#direcciones">Direcciones de env&iacute;o</a></li>
+                    <li class="tab col s3"><a href="#datos_facturacion">Datos de facturaci&oacute;n</a></li>
                 </ul>
             </div>
             <div id="datos_personales" class="col s12">
@@ -108,6 +109,18 @@
                     </div>
                     <div class="col 12">
                         <a class="btn modal-trigger" id="agregar_direcciones" href="#modal_direcciones">Agregar direcci&oacute;n</a>
+                    </div>
+                </div>
+            </div>
+            <div id="datos_facturacion" class="s12">
+                <div class="row">
+                    <div class="col s12" style="padding-top: 5vh;">
+                        <ul class="collection" id="lista_comprobantes" style="border: unset;">
+
+                        </ul>
+                    </div>
+                    <div class="col 12">
+                        <a class="btn modal-trigger" id="agregar_comprobantes" href="#modal_comprobantes">Agregar comprobante</a>
                     </div>
                 </div>
             </div>
@@ -462,6 +475,202 @@
         </div>
     </div>
     <a class="modal-trigger hide" href="#modal_confirmacion_eliminacion_direccion" id="abrir_confirmacion_eliminacion_direccion"></a>
+
+    <!-- Modal confirmación de eliminación de comprobante -->
+    <div class="modal" id="modal_confirmacion_eliminacion_comprobante" style="margin-top: 20vh;">
+        <div class="modal-content center-align">
+            <h5 id="titulo_confirmacion_eliminacion_comprobante">¿Está seguro de eliminar la comprobante?</h5>
+            <p>Esta acci&oacute;n no se puede revertir</p>
+            <div class="row">
+                <div class="col s12 m6 l6 xl6 center-align" style="padding: 10px;">
+                    <button id="btn_eliminar_comprobante" class="btn" style="width: 150px; background: #ffffff; border: 1px solid #f44336; color: #f44336; font-weight: bold;">ELIMINAR</button>
+                    <div class="preloader-wrapper big active hide" style="width: 50px; height: 50px;" id="loader_eliminar_comprobante">
+                        <div class="spinner-layer" style="border-color: #1461a3;">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m6 l6 xl6 center-align" style="padding: 10px;">
+                    <button id="close_eliminar_comprobante" class="btn modal-close" style="width: 150px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">CANCELAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="modal-trigger hide" href="#modal_confirmacion_eliminacion_comprobante" id="abrir_confirmacion_eliminacion_comprobante"></a>
+
+    <!-- Modal para agregar comprobantes -->
+    <div id="modal_comprobantes" class="modal" style="padding: 10px;">
+        <div class="modal-content">
+            <i class="material-icons modal-close hide" id="close_modal_comprobantes">close</i>
+            <div class="row" style="border-radius: 30px; height: 100%; margin: unset; ">
+                <div class="col s12 center-align" style="height: 100%; border-radius: 0px 30px 30px 0px; background: #ffffff;">
+                    <h5 style="font-weight: bold; color: #1461a3; margin: 2vh;">Crear direcci&oacute;n</h5>
+                    <p>Completa la informaci&oacute;n solicitada para agregar un nuevo comprobante de pago</p>
+                    <form>
+                        <div class="input-field col s12 m12 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                            <select id="tipo_comprobante_add">
+                                <option value="BOLETA">BOLETA</option>
+                                <option value="FACTURA">FACTURA</option>
+                            </select>
+                        </div>
+                        <div class="input-field col s12 m12 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                            <input id="txt_documento_add" type="number" placeholder="Documento">
+                        </div>
+                        <div class="input-field col s12 m12 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                            <input id="txt_nombres_razon_add" type="text" placeholder="Nombres o razón social">
+                        </div>
+                        <div class="input-field col s12 m12 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                            <input id="txt_direccion_comprobante_add" type="text" placeholder="Dirección">
+                        </div>
+                    </form>
+                    <div class="row">
+                        <div class="col s12" style="text-align: center;">
+                            <div class="preloader-wrapper big active hide" style="width: 50px; height: 50px;" id="loader_comprobante_add">
+                                <div class="spinner-layer" style="border-color: #1461a3;">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s12" style="padding: 15px;">
+                            <button id="btn_comprobante_add" onclick="agregar_comprobante();" class="btn" style="width: 145px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">GUARDAR</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de editar direccion -->
+    <div class="modal" id="modal_editar_direccion">
+        <i class="material-icons modal-close hide" id="cerrar_editar_direccion">close</i>
+        <div class="modal-content center-align">
+            <h5>Editar direcci&oacute;n</h5>
+            <div class="input-field" style="margin-top: 2rem;">
+                <p><a href="#modal_zonas_cobertura" class="modal-trigger" style="color: #1461a3; font-weight: bold; background: yellow;">Zonas de cobertura</a></p>
+            </div>
+            <form>
+                <div class="row">
+                    <div class="input-field col s12 m12 l8 xl8">
+                        <input id="txt_direccion_nombres" type="text" placeholder="Nombres">
+                    </div>
+                    <div class="input-field col s12 m12 l4 xl4">
+                        <input id="txt_direccion_dni" type="text" placeholder="DNI">
+                    </div>
+                    <div class="input-field col s12 m12 l8 xl8">
+                        <input id="txt_direccion_direccion" type="text" placeholder="Direcci&oacute;n completa">
+                    </div>
+                    <div class="input-field col s12 m4 l4 xl4">
+                        <input id="txt_direccion_interior" type="text" placeholder="N&uacute;mero de interior">
+                    </div>
+                    <div class="input-field col s12 m6 l6 xl6">
+                        <select id="select_departamento_add__">
+                        </select>
+                    </div>
+                    <div class="input-field col s12 m6 l6 xl6">
+                        <select id="select_provincia_add__">
+                        </select>
+                    </div>
+                    <div class="input-field col s12 m6 l6 xl6">
+                        <select id="select_distrito_add__">
+                        </select>
+                    </div>
+                    <div class="input-field col s12 m6 l6 xl6">
+                        <input id="txt_direccion_telefono" type="text" placeholder="Tel&eacute;fono">
+                    </div>
+                </div>
+            </form>
+            <div class="input-field">
+                <div id="mapa" style="width: 100%; height: 250px; border-radius: 10px"></div>
+            </div>
+            <div class="row">
+                <div class="col s12 center-align">
+                    <button id="btn_editar_direccion" class="btn" style="margin: 15px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">Guardar</button>
+                    <button style="bottom: 30px; left: 0px; width: 36px; padding: unset;" class="btn" onclick="my_location_bd()"><i class="material-icons">location_searching</i></button>
+                </div>
+                <div class="col s12" style="text-align: center;">
+                    <div class="preloader-wrapper big active hide" style="width: 50px; height: 50px;" id="loader_editar_direccion">
+                        <div class="spinner-layer" style="border-color: #1461a3;">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="modal-trigger hide" href="#modal_editar_direccion" id="abrir_editar_direccion"></a>
+
+    <!-- Modal de editar comprobante -->
+    <div class="modal" id="modal_editar_comprobante">
+        <i class="material-icons modal-close hide" id="cerrar_editar_comprobante">close</i>
+        <div class="modal-content center-align">
+            <h5>Editar comprobante</h5>
+            <form>
+                <div class="row">
+                    <div class="input-field col s12 m12 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                        <select id="tipo_comprobante_edit">
+                            <option value="BOLETA">BOLETA</option>
+                            <option value="FACTURA">FACTURA</option>
+                        </select>
+                    </div>
+                    <div class="input-field col s12 m12 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                        <input id="txt_documento_edit" type="number" placeholder="Documento">
+                    </div>
+                    <div class="input-field col s12 m12 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                        <input id="txt_nombres_razon_edit" type="text" placeholder="Nombres o razón social">
+                    </div>
+                    <div class="input-field col s12 m12 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                        <input id="txt_direccion_comprobante_edit" type="text" placeholder="Dirección">
+                    </div>
+                </div>
+            </form>
+            <div class="row">
+                <div class="col s12 center-align">
+                    <button id="btn_editar_comprobante" class="btn" style="margin: 15px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">Guardar</button>
+                </div>
+                <div class="col s12" style="text-align: center;">
+                    <div class="preloader-wrapper big active hide" style="width: 50px; height: 50px;" id="loader_editar_comprobante">
+                        <div class="spinner-layer" style="border-color: #1461a3;">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="modal-trigger hide" href="#modal_editar_comprobante" id="abrir_editar_comprobante"></a>
+
 </body>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAocjUvXvZ17oARl290-1eQbtuMQvt1WzA"></script>
 <script src="../js/piidelo.js"></script>
@@ -472,7 +681,7 @@
 <script>
     /**Activar componentes */
     $(document).ready(function() {
-        // $("#select_direcciones").formSelect();
+        $("#tipo_comprobante_add").formSelect();
         /**Activar tabs */
         $(".tabs").tabs();
         /**Activar desplegable */
@@ -487,7 +696,10 @@
             if (this.value.length > 11)
                 this.value = this.value.slice(0, 11);
         });
-
+        document.getElementById("txt_documento_add").addEventListener("input", function() {
+            if (this.value.length > 11)
+                this.value = this.value.slice(0, 11);
+        });
         /**Limitar el tel&eacute;fono */
         document.getElementById("txt_update_telefono").addEventListener("input", function() {
             if (this.value.length > 9)
@@ -1329,7 +1541,7 @@
     function eliminar_direccion(codigo) {
         // console.log(codigo);
         document.getElementById("abrir_confirmacion_eliminacion_direccion").click();
-        document.getElementById("titulo_confirmacion_eliminacion_direccion").innerHTML = "¿Está seguro de eliminar el la dirección?";
+        document.getElementById("titulo_confirmacion_eliminacion_direccion").innerHTML = "¿Está seguro de eliminar la dirección?";
         $("#btn_eliminar_direccion").on("click", function() {
             borrar_direccion(codigo);
         });
@@ -1569,7 +1781,7 @@
         listar_distritos_new($(this).val());
     });
 
-    /**Agregar direcci&oacute;n */
+    /**Agregar dirección */
     function agregar_direccion() {
         var nombres = $("#txt_nombres_new").val();
         var dni = $("#txt_dni_new").val();
@@ -1686,6 +1898,305 @@
                 }
             });
         }
+    }
+
+    /**Agregar comprobante */
+    function agregar_comprobante() {
+        var tipo = $("#tipo_comprobante_add").val();
+        var documento = $("#txt_documento_add").val();
+        var nombres_razon = $("#txt_nombres_razon_add").val();
+        var direccion = $("#txt_direccion_comprobante_add").val();
+        var cliente = JSON.parse(store.getItem("cliente")).codigo;
+        if (documento === "") {
+            Swal.fire({
+                title: "Piidelo.com",
+                icon: "warning",
+                text: "Ingresa el documento",
+                showConfirmButton: false,
+                timer: 2000
+            });
+        } else if (nombres_razon === "") {
+            Swal.fire({
+                title: "Piidelo.com",
+                icon: "warning",
+                text: "Ingresa los nombres o la razón social",
+                showConfirmButton: false,
+                timer: 2000
+            });
+        } else if (direccion === "") {
+            Swal.fire({
+                title: "Piidelo.com",
+                icon: "warning",
+                text: "Ingresa la dirección",
+                showConfirmButton: false,
+                timer: 2000
+            });
+        } else {
+            $("#btn_comprobante_add").addClass("hide");
+            $("#loader_comprobante_add").removeClass("hide");
+            parametros = {
+                metodo: "AgregarComprobante",
+                tipo: tipo,
+                documento: documento,
+                nombres_razon: nombres_razon,
+                direccion: direccion,
+                cliente: cliente
+            };
+            $.ajax({
+                url: "../config/datos_facturacion/datos_facturacion",
+                data: parametros,
+                type: "post",
+                cache: false,
+                success: function(resultado) {
+                    $("#btn_comprobante_add").removeClass("hide");
+                    $("#loader_comprobante_add").addClass("hide");
+                    var response = JSON.parse(resultado);
+                    var codigo = response.codigo;
+                    var mensaje = response.mensaje;
+                    var cliente = response.cliente;
+                    if (codigo === 108) {
+                        Swal.fire({
+                            title: "Piidelo.com",
+                            icon: "error",
+                            text: mensaje,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        return;
+                    }
+                    if (codigo === 107) {
+                        Swal.fire({
+                            title: "Piidelo.com",
+                            icon: "success",
+                            text: mensaje,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        listar_comprobantes();
+                        document.getElementById("close_modal_comprobantes").click();
+                        return;
+                    }
+                }
+            });
+        }
+    }
+
+    /**Listar las comprobantes */
+    listar_comprobantes();
+
+    function listar_comprobantes() {
+        $("#lista_comprobantes").html("");
+        parametros = {
+            metodo: "ListarComprobantes",
+            codigo: JSON.parse(store.getItem("cliente")).codigo
+        }
+        $.ajax({
+            url: "../config/datos_facturacion/datos_facturacion",
+            data: parametros,
+            type: "post",
+            cache: false,
+            success: function(resultado) {
+                var comprobantes = JSON.parse(resultado);
+                if (comprobantes.length > 0) {
+                    for (var i = 0; i < comprobantes.length; i++) {
+                        if (comprobantes[i].tipo === "BOLETA") {
+                            document.getElementById("lista_comprobantes").innerHTML +=
+                                `
+                                    <li class="collection-item avatar" style="border: unset;">
+                                        <i class="material-icons circle" style="background: #1461a3;">ballot</i>
+                                        <span class="title"><b>${comprobantes[i].tipo}</b></span>
+                                        <p>DNI: ${comprobantes[i].documento}</p>
+                                        <p>Nombres: ${comprobantes[i].nombres_razon}</p>
+                                        <p>Dirección: ${comprobantes[i].direccion}</p>                            
+                                        <div style="display: inline-flex; height: 40px; width: 120px;" class="secondary-content hide-on-med-and-down">
+                                            <button onclick='editar_comprobante(${JSON.stringify(comprobantes[i])});' style="margin: 5px;" class="less_plus"><i style="color: #4caf50;" class="material-icons" style="cursor: pointer;">edit</i></button>
+                                            <button onclick="eliminar_comprobante(${comprobantes[i].codigo});" style="margin: 5px;" class="less_plus"><i style="color: #f44336;" class="material-icons" style="cursor: pointer;">delete</i></button>
+                                        </div>
+                                        <div style="display: inline-flex; height: 40px; width: 120px;" class="hide-on-large-only">
+                                            <button onclick='editar_comprobante(${JSON.stringify(comprobantes[i])});' style="margin: 5px;" class="less_plus"><i style="color: #4caf50;" class="material-icons" style="cursor: pointer;">edit</i></button>
+                                            <button onclick="eliminar_comprobante(${comprobantes[i].codigo});" style="margin: 5px;" class="less_plus"><i style="color: #f44336;" class="material-icons" style="cursor: pointer;">delete</i></button>
+                                        </div>
+                                    </li>
+                                    <li class="divider"></li>
+                                `;
+                        } else {
+                            document.getElementById("lista_comprobantes").innerHTML +=
+                                `
+                                    <li class="collection-item avatar" style="border: unset;">
+                                        <i class="material-icons circle" style="background: #009688;">receipt</i>
+                                        <span class="title"><b>${comprobantes[i].tipo}</b></span>
+                                        <p>RUC: ${comprobantes[i].documento}</p>
+                                        <p>Razón social: ${comprobantes[i].nombres_razon}</p>
+                                        <p>Dirección: ${comprobantes[i].direccion}</p>                            
+                                        <div style="display: inline-flex; height: 40px; width: 120px;" class="secondary-content hide-on-med-and-down">
+                                            <button onclick='editar_comprobante(${JSON.stringify(comprobantes[i])});' style="margin: 5px;" class="less_plus"><i style="color: #4caf50;" class="material-icons" style="cursor: pointer;">edit</i></button>
+                                            <button onclick="eliminar_comprobante(${comprobantes[i].codigo});" style="margin: 5px;" class="less_plus"><i style="color: #f44336;" class="material-icons" style="cursor: pointer;">delete</i></button>
+                                        </div>
+                                        <div style="display: inline-flex; height: 40px; width: 120px;" class="hide-on-large-only">
+                                            <button onclick='editar_comprobante(${JSON.stringify(comprobantes[i])});' style="margin: 5px;" class="less_plus"><i style="color: #4caf50;" class="material-icons" style="cursor: pointer;">edit</i></button>
+                                            <button onclick="eliminar_comprobante(${comprobantes[i].codigo});" style="margin: 5px;" class="less_plus"><i style="color: #f44336;" class="material-icons" style="cursor: pointer;">delete</i></button>
+                                        </div>
+                                    </li>
+                                    <li class="divider"></li>
+                                `;
+                        }
+
+                    }
+                } else {
+                    document.getElementById("lista_comprobantes").innerHTML =
+                        `
+                            <li class="collection-item" style="border: unset; text-align: center;">
+                                <img src="../image/factura.png" alt="Piidelo.com" title="Piidelo.com" style="width: 15%; filter: opacity(0.2);"/>
+                                <h5>No tienes comprobantes registradas</h5>
+                            </li>
+                        `;
+                }
+            }
+        });
+    }
+
+    /**Función para eliminar comprobante */
+    function eliminar_comprobante(codigo) {
+        // console.log(codigo);
+        document.getElementById("abrir_confirmacion_eliminacion_comprobante").click();
+        document.getElementById("titulo_confirmacion_eliminacion_comprobante").innerHTML = "¿Está seguro de eliminar el comprobante?";
+        $("#btn_eliminar_comprobante").on("click", function() {
+            borrar_comprobante(codigo);
+        });
+    }
+
+    function borrar_comprobante(codigo) {
+        parametros = {
+            metodo: "EliminarComprobante",
+            codigo: codigo
+        }
+        $.ajax({
+            url: "../config/datos_facturacion/datos_facturacion",
+            data: parametros,
+            type: "post",
+            cache: false,
+            success: function(resultado) {
+                var response = JSON.parse(resultado);
+                var codigo = response.codigo;
+                var mensaje = response.mensaje;
+                if (codigo === 112) {
+                    Swal.fire({
+                        title: "Piidelo.com",
+                        icon: "error",
+                        text: mensaje,
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                } else if (codigo === 111) {
+                    Swal.fire({
+                        title: "Piidelo.com",
+                        icon: "success",
+                        text: mensaje,
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    listar_comprobantes();
+                    document.getElementById("close_eliminar_comprobante").click();
+                    return;
+                }
+            }
+        });
+    }
+
+    function editar_comprobante(comprobante) {
+        var codigo = comprobante.codigo;
+        $("#tipo_comprobante_edit").find("option[value='" + comprobante.tipo + "']").prop("selected", true).change();
+        $("#tipo_comprobante_edit").formSelect();
+        $("#txt_documento_edit").val(comprobante.documento);
+        $("#txt_nombres_razon_edit").val(comprobante.nombres_razon);
+        $("#txt_direccion_comprobante_edit").val(comprobante.direccion);
+        document.getElementById("abrir_editar_comprobante").click();
+
+        if ($("#btn_editar_comprobante").length > 0) {
+            $("#btn_editar_comprobante").off("click");
+            $("#btn_editar_comprobante").on("click", function(e) {
+                e.preventDefault();
+                var tipo = $("#tipo_comprobante_edit").val();
+                var documento = $("#txt_documento_edit").val();
+                var nombres_razon = $("#txt_nombres_razon_edit").val();
+                var direccion = $("#txt_direccion_comprobante_edit").val();
+                var cliente = JSON.parse(store.getItem("cliente")).codigo;
+                if (documento === "") {
+                    Swal.fire({
+                        title: "Piidelo.com",
+                        icon: "warning",
+                        text: "Ingresa el documento",
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                } else if (nombres_razon === "") {
+                    Swal.fire({
+                        title: "Piidelo.com",
+                        icon: "warning",
+                        text: "Ingresa los nombres o la razón social",
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                } else if (direccion === "") {
+                    Swal.fire({
+                        title: "Piidelo.com",
+                        icon: "warning",
+                        text: "Ingresa la dirección",
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                } else {
+                    $("#btn_editar_comprobante").addClass("hide");
+                    $("#loader_editar_comprobante").removeClass("hide");
+                    parametros = {
+                        metodo: "EditarComprobante",
+                        codigo: codigo,
+                        tipo: tipo,
+                        documento: documento,
+                        nombres_razon: nombres_razon,
+                        direccion: direccion
+                    };
+                    $.ajax({
+                        url: "../config/datos_facturacion/datos_facturacion",
+                        data: parametros,
+                        type: "post",
+                        cache: false,
+                        success: function(resultado) {
+                            $("#btn_editar_comprobante").removeClass("hide");
+                            $("#loader_editar_comprobante").addClass("hide");
+                            var response = JSON.parse(resultado);
+                            var codigo = response.codigo;
+                            var mensaje = response.mensaje;
+                            var cliente = response.cliente;
+                            if (codigo === 112) {
+                                Swal.fire({
+                                    title: "Piidelo.com",
+                                    icon: "error",
+                                    text: mensaje,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                                return;
+                            }
+                            if (codigo === 111) {
+                                Swal.fire({
+                                    title: "Piidelo.com",
+                                    icon: "success",
+                                    text: mensaje,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                                listar_comprobantes();
+                                document.getElementById("cerrar_editar_comprobante").click();
+                                return;
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
     }
 </script>
 

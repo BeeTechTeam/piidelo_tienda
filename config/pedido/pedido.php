@@ -15,13 +15,10 @@ switch ($metodo) {
         $tipo = $_POST["tipo"];
         $fecha_programacion = $_POST["fecha_programacion"];
         $observacion = $_POST["informacion"];
-        $documento = $_POST["documento"];
-        $razon_social_nombres = $_POST["razon_social_nombres"];
-        $direccion_comprobante = $_POST["direccion_comprobante"];
-        $tipo_comprobante = $_POST["tipo_comprobante"];
+        $comprobante = $_POST["comprobante"];
 
         /**Funci&oacute;n para insertar el pedido */
-        function finalizar_pedido($carrito, $total, $cliente, $direccion, $tipo, $fecha_programacion, $observacion, $documento, $razon_social_nombres, $direccion_comprobante, $tipo_comprobante, $connection)
+        function finalizar_pedido($carrito, $total, $cliente, $direccion, $tipo, $fecha_programacion, $observacion, $comprobante, $connection)
         {
             $subtotal = round(floatval($total / 1.18), 2, PHP_ROUND_HALF_UP);
             $igv = round(floatval($total - $subtotal), 2, PHP_ROUND_HALF_UP);
@@ -40,10 +37,7 @@ switch ($metodo) {
                                 ped_direccion,
                                 ped_tipo,
                                 ped_observacion,
-                                ped_comprobante,
-                                ped_documento,
-                                ped_razon_social,
-                                ped_direccion_comprobante
+                                ped_comprobante
                             ) 
                             values(
                                 '" . $fecha_solicitud . "', 
@@ -55,10 +49,7 @@ switch ($metodo) {
                                     '" . $direccion . "', 
                                     '" . $tipo . "',
                                     '" . $observacion . "',
-                                    '" . $tipo_comprobante . "',
-                                    '" . $documento . "',
-                                    '" . $razon_social_nombres . "',
-                                    '" . $direccion_comprobante . "'
+                                    '" . $comprobante . "'
                             )";
             } else {
                 $insert = "insert into pedido(
@@ -72,10 +63,7 @@ switch ($metodo) {
                                 ped_tipo,
                                 ped_fecha_programacion,
                                 ped_observacion,
-                                ped_comprobante,
-                                ped_documento,
-                                ped_razon_social,
-                                ped_direccion_comprobante
+                                ped_comprobante
                             ) 
                             values(
                                 '" . $fecha_solicitud . "', 
@@ -88,10 +76,7 @@ switch ($metodo) {
                                     '" . $tipo . "',
                                     '" . $fecha_programacion . "',
                                     '" . $observacion . "',
-                                    '" . $tipo_comprobante . "',
-                                    '" . $documento . "',
-                                    '" . $razon_social_nombres . "',
-                                    '" . $direccion_comprobante . "'
+                                    '" . $comprobante . "'
                             )";
             }
 
@@ -102,6 +87,8 @@ switch ($metodo) {
                     /**Traemos el pedido creado */
                     $pedido = trim($row["pedido"]);
                 }
+                $resultado->close();
+
                 /**Insertamos las líneas del pedido en la base de datos */
                 for ($i = 0; $i < count($carrito); $i++) {
                     $subtotal = floatval($carrito[$i]["cantidad"] * $carrito[$i]["precio"]);
@@ -124,13 +111,33 @@ switch ($metodo) {
                         if (mysqli_query($connection, $update) === true) {
                             /**Al finalizar el pedido se tiene que enviar el resumen al correo */
                             /**Primero traemos el correo del cliente */
-                            $select_correo = "select usu_usuario email from usuario where usu_cliente = '" . $cliente . "'";
-                            $resultado_correo = mysqli_query($connection, $select_correo);
+                            $select = "select usu_usuario email from usuario where usu_cliente = '" . $cliente . "'";
+                            $resultado = mysqli_query($connection, $select);
                             $correo = "";
-                            while ($row = $resultado_correo->fetch_assoc()) {
+                            while ($row = $resultado->fetch_assoc()) {
                                 /**Guardamos el email en una variable */
                                 $correo = trim($row["email"]);
                             }
+
+                            /**Luego, traemos la dirección asignada para el pedido */
+                            $select = "select * from direccion where dir_id = '" . $direccion . "'";
+                            $resultado = mysqli_query($connection, $select);
+                            $nombres = "";
+                            $dni = "";
+                            $telefono = "";
+                            $direccion_completa = "";
+                            $interior = "";
+                            while ($row = $resultado->fetch_assoc()) {
+                                /**Traemos el pedido creado */
+                                $nombres = trim($row["dir_nombres"]);
+                                $dni = trim($row["dir_dni"]);
+                                $telefono = trim($row["dir_telefono"]);
+                                $direccion_completa = trim($row["dir_direccion"]);
+                                $interior = trim($row["dir_interior"]);
+                            }
+                            $resultado->close();
+
+                            /**Llenamos la lista de los productos */
                             $productos = "";
                             for ($i = 0; $i < count($carrito); $i++) {
                                 $subtotal = floatval($carrito[$i]["cantidad"] * $carrito[$i]["precio"]);
@@ -166,7 +173,15 @@ switch ($metodo) {
                                         <h3 style='font-family: Quicksand;'>Lista de productos</h3>
                                         {$productos}
                                         <p style='font-family: Quicksand;'>TOTAL: <b>S/{$total}</b></p>
-                                        <p style='font-family: Quicksand;'>Muchas gracias por tu compra</p>
+                                        <div style='padding: 5px; border-bottom: 1px solid #e5e5e5; border-top: 1px solid #e5e5e5; width: 50%; margin: auto;'> 
+                                            <h3 style='font-family: Quicksand;'>Dirección de entrega</h3>
+                                            <p style='font-family: Quicksand; margin: unset;'>Nombres: " . $nombres . "</p>
+                                            <p style='font-family: Quicksand; margin: unset;'>DNI: " . $dni . "</p>
+                                            <p style='font-family: Quicksand; margin: unset;'>Teléfono: " . $telefono . "</p>
+                                            <p style='font-family: Quicksand; margin: unset;'>Dirección: " . $direccion_completa . "</p>
+                                            <p style='font-family: Quicksand; margin: unset;'>Interior: " . $interior . "</p>
+                                            <p style='font-family: Quicksand;'>Si esta no es su dirección o hay algún error por favor escríbenos a este correo o al 922944350, muchas gracias por tu compra.</p>
+                                        </div>
                                     </div>
                                 </body>
             
@@ -218,7 +233,7 @@ switch ($metodo) {
         }
 
         /**Ejecutamos la funci&oacute;n para el registro del pedido */
-        finalizar_pedido($carrito, $total, $cliente, $direccion, $tipo, $fecha_programacion, $observacion, $documento, $razon_social_nombres, $direccion_comprobante, $tipo_comprobante, $connection);
+        finalizar_pedido($carrito, $total, $cliente, $direccion, $tipo, $fecha_programacion, $observacion, $comprobante, $connection);
         break;
 
 

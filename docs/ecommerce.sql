@@ -2051,8 +2051,14 @@ CREATE TABLE `pedido` (
   `ped_cliente` int(10) NOT NULL,
   `ped_direccion` int(10) NOT NULL,
   `ped_tipo` varchar(20) NOT NULL,
-  `ped_fecha_programacion` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `ped_fecha_programacion` datetime DEFAULT NULL,
+  `ped_observacion` text DEFAULT NULL,
+  `ped_comprobante` int(10) NOT NULL,
+  constraint pedpk primary key(ped_id),
+  constraint pedfk1 foreign key(ped_direccion) references direccion(dir_id),
+  constraint pedfk2 foreign key(ped_cliente) references cliente(cli_id),
+  constraint pedfk3 foreign key(ped_comprobante) references datos_facturacion(df_id)
+) 
 
 --
 -- Volcado de datos para la tabla `pedido`
@@ -2701,3 +2707,15 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+create table if not exists datos_facturacion(
+  df_id int(10) unique not null auto_increment,
+  df_tipo varchar(20) not null,
+  df_nombres_razon_social varchar(100) not null,
+  df_dni_ruc varchar(15) not null,
+  df_direccion varchar(100) not null,
+  df_cliente int(10) not null,
+  constraint dfpk primary key(df_id),
+  constraint dffk foreign key(df_cliente) references cliente(cli_id)
+);

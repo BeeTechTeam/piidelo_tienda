@@ -81,6 +81,7 @@
                         <div class="row">
                             <div class="col s12 center-align">
                                 <button onclick="continuar();" id="btn_continuar" class="btn" style="margin: 15px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">Continuar</button>
+                                <a id="abrir_modal_direcciones_mensaje" href="#modal_direcciones" class="modal-trigger hide" style="color: red">Para finalizar tu pedido debes agregar una direcci&oacute;n de entrega</a>
                             </div>
                             <div class="col s12 center-align">
                                 <a class="tooltipped" data-position="bottom" data-tooltip="Inicio" href="#" onclick="inicio();" style="color: #1461a3;"><i class="material-icons">home</i></a>
@@ -357,7 +358,14 @@
                 if (direcciones.length > 0) {
                     leer_direccion(direcciones[0].codigo);
                     store.setItem("direccion_envio", direcciones[0].codigo);
+                    $("#abrir_modal_direcciones_mensaje").addClass("hide");
+                    $("#btn_continuar").removeClass("hide");
+                    return;
+                } else {
+                    $("#abrir_modal_direcciones_mensaje").removeClass("hide");
+                    $("#btn_continuar").addClass("hide");
                 }
+
             }
         });
     }

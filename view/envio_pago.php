@@ -14,12 +14,12 @@
 <body style="background-color: unset;">
     <!-- Div de información  -->
     <div class="container" style="width: 80%;">
-        <diw class="row">
+        <div class="row">
             <div class="col s1">
                 <img onclick="inicio();" src="../image/logo.png" width="200px" alt="Piidelo.com" title="Piidelo.com" style="cursor: pointer;" />
             </div>
-        </diw>
-        <diw class="row">
+        </div>
+        <div class="row">
             <div class="col s12 m12 l7 xl7">
                 <div class="row">
                     <div class="col s12">
@@ -61,57 +61,26 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col s12">
                         <h5>Elige tu comprobante de pago</h5>
-                        <div class="row">
-                            <div class="col s12">
-                                <form style="display: inline-flex;" id="radio_comprobante">
-                                    <p style="margin: 10px;">
-                                        <label>
-                                            <input name="tipo_comprobante" type="radio" value="Boleta" checked />
-                                            <span>BOLETA</span>
-                                        </label>
-                                    </p>
-                                    <p style="margin: 10px;">
-                                        <label>
-                                            <input name="tipo_comprobante" value="Factura" type="radio" />
-                                            <span>FACTURA</span>
-                                        </label>
-                                    </p>
-                                </form>
-                            </div>
-                            <div class="col s12" style="padding-left: 55px; padding-right: 55px;">
-                                <div id="comprobante_boleta">
-                                    <form class="row">
-                                        <div class="input-field col s12 m12 l12 x12">
-                                            <input id="txt_dni" type="number" placeholder="DNI">
-                                        </div>
-                                        <div class="input-field col s12 m6 l6 xl6">
-                                            <input id="txt_nombres_apellidos" type="text" placeholder="Nombres y apellidos">
-                                        </div>
-                                        <div class="input-field col s12 m6 l6 xl6">
-                                            <input id="txt_direccion_boleta" type="text" placeholder="Dirección">
-                                        </div>
-                                    </form>
-                                </div>
-                                <div id="comprobante_factura" class="hide">
-                                    <form class="row">
-                                        <div class="input-field col s12 m12 l12 x12">
-                                            <input id="txt_ruc" type="number" placeholder="RUC">
-                                        </div>
-                                        <div class="input-field col s12 m6 l6 xl6">
-                                            <input id="txt_razon_social" type="text" placeholder="Razón social">
-                                        </div>
-                                        <div class="input-field col s12 m6 l6 xl6">
-                                            <input id="txt_direccion_factura" type="text" placeholder="Dirección">
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+                        <div class="input-field" style="margin-top: 2rem;">
+                            <select id="select_comprobantes">
+                            </select>
+                            <label>Comprobantes guardados</label>
+                            <a href="#modal_comprobantes" class="modal-trigger" style="color: #1461a3">Agregar nuevo comprobante de pago</a>
                         </div>
+                        <form class="row">
+                            <div class="input-field col s12 m12 l12 x12">
+                                <input id="txt_documento" type="number" placeholder="Documento" readonly>
+                            </div>
+                            <div class="input-field col s12 m6 l6 xl6">
+                                <input id="txt_nombres_razon_social" type="text" placeholder="Nombres/Razón Social" readonly>
+                            </div>
+                            <div class="input-field col s12 m6 l6 xl6">
+                                <input id="txt_direccion" type="text" placeholder="Dirección" readonly>
+                            </div>
+                        </form>
                     </div>
-
                     <div class="col s12">
                         <h5>Informaci&oacute;n para el repartidor</h5>
                         <div class="row">
@@ -164,6 +133,7 @@
                         <div class="row">
                             <div class="col s12 center-align">
                                 <button onclick="verificar_datos_de_entrega();" id="btn_verificar" class="btn" style="margin: 15px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">Finalizar pedido</button>
+                                <a id="abrir_modal_comprobantes" href="#modal_comprobantes" class="modal-trigger hide" style="color: red">Para finalizar tu pedido debes agregar un comprobante de pago</a>
                             </div>
                             <div class="col s12 center-align">
                                 <a href="checkout.php" style="font-weight: bold; color: #1461a3;">Regresar</a>
@@ -206,8 +176,60 @@
                     </div>
                 </div>
             </div>
-        </diw>
+        </div>
     </div>
+
+
+    <!-- Modal para agregar comprobantes -->
+    <div id="modal_comprobantes" class="modal" style="padding: 10px;">
+        <div class="modal-content">
+            <i class="material-icons modal-close hide" id="close_modal_comprobantes">close</i>
+            <div class="row" style="border-radius: 30px; height: 100%; margin: unset; ">
+                <div class="col s12 center-align" style="height: 100%; border-radius: 0px 30px 30px 0px; background: #ffffff;">
+                    <h5 style="font-weight: bold; color: #1461a3; margin: 2vh;">Crear comprobante de pago</h5>
+                    <p>Completa la informaci&oacute;n solicitada para agregar un nuevo comprobante de pago</p>
+                    <form>
+                        <div class="input-field col s12 m12 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                            <select id="tipo_comprobante_add">
+                                <option value="BOLETA">BOLETA</option>
+                                <option value="FACTURA">FACTURA</option>
+                            </select>
+                        </div>
+                        <div class="input-field col s12 m12 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                            <input id="txt_documento_add" type="number" placeholder="Documento">
+                        </div>
+                        <div class="input-field col s12 m12 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                            <input id="txt_nombres_razon_add" type="text" placeholder="Nombres o razón social">
+                        </div>
+                        <div class="input-field col s12 m12 l6 xl6" style=" padding: 0px 5px 0px 0px; margin: unset;">
+                            <input id="txt_direccion_comprobante_add" type="text" placeholder="Dirección">
+                        </div>
+                    </form>
+                    <div class="row">
+                        <div class="col s12" style="text-align: center;">
+                            <div class="preloader-wrapper big active hide" style="width: 50px; height: 50px;" id="loader_comprobante_add">
+                                <div class="spinner-layer" style="border-color: #1461a3;">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s12" style="padding: 15px;">
+                            <button id="btn_comprobante_add" onclick="agregar_comprobante();" class="btn" style="width: 145px; background: #ffffff; border: 1px solid #1461a3; color: #1461a3; font-weight: bold;">GUARDAR</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 <script src="../js/piidelo.js"></script>
 <script src="../libraries/jquery-3.5.1.min.js"></script>
@@ -218,12 +240,18 @@
     /**Activar componentes */
     $(document).ready(function() {
         /**Activar select */
-        $("#select_direcciones").formSelect();
+        $("#select_comprobantes").formSelect();
+        $("#tipo_comprobante_add").formSelect();
         /**Activar modal */
         $(".modal").modal();
         if (!store.getItem("cliente") || !store.getItem("carrito") || JSON.parse(store.getItem("carrito")).length === 0) {
             inicio();
         }
+        /**Cantidad de caracteres del documento */
+        document.getElementById("txt_documento_add").addEventListener("input", function() {
+            if (this.value.length > 11)
+                this.value = this.value.slice(0, 11);
+        });
     });
 
     /**Lanzar funciones */
@@ -258,14 +286,6 @@
         });
         $("#radio_comprobante input[name=tipo_comprobante]").on("change", function() {
             tipo_comprobante();
-        });
-        document.getElementById("txt_dni").addEventListener("input", function() {
-            if (this.value.length > 8)
-                this.value = this.value.slice(0, 8);
-        });
-        document.getElementById("txt_ruc").addEventListener("input", function() {
-            if (this.value.length > 11)
-                this.value = this.value.slice(0, 11);
         });
         var today = new Date();
         var min_dd = today.getDate();
@@ -395,18 +415,19 @@
         var carrito = JSON.parse(store.getItem("carrito"));
         var total = parseFloat(document.getElementById("total_final").innerText);
         var informacion = $("#txt_informacion").val();
-        var documento, razon_social_nombres, direccion_comprobante, tipo_comprobante;
-        if ($("input[name=tipo_comprobante]:checked", "#radio_comprobante").val() === "Boleta") {
-            tipo_comprobante = "Boleta";
-            documento = $("#txt_dni").val();
-            razon_social_nombres = $("#txt_nombres_apellidos").val();
-            direccion_comprobante = $("#txt_direccion_boleta").val();
-        } else {
-            tipo_comprobante = "Factura";
-            documento = $("#txt_ruc").val();
-            razon_social_nombres = $("#txt_razon_social").val();
-            direccion_comprobante = $("#txt_direccion_factura").val();
-        }
+        var comprobante = $("#select_comprobantes").val();
+        // var documento, razon_social_nombres, direccion_comprobante, tipo_comprobante;
+        // if ($("input[name=tipo_comprobante]:checked", "#radio_comprobante").val() === "Boleta") {
+        //     tipo_comprobante = "Boleta";
+        //     documento = $("#txt_dni").val();
+        //     razon_social_nombres = $("#txt_nombres_apellidos").val();
+        //     direccion_comprobante = $("#txt_direccion_boleta").val();
+        // } else {
+        //     tipo_comprobante = "Factura";
+        //     documento = $("#txt_ruc").val();
+        //     razon_social_nombres = $("#txt_razon_social").val();
+        //     direccion_comprobante = $("#txt_direccion_factura").val();
+        // }
         parametros = {
             metodo: "FinalizarPedido",
             carrito: carrito,
@@ -416,10 +437,7 @@
             fecha_programacion: fecha_programacion,
             total: total,
             informacion: informacion,
-            tipo_comprobante: tipo_comprobante,
-            documento: documento,
-            razon_social_nombres: razon_social_nombres,
-            direccion_comprobante: direccion_comprobante
+            comprobante: comprobante
         };
         $.ajax({
             url: "../config/pedido/pedido",
@@ -430,7 +448,7 @@
                 $("#btn_verificar").removeClass("hide");
                 $("#loader_verificar").addClass("hide");
                 var resultado = JSON.parse(response);
-                console.log(resultado);  
+                console.log(resultado);
                 var codigo = resultado.codigo;
                 var mensaje = resultado.mensaje;
                 if (codigo === 108) {
@@ -464,6 +482,7 @@
 
     /**Llenamos la información de facturación */
     llenar_informacion_facturacion();
+
     function llenar_informacion_facturacion() {
         var cliente = JSON.parse(store.getItem("cliente"))
         $("#txt_dni").val(cliente.ruc);
@@ -472,6 +491,153 @@
         $("#txt_ruc").val(cliente.ruc);
         $("#txt_razon_social").val(cliente.razon_social);
         $("#txt_direccion_factura").val(cliente.direccion);
+    }
+
+    /**Listar comprobantes */
+    listar_comprobantes();
+
+    function listar_comprobantes() {
+        $("#select_comprobantes").html("");
+        parametros = {
+            metodo: "ListarComprobantes",
+            codigo: JSON.parse(store.getItem("cliente")).codigo
+        }
+        $.ajax({
+            url: "../config/datos_facturacion/datos_facturacion",
+            data: parametros,
+            type: "post",
+            cache: false,
+            success: function(resultado) {
+                var comprobantes = JSON.parse(resultado);
+                comprobantes.forEach(comprobante => {
+                    var comprobante_completo =
+                        comprobante.tipo + " (" +
+                        comprobante.documento + ")";
+                    var select = document.getElementById("select_comprobantes");
+                    var option = document.createElement("option");
+                    option.appendChild(document.createTextNode(comprobante_completo));
+                    option.value = comprobante.codigo;
+                    select.appendChild(option);
+                });
+                $("#select_comprobantes").formSelect();
+                if (comprobantes.length === 0) {
+                    $("#abrir_modal_comprobantes").removeClass("hide");
+                    $("#btn_verificar").addClass("hide");
+                    return;
+                } else {
+                    leer_comprobante(comprobantes[0].codigo);
+                    $("#abrir_modal_comprobantes").addClass("hide");
+                    $("#btn_verificar").removeClass("hide");
+                    return;
+                }
+            }
+        });
+    }
+
+    /**Leer comprobante */
+    function leer_comprobante(codigo) {
+        parametros = {
+            metodo: "LeerComprobante",
+            codigo: codigo
+        }
+        $.ajax({
+            url: "../config/datos_facturacion/datos_facturacion",
+            data: parametros,
+            type: "post",
+            cache: false,
+            success: function(resultado) {
+                var comprobante = JSON.parse(resultado);
+                $("#txt_documento").val(comprobante.documento);
+                $("#txt_nombres_razon_social").val(comprobante.nombres_razon);
+                $("#txt_direccion").val(comprobante.direccion);
+            }
+        });
+    }
+
+    /**Leer direccion */
+    $("#select_comprobantes").on("change", function() {
+        leer_comprobante($("#select_comprobantes").val());
+    });
+
+    /**Agregar comprobante */
+    function agregar_comprobante() {
+        var tipo = $("#tipo_comprobante_add").val();
+        var documento = $("#txt_documento_add").val();
+        var nombres_razon = $("#txt_nombres_razon_add").val();
+        var direccion = $("#txt_direccion_comprobante_add").val();
+        var cliente = JSON.parse(store.getItem("cliente")).codigo;
+        if (documento === "") {
+            Swal.fire({
+                title: "Piidelo.com",
+                icon: "warning",
+                text: "Ingresa el documento",
+                showConfirmButton: false,
+                timer: 2000
+            });
+        } else if (nombres_razon === "") {
+            Swal.fire({
+                title: "Piidelo.com",
+                icon: "warning",
+                text: "Ingresa los nombres o la razón social",
+                showConfirmButton: false,
+                timer: 2000
+            });
+        } else if (direccion === "") {
+            Swal.fire({
+                title: "Piidelo.com",
+                icon: "warning",
+                text: "Ingresa la dirección",
+                showConfirmButton: false,
+                timer: 2000
+            });
+        } else {
+            $("#btn_comprobante_add").addClass("hide");
+            $("#loader_comprobante_add").removeClass("hide");
+            parametros = {
+                metodo: "AgregarComprobante",
+                tipo: tipo,
+                documento: documento,
+                nombres_razon: nombres_razon,
+                direccion: direccion,
+                cliente: cliente
+            };
+            $.ajax({
+                url: "../config/datos_facturacion/datos_facturacion",
+                data: parametros,
+                type: "post",
+                cache: false,
+                success: function(resultado) {
+                    $("#btn_comprobante_add").removeClass("hide");
+                    $("#loader_comprobante_add").addClass("hide");
+                    var response = JSON.parse(resultado);
+                    var codigo = response.codigo;
+                    var mensaje = response.mensaje;
+                    var cliente = response.cliente;
+                    if (codigo === 108) {
+                        Swal.fire({
+                            title: "Piidelo.com",
+                            icon: "error",
+                            text: mensaje,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        return;
+                    }
+                    if (codigo === 107) {
+                        Swal.fire({
+                            title: "Piidelo.com",
+                            icon: "success",
+                            text: mensaje,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        listar_comprobantes();
+                        document.getElementById("close_modal_comprobantes").click();
+                        return;
+                    }
+                }
+            });
+        }
     }
 </script>
 
