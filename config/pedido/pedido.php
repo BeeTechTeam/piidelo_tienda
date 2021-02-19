@@ -26,6 +26,7 @@ switch ($metodo) {
             date_default_timezone_set("UTC");
             date_default_timezone_set("America/Lima");
             $fecha_solicitud = date("Y-m-d H:i:s");
+            $enviar_correo = false;
             if ($tipo === "Express") {
                 $insert = "insert into pedido(
                                 ped_fecha_solicitud,
@@ -109,51 +110,69 @@ switch ($metodo) {
                     if (mysqli_query($connection, $insert_linea) === true) {
                         $update = "update producto set prod_stock = prod_stock - " . $carrito[$i]["cantidad"] . " where prod_id = " . $carrito[$i]["producto"]["prod_id"] . "";
                         if (mysqli_query($connection, $update) === true) {
-                            /**Al finalizar el pedido se tiene que enviar el resumen al correo */
-                            /**Primero traemos el correo del cliente */
-                            $select = "select usu_usuario email from usuario where usu_cliente = '" . $cliente . "'";
-                            $resultado = mysqli_query($connection, $select);
-                            $correo = "";
-                            while ($row = $resultado->fetch_assoc()) {
-                                /**Guardamos el email en una variable */
-                                $correo = trim($row["email"]);
-                            }
+                            $enviar_correo = true;
+                        } else {
+                            $enviar_correo = false;
+                            $response = array(
+                                "codigo" => 108,
+                                "mensaje" => "Error al actualizar stock"
+                            );
+                        }
+                    } else {
+                        $response = array(
+                            "codigo" => 108,
+                            "mensaje" => "Error al guardar linea de pedido"
+                        );
+                    }
+                }
 
-                            /**Luego, traemos la dirección asignada para el pedido */
-                            $select = "select * from direccion where dir_id = '" . $direccion . "'";
-                            $resultado = mysqli_query($connection, $select);
-                            $nombres = "";
-                            $dni = "";
-                            $telefono = "";
-                            $direccion_completa = "";
-                            $interior = "";
-                            while ($row = $resultado->fetch_assoc()) {
-                                /**Traemos el pedido creado */
-                                $nombres = trim($row["dir_nombres"]);
-                                $dni = trim($row["dir_dni"]);
-                                $telefono = trim($row["dir_telefono"]);
-                                $direccion_completa = trim($row["dir_direccion"]);
-                                $interior = trim($row["dir_interior"]);
-                            }
-                            $resultado->close();
 
-                            /**Llenamos la lista de los productos */
-                            $productos = "";
-                            for ($i = 0; $i < count($carrito); $i++) {
-                                $subtotal = floatval($carrito[$i]["cantidad"] * $carrito[$i]["precio"]);
-                                $productos .=
-                                    "
-                                    <div style='padding: 5px; border-bottom: 1px solid #e5e5e5; width: 50%; margin: auto;'> 
-                                        <img src='" . $carrito[$i]["producto"]["prod_foto"] . "' style='width: 100px;' alt='" . $carrito[$i]["producto"]["prod_nombre"] . "' title='" . $carrito[$i]["producto"]["prod_nombre"] . "'>
-                                        <p style='font-family: Quicksand; margin: unset;'>Producto: " . $carrito[$i]["producto"]["prod_nombre"] . "</p>
-                                        <p style='font-family: Quicksand; margin: unset;'>Cantidad: " . $carrito[$i]["cantidad"] . "</p>
-                                        <p style='font-family: Quicksand; margin: unset;'>Precio: " . $carrito[$i]["precio"] . "</p>
-                                        <p style='font-family: Quicksand; margin: unset;'>Subtotal: S/" . $subtotal . "</p>
-                                    </div>
-                                    ";
-                            }
+                if ($enviar_correo === true) {
+                    /**Al finalizar el pedido se tiene que enviar el resumen al correo */
+                    /**Primero traemos el correo del cliente */
+                    $select = "select usu_usuario email from usuario where usu_cliente = '" . $cliente . "'";
+                    $resultado = mysqli_query($connection, $select);
+                    $correo = "";
+                    while ($row = $resultado->fetch_assoc()) {
+                        /**Guardamos el email en una variable */
+                        $correo = trim($row["email"]);
+                    }
 
-                            $htmlContent = "
+                    /**Luego, traemos la dirección asignada para el pedido */
+                    $select = "select * from direccion where dir_id = '" . $direccion . "'";
+                    $resultado = mysqli_query($connection, $select);
+                    $nombres = "";
+                    $dni = "";
+                    $telefono = "";
+                    $direccion_completa = "";
+                    $interior = "";
+                    while ($row = $resultado->fetch_assoc()) {
+                        /**Traemos el pedido creado */
+                        $nombres = trim($row["dir_nombres"]);
+                        $dni = trim($row["dir_dni"]);
+                        $telefono = trim($row["dir_telefono"]);
+                        $direccion_completa = trim($row["dir_direccion"]);
+                        $interior = trim($row["dir_interior"]);
+                    }
+                    $resultado->close();
+
+                    /**Llenamos la lista de los productos */
+                    $productos = "";
+                    for ($i = 0; $i < count($carrito); $i++) {
+                        $subtotal = floatval($carrito[$i]["cantidad"] * $carrito[$i]["precio"]);
+                        $productos .=
+                            "
+                            <div style='padding: 5px; border-bottom: 1px solid #e5e5e5; width: 50%; margin: auto;'> 
+                                <img src='" . $carrito[$i]["producto"]["prod_foto"] . "' style='width: 100px;' alt='" . $carrito[$i]["producto"]["prod_nombre"] . "' title='" . $carrito[$i]["producto"]["prod_nombre"] . "'>
+                                <p style='font-family: Quicksand; margin: unset;'>Producto: " . $carrito[$i]["producto"]["prod_nombre"] . "</p>
+                                <p style='font-family: Quicksand; margin: unset;'>Cantidad: " . $carrito[$i]["cantidad"] . "</p>
+                                <p style='font-family: Quicksand; margin: unset;'>Precio: " . $carrito[$i]["precio"] . "</p>
+                                <p style='font-family: Quicksand; margin: unset;'>Subtotal: S/" . $subtotal . "</p>
+                            </div>
+                        ";
+                    }
+
+                    $htmlContent = "
                             <html lang='en'>
                                 <head>
                                     <meta charset='UTF-8'>
@@ -187,39 +206,27 @@ switch ($metodo) {
             
                             </html>";
 
-                            $email = new \SendGrid\Mail\Mail();
-                            $email->setFrom("hola@piidelo.com", "Piidelo.com");
-                            $email->setSubject("RESUMEN DE PEDIDO - PIIDELO.COM");
-                            $email->addTo($correo, $correo);
-                            $email->addContent("text/html", $htmlContent);
-                            $sendgrid = new \SendGrid("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");
-                            try {
-                                $response_grid = $sendgrid->send($email);
-                                $codigo_response_grid = $response_grid->statusCode();
-                            } catch (Exception $e) {
-                                echo 'Caught exception: ' . $e->getMessage() . "\n";
-                            }
-                            if ($codigo_response_grid === 202) {
-                                $response = array(
-                                    "codigo" => 107,
-                                    "mensaje" => "Su pedido fue registrado satisfactoriamente. Se le ha enviado un resumen de su pedido a su correo"
-                                );
-                            } else {
-                                $response = array(
-                                    "codigo" => 107,
-                                    "mensaje" => "Su pedido fue registrado satisfactoriamente"
-                                );
-                            }
-                        } else {
-                            $response = array(
-                                "codigo" => 108,
-                                "mensaje" => "Error al actualizar stock"
-                            );
-                        }
+                    $email = new \SendGrid\Mail\Mail();
+                    $email->setFrom("hola@piidelo.com", "Piidelo.com");
+                    $email->setSubject("RESUMEN DE PEDIDO - PIIDELO.COM");
+                    $email->addTo($correo, $correo);
+                    $email->addContent("text/html", $htmlContent);
+                    $sendgrid = new \SendGrid("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");
+                    try {
+                        $response_grid = $sendgrid->send($email);
+                        $codigo_response_grid = $response_grid->statusCode();
+                    } catch (Exception $e) {
+                        echo 'Caught exception: ' . $e->getMessage() . "\n";
+                    }
+                    if ($codigo_response_grid === 202) {
+                        $response = array(
+                            "codigo" => 107,
+                            "mensaje" => "Su pedido fue registrado satisfactoriamente. Se le ha enviado un resumen de su pedido a su correo"
+                        );
                     } else {
                         $response = array(
-                            "codigo" => 108,
-                            "mensaje" => "Error al guardar linea de pedido"
+                            "codigo" => 107,
+                            "mensaje" => "Su pedido fue registrado satisfactoriamente"
                         );
                     }
                 }

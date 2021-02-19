@@ -7,11 +7,11 @@ $metodo = $_POST["metodo"];
 switch ($metodo) {
         /**Función para agregar nuevas direcciones */
     case "AgregarDireccion":
-        $nombres = utf8_encode(trim($_POST["nombres"]));
+        $nombres = utf8_decode(trim($_POST["nombres"]));
         $dni = trim($_POST["dni"]);
         $telefono = trim($_POST["telefono"]);
-        $direccion = utf8_encode(trim($_POST["direccion"]));
-        $interior = trim($_POST["interior"]);
+        $direccion = utf8_decode(trim($_POST["direccion"]));
+        $interior = utf8_decode(trim($_POST["interior"]));
         $latitud = trim($_POST["latitud"]);
         $longitud = trim($_POST["longitud"]);
         $distrito = trim($_POST["distrito"]);
@@ -64,7 +64,7 @@ switch ($metodo) {
         $codigo = trim($_POST["codigo"]);
 
         function listar_direcciones($codigo, $connection)
-        {
+        { 
             $select = "select 
                             dir.*,  
                             dis.dis_nombre 'dir_distrito',
@@ -79,7 +79,7 @@ switch ($metodo) {
                             inner join distrito dis on dir.dir_distrito = dis.dis_id
                             inner join provincia pro on dis.dis_provincia = pro.provi_id
                             inner join departamento dep on pro.provi_departamento = dep.dep_id
-                        where dir_cliente = '" . $codigo . "' and dir_estado = 'ACTIVA'
+                        where dir_cliente = " . $codigo . " and dir_estado = 'ACTIVA'
                         order by dir_id desc";
             $result = mysqli_query($connection, $select);
             $direcciones = [];
@@ -162,11 +162,11 @@ switch ($metodo) {
         /**Función para editar una dirección ya existente */
     case "EditarDireccion":
         $codigo = trim($_POST["codigo"]);
-        $nombres = utf8_encode(trim($_POST["nombres"]));
+        $nombres = utf8_decode(trim($_POST["nombres"]));
         $dni = trim($_POST["dni"]);
         $telefono = trim($_POST["telefono"]);
-        $direccion = utf8_encode(trim($_POST["direccion"]));
-        $interior = utf8_encode(trim($_POST["interior"]));
+        $direccion = utf8_decode(trim($_POST["direccion"]));
+        $interior = utf8_decode(trim($_POST["interior"]));
         $latitud = trim($_POST["latitud"]);
         $longitud = trim($_POST["longitud"]);
         $distrito = trim($_POST["distrito"]);

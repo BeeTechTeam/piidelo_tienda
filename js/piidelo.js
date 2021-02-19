@@ -1768,8 +1768,9 @@ function listar_distritos(provincia) {
 /**Calcular toal checkout */
 function calcular_total_checkout() {
     var subtotal = parseFloat(calcular_subtotal());
-    var envio = parseFloat(document.getElementById("envio_final").innerText);
-    var total = parseFloat(subtotal + envio).toFixed(2);
+    // var envio = parseFloat(document.getElementById("envio_final").innerText);
+    // var total = parseFloat(subtotal + envio).toFixed(2);
+    var total = parseFloat(subtotal).toFixed(2);
     document.getElementById("total_final").innerText = total;
 }
 
