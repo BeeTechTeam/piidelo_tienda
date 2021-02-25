@@ -1065,6 +1065,7 @@
             }
         });
     }
+    
     /**Lerr pedido */
     function leer_pedido(codigo, estado) {
         parametros = {
@@ -1771,6 +1772,7 @@
             }
         });
     }
+
     /**Listar provincias */
     $("#select_departamento_new").on("change", function() {
         listar_provincias_new($(this).val());

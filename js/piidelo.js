@@ -295,6 +295,7 @@ function mostrar_buscador() {
     $("#buscador").removeClass("ocultar_buscador");
     $("#buscador").addClass("mostrar_buscador");
     $("#txt_buscar").focus();
+    $("#nombre_categoria").val("");
 }
 
 /**Ocultar buscador */
@@ -302,12 +303,13 @@ function ocultar_buscador() {
     $("#buscador").removeClass("mostrar_buscador");
     $("#buscador").addClass("ocultar_buscador");
     $("#txt_buscar").val("");
+    $("#nombre_categoria").val("");
     /**Favoritos del mes */
-    todos_general();
+    todos_general(0);
     /**Productos nuevos */
-    productos_nuevos();
+    productos_nuevos(0);
     /**Ofertas */
-    ofertas();
+    ofertas(0);
 }
 
 /**Favoritos del mes */
@@ -493,12 +495,13 @@ function imprimir_todos(producto) {
     }
 }
 
-function todos_general() {
+function todos_general(categoria) {
     if (store.getItem("cliente")) {
         $("#todos").html("");
         parametros = {
             metodo: "Todos",
-            cliente: JSON.parse(store.getItem("cliente")).codigo
+            cliente: JSON.parse(store.getItem("cliente")).codigo,
+            categoria: categoria
         };
         $.ajax({
             url: "config/producto/producto",
@@ -513,6 +516,9 @@ function todos_general() {
                 var longitud = productos.length;
                 if (longitud > 0) {
                     $("#titulo_todos").html("Todos");
+                } else {
+                    $("#titulo_todos").html("");
+                    $("#seccion_todos").css({ "margin": "unset", "height": 0 });
                 }
             }
         });
@@ -520,7 +526,8 @@ function todos_general() {
         $("#todos").html("");
         parametros = {
             metodo: "Todos",
-            cliente: 0
+            cliente: 0,
+            categoria: categoria
         };
         $.ajax({
             url: "config/producto/producto",
@@ -535,6 +542,9 @@ function todos_general() {
                 var longitud = productos.length;
                 if (longitud > 0) {
                     $("#titulo_todos").html("Todos");
+                } else {
+                    $("#titulo_todos").html("");
+                    $("#seccion_todos").css({ "margin": "unset", "height": 0 });
                 }
             }
         });
@@ -728,12 +738,13 @@ function imprimir_nuevos(producto) {
 
 }
 
-function productos_nuevos() {
+function productos_nuevos(categoria) {
     if (store.getItem("cliente")) {
         $("#nuevos").html("");
         parametros = {
             metodo: "Nuevos",
-            cliente: JSON.parse(store.getItem("cliente")).codigo
+            cliente: JSON.parse(store.getItem("cliente")).codigo,
+            categoria: categoria
         };
         $.ajax({
             url: "config/producto/producto",
@@ -748,6 +759,9 @@ function productos_nuevos() {
                 var longitud = productos.length;
                 if (longitud > 0) {
                     $("#titulo_nuevos").html("Nuevos");
+                } else {
+                    $("#titulo_nuevos").html("");
+                    $("#seccion_nuevos").css({ "margin": "unset", "height": 0 });
                 }
             }
         });
@@ -755,7 +769,8 @@ function productos_nuevos() {
         $("#nuevos").html("");
         parametros = {
             metodo: "Nuevos",
-            cliente: 0
+            cliente: 0,
+            categoria: categoria
         };
         $.ajax({
             url: "config/producto/producto",
@@ -770,6 +785,9 @@ function productos_nuevos() {
                 var longitud = productos.length;
                 if (longitud > 0) {
                     $("#titulo_nuevos").html("Nuevos");
+                } else {
+                    $("#titulo_nuevos").html("");
+                    $("#seccion_nuevos").css({ "margin": "unset", "height": 0 });
                 }
             }
         });
@@ -787,8 +805,9 @@ function imprimir_ofertas(producto) {
                     `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
     
                         <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: center;">
-                            <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>
+                            
                             <div class="card-image">
+                            <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>
                                 <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
                             </div>
                             <div class="card-content" style="text-align: center; padding: unset;">
@@ -818,8 +837,9 @@ function imprimir_ofertas(producto) {
                     `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
     
                         <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: center;">       
-                            <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>        
+                                    
                             <div class="card-image">
+                            <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>
                                 <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
                             </div>
                             <div class="card-content" style="text-align: center; padding: unset;">
@@ -851,8 +871,9 @@ function imprimir_ofertas(producto) {
                     `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
                             
                         <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: center;">
-                            <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>
+                            
                             <div class="card-image">
+                            <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>
                                 <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
                             </div>
                             <div class="card-content" style="text-align: center; padding: unset;">
@@ -882,8 +903,9 @@ function imprimir_ofertas(producto) {
                     `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
                         
                         <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; box-shadow: unset; text-align: center;">
-                            <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>    
+                             
                             <div class="card-image">
+                            <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>   
                                 <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
                             </div>
                             <div class="card-content" style="text-align: center; padding: unset;">
@@ -916,8 +938,9 @@ function imprimir_ofertas(producto) {
                 `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
 
                     <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative; text-align: center;"">
-                        <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>
+                        
                         <div class="card-image">
+                        <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>
                             <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
                         </div>
                         <div class="card-content" style="text-align: center; padding: unset;">
@@ -945,8 +968,9 @@ function imprimir_ofertas(producto) {
                 `<div class="col s12 m6 l4 xl4" style="margin: 10px 0px;">
 
                     <div class="card" style="min-height: 500px; max-height: 500px; height: 500px; width: 100%; box-shadow: unset; position: relative; text-align: center;"">
-                        <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>
+                        
                         <div class="card-image">
+                        <p class="btn-floating pulse" style="background: #F44336; width: 90px; border-radius: 30px; cursor: default; margin: unset;">OFERTA</p>
                             <img src="${producto.prod_foto}" title="${producto.prod_nombre}" alt="${producto.prod_nombre}" style="height: 400px; width: 350px; margin: auto;">
                         </div>
                         <div class="card-content" style="text-align: center; padding: unset;">
@@ -973,12 +997,13 @@ function imprimir_ofertas(producto) {
     }
 }
 
-function ofertas() {
+function ofertas(categoria) {
     if (store.getItem("cliente")) {
         $("#ofertas").html("");
         parametros = {
             metodo: "Ofertas",
-            cliente: JSON.parse(store.getItem("cliente")).codigo
+            cliente: JSON.parse(store.getItem("cliente")).codigo,
+            categoria: categoria
         };
         $.ajax({
             url: "config/producto/producto",
@@ -993,6 +1018,9 @@ function ofertas() {
                 var longitud = productos.length;
                 if (longitud > 0) {
                     $("#titulo_ofertas").html("Ofertas");
+                } else {
+                    $("#titulo_ofertas").html("");
+                    $("#seccion_ofertas").css({ "margin": "unset", "height": 0 });
                 }
             }
         });
@@ -1000,7 +1028,8 @@ function ofertas() {
         $("#ofertas").html("");
         parametros = {
             metodo: "Ofertas",
-            cliente: 0
+            cliente: 0,
+            categoria: categoria
         };
         $.ajax({
             url: "config/producto/producto",
@@ -1015,6 +1044,9 @@ function ofertas() {
                 var longitud = productos.length;
                 if (longitud > 0) {
                     $("#titulo_ofertas").html("Ofertas");
+                } else {
+                    $("#titulo_ofertas").html("");
+                    $("#seccion_ofertas").css({ "margin": "unset", "height": 0 });
                 }
             }
         });
@@ -1599,7 +1631,6 @@ function eliminar_item_checkout(codigo) {
     }
 }
 
-
 /**Aumentar cantidad en el carrito del checkout*/
 function _plus_item_checkout(codigo, stock, index, precio) {
     // $("#loader").removeClass("hide_loader");
@@ -1655,8 +1686,6 @@ function _less_item_checkout(codigo, stock, index, precio) {
     //     $("#items_carrito").removeClass("disabled");
     // }, 500);
 }
-
-
 
 /**Calcular envio */
 function mostrar_envio(codigo) {
@@ -1851,6 +1880,7 @@ function favoritos_usuario() {
     $("#todos_icon").removeClass("hide");
     $("#favoritos_icon_small").addClass("hide");
     $("#todos_icon_small").removeClass("hide");
+    $("#nombre_categoria").html("");
     todos_favoritos();
     productos_nuevos_favoritos();
     ofertas_favoritos();
@@ -1879,6 +1909,7 @@ function todos_favoritos() {
             } else {
                 $("#titulo_todos").html("");
                 $("#sin_favoritos").removeClass("hide");
+                $("#todos").css({ "margin": "unset", "height": 0 });
             }
         }
     });
@@ -1907,6 +1938,7 @@ function productos_nuevos_favoritos() {
             } else {
                 $("#titulo_nuevos").html("");
                 $("#sin_favoritos").removeClass("hide");
+                $("#nuevos").css({ "margin": "unset", "height": 0 });
             }
 
         }
@@ -1936,6 +1968,7 @@ function ofertas_favoritos() {
             } else {
                 $("#titulo_ofertas").html("");
                 $("#sin_favoritos").removeClass("hide");
+                $("#ofertas").css({ "margin": "unset", "height": 0 });
             }
         }
     });
@@ -1948,7 +1981,39 @@ function todos() {
     $("#favoritos_icon").removeClass("hide");
     $("#todos_icon_small").addClass("hide");
     $("#favoritos_icon_small").removeClass("hide");
-    todos_general();
-    productos_nuevos();
-    ofertas();
+    $("#nombre_categoria").html("");
+    todos_general(0);
+    productos_nuevos(0);
+    ofertas(0);
+}
+
+/**Listar categorias */
+function listar_categorias() {
+    $("#lista_categorias").html("");
+    parametros = {
+        metodo: "ListarCategorias",
+    };
+    $.ajax({
+        url: "config/categoria/categoria",
+        data: parametros,
+        type: "post",
+        cache: false,
+        success: function (resultado) {
+            var categorias = JSON.parse(resultado);
+            for (var i = 0; i < categorias.length; i++) {
+                document.getElementById("lista_categorias").innerHTML +=
+                    `
+                        <li onclick='categoria(${JSON.stringify(categorias[i])});'><a href="#"><i class="material-icons options-header-landing">device_hub</i>${categorias[i].nombre}</a></li>
+                    `;
+            }
+
+        }
+    });
+}
+
+function categoria(categoria) {
+    $("#nombre_categoria").html(categoria.nombre);
+    ofertas(categoria.codigo);
+    productos_nuevos(categoria.codigo);
+    todos_general(categoria.codigo);
 }

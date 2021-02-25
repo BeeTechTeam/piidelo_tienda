@@ -8,12 +8,14 @@ switch ($metodo) {
         /**Función para listar los productos más vendidos del mes */
     case "Todos":
         $cliente = $_POST["cliente"];
+        $categoria = $_POST["categoria"];
 
-        function todos($cliente, $connection)
+        function todos($cliente, $categoria, $connection)
         {
             /**Favoritos del mes */
-            $select =
-                "select p.* from producto p 
+            if ($categoria == 0) {
+                $select =
+                    "select p.* from producto p 
                     where 
                         p.prod_estado = 'ACTIVO'
                         and 
@@ -22,6 +24,21 @@ switch ($metodo) {
                         p.prod_oferta_inicio is NULL
                     group by p.prod_id
                     order by p.prod_nombre asc";
+            } else {
+                $select =
+                    "select p.* from producto p 
+                    inner join categoria c on p.prod_categoria = c.cat_id
+                    where 
+                        c.cat_id = '" . $categoria . "'
+                        and
+                        p.prod_estado = 'ACTIVO'
+                        and 
+                        (p.prod_nuevo = 'NO' or p.prod_nuevo is NULL)
+                        and
+                        p.prod_oferta_inicio is NULL
+                    group by p.prod_id
+                    order by p.prod_nombre asc";
+            }
             $resultado = mysqli_query($connection, $select);
             $productos = [];
             if ($resultado->num_rows > 0) {
@@ -57,16 +74,18 @@ switch ($metodo) {
             echo json_encode($productos);
             $resultado->close();
         }
-        todos($cliente, $connection);
+        todos($cliente, $categoria, $connection);
         break;
 
         /**Función para listar los productos nuevos */
     case "Nuevos":
         $cliente = $_POST["cliente"];
-        function nuevos($connection, $cliente)
+        $categoria = $_POST["categoria"];
+        function nuevos($connection, $categoria, $cliente)
         {
-            $select =
-                "select p.* from producto p
+            if ($categoria == 0) {
+                $select =
+                    "select p.* from producto p
                     where 
                         p.prod_estado = 'ACTIVO'
                         and
@@ -75,6 +94,21 @@ switch ($metodo) {
                         p.prod_oferta_inicio is NULL
                     group by p.prod_id
                     order by p.prod_nombre asc";
+            } else {
+                $select =
+                    "select p.* from producto p
+                    inner join categoria c on p.prod_categoria = c.cat_id
+                    where 
+                        c.cat_id = '" . $categoria . "'
+                        and
+                        p.prod_estado = 'ACTIVO'
+                        and
+                        p.prod_nuevo = 'SI'
+                        and
+                        p.prod_oferta_inicio is NULL
+                    group by p.prod_id
+                    order by p.prod_nombre asc";
+            }
             $resultado = mysqli_query($connection, $select);
             $productos = [];
             if ($resultado->num_rows > 0) {
@@ -111,30 +145,54 @@ switch ($metodo) {
             echo json_encode($productos);
             $resultado->close();
         }
-        nuevos($connection, $cliente);
+        nuevos($connection, $categoria, $cliente);
         break;
 
         /**Función para listar las ofetas */
     case "Ofertas":
         $cliente = $_POST["cliente"];
-        function ofertas($cliente, $connection)
+        $categoria = $_POST["categoria"];
+        function ofertas($cliente, $categoria, $connection)
         {
-            $select =
-                "select p.* from producto p
-                where 
-                    (
-                        (date_format(now(),'%Y-%m-%d') between date_format(p.prod_oferta_inicio, '%Y-%m-%d') and date_format(p.prod_oferta_fin, '%Y-%m-%d'))
-                        or
-                        p.prod_oferta_especial = 'SI'
-                    )
-                    and
-                    p.prod_estado = 'ACTIVO'
-                    and 
-                    (p.prod_nuevo is NULL or p.prod_nuevo = 'NO')
-                    and
-                    p.prod_oferta_inicio is not NULL
-                group by p.prod_id
-                order by p.prod_nombre asc";
+            if ($categoria == 0) {
+                $select =
+                    "select p.* from producto p
+                    where 
+                        (
+                            (date_format(now(),'%Y-%m-%d') between date_format(p.prod_oferta_inicio, '%Y-%m-%d') and date_format(p.prod_oferta_fin, '%Y-%m-%d'))
+                            or
+                            p.prod_oferta_especial = 'SI'
+                        )
+                        and
+                        p.prod_estado = 'ACTIVO'
+                        and 
+                        (p.prod_nuevo is NULL or p.prod_nuevo = 'NO')
+                        and
+                        p.prod_oferta_inicio is not NULL
+                    group by p.prod_id
+                    order by p.prod_nombre asc";
+            } else {
+                $select =
+                    "select p.* from producto p
+                    inner join categoria c on p.prod_categoria = c.cat_id
+                    where 
+                        c.cat_id = '" . $categoria . "'
+                        and 
+                        (
+                            (date_format(now(),'%Y-%m-%d') between date_format(p.prod_oferta_inicio, '%Y-%m-%d') and date_format(p.prod_oferta_fin, '%Y-%m-%d'))
+                            or
+                            p.prod_oferta_especial = 'SI'
+                        )
+                        and
+                        p.prod_estado = 'ACTIVO'
+                        and 
+                        (p.prod_nuevo is NULL or p.prod_nuevo = 'NO')
+                        and
+                        p.prod_oferta_inicio is not NULL
+                    group by p.prod_id
+                    order by p.prod_nombre asc";
+            }
+
             $resultado = mysqli_query($connection, $select);
             $productos = [];
             if ($resultado->num_rows > 0) {
@@ -171,7 +229,7 @@ switch ($metodo) {
             echo json_encode($productos);
             $resultado->close();
         }
-        ofertas($cliente, $connection);
+        ofertas($cliente, $categoria, $connection);
         break;
 
         /**Función para buscar productos */

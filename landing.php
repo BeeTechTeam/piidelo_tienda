@@ -32,7 +32,7 @@
         <div class="nav-wrapper">
             <div class="row">
                 <div class="col s4">
-                    <a href="#" data-target="opciones_movil" class="sidenav-trigger"><i class="material-icons" style="color: #003c82">menu</i></a>
+                    <a href="#" data-target="opciones_movil" class="sidenav-trigger"><i class="material-icons" style="color: #000000">menu</i></a>
                 </div>
                 <div class="col s4 center-align hide-on-med-and-down">
                     <img onclick="inicio();" src="image/logo.png" width="200px" alt="Piidelo.com" title="Piidelo.com" style="cursor: pointer;" />
@@ -53,11 +53,25 @@
 
     <!-- Desplegable small -->
     <ul class="sidenav" id="opciones_movil">
-        <li onclick="mostrar_carrito();"><a href="#"><i class="material-icons options-header-landing">shopping_cart</i>Mi carrito</a></li>
-        <li onclick="perfil();"><a href="#"><i class="material-icons options-header-landing">account_circle</i>Perfil</a></li>
-        <li onclick="favoritos_usuario();" id="favoritos_icon_small"><a href="#"><i class="material-icons options-header-landing">favorite_border</i>Favoritos</a></li>
-        <li onclick="todos();" id="todos_icon_small" class="hide"><a href="#"><i class="material-icons options-header-landing" style="color: #f44336;">favorite</i>Todos</a></li>
-        <li onclick="logout();"><a href="#"><i class="material-icons options-header-landing">power_settings_new</i>Cerrar sesi&oacute;n</a></li>
+        <div class="row">
+            <ul class="tabs">
+                <li class="tab col s6 m6 l6 xl6"><a class="active" href="#menu" style="color: black; font-weight: bold;">Menú</a></li>
+                <li class="tab col s6 m6 l6 xl6"><a href="#categorias" style="color: black; font-weight: bold;">Categorías</a></li>
+            </ul>
+        </div>
+        <div class="row" id="menu">
+            <div class="col s12">
+                <li onclick="mostrar_carrito();"><a href="#"><i class="material-icons options-header-landing">shopping_cart</i>Mi carrito</a></li>
+                <li onclick="perfil();"><a href="#"><i class="material-icons options-header-landing">account_circle</i>Perfil</a></li>
+                <li onclick="favoritos_usuario();" id="favoritos_icon_small"><a href="#"><i class="material-icons options-header-landing">favorite_border</i>Favoritos</a></li>
+                <li onclick="todos();" id="todos_icon_small" class="hide"><a href="#"><i class="material-icons options-header-landing" style="color: #f44336;">favorite</i>Todos</a></li>
+                <li onclick="logout();"><a href="#"><i class="material-icons options-header-landing">power_settings_new</i>Cerrar sesi&oacute;n</a></li>
+            </div>
+        </div>
+        <div class="row" id="categorias">
+            <div class="col s12" id="lista_categorias">
+            </div>
+        </div>
     </ul>
 
     <!-- Buscador -->
@@ -83,6 +97,13 @@
                 A&uacute;n no has marcado ningún producto como favorito, para hacerlo debes hacer clic sobre el coraz&oacute;n en el producto y para eliminar
                 un producto de tus favoritos, debes volver a hacer clic sobre el coraz&oacute;n en el producto
             </h5>
+        </div>
+    </div>
+
+    <!-- Categoria -->
+    <div class="row" style="margin-top: 50px;">
+        <div class="col s12 center-align">
+            <h4 style="font-weight: bold;" id="nombre_categoria"></h4>
         </div>
     </div>
 
@@ -749,6 +770,8 @@
 
 
     $(document).ready(function() {
+        /**Activar tabs */
+        $(".tabs").tabs();
         /**Activar el sidenav */
         $(".sidenav").sidenav();
         /**Abrir el carrito en la derecha */
@@ -784,16 +807,19 @@
     });
 
     /**Ofertas */
-    ofertas();
+    ofertas(0);
 
     /**Productos nuevos */
-    productos_nuevos();
+    productos_nuevos(0);
 
     /**Todos los productos */
-    todos_general();
+    todos_general(0);
 
     /**Activar buscador */
     buscador();
+
+    /**Listar caategorias */
+    listar_categorias();
 </script>
 
 </html>

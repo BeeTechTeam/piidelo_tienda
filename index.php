@@ -37,7 +37,7 @@
         <div class="nav-wrapper">
             <div class="row">
                 <div class="col s4">
-                    <a href="#" data-target="opciones_movil" class="sidenav-trigger"><i class="material-icons" style="color: #003c82">menu</i></a>
+                    <a href="#" data-target="opciones_movil" class="sidenav-trigger"><i class="material-icons" style="color: #000000">menu</i></a>
                 </div>
                 <div class="col s4 center-align hide-on-med-and-down">
                     <img onclick="inicio();" src="image/logo.png" width="200px" alt="Piidelo.com" title="Piidelo.com" style="cursor: pointer;" />
@@ -55,10 +55,30 @@
     </nav>
 
     <!-- Desplegable small -->
-    <ul class="sidenav" id="opciones_movil">
+    <!-- <ul class="sidenav" id="opciones_movil">
         <li onclick="mostrar_carrito();"><a href="#"><i class="material-icons options-header">shopping_cart</i>Mi carrito</a></li>
         <li onclick="signup();"><a href="#"><i class="material-icons options-header">account_circle</i>Iniciar sesi&oacute;n</a></li>
+    </ul> -->
+
+
+    <!-- Desplegable small -->
+    <ul class="sidenav" id="opciones_movil">
+        <div class="row">
+            <ul class="tabs">
+                <li class="tab col s6 m6 l6 xl6"><a class="active" href="#menu" style="color: black; font-weight: bold;">Menú</a></li>
+                <li class="tab col s6 m6 l6 xl6"><a href="#categorias" style="color: black; font-weight: bold;">Categorías</a></li>
+            </ul>
+        </div>
+        <div class="row" id="menu">
+            <li onclick="mostrar_carrito();"><a href="#"><i class="material-icons options-header">shopping_cart</i>Mi carrito</a></li>
+            <li onclick="signup();"><a href="#"><i class="material-icons options-header">account_circle</i>Iniciar sesi&oacute;n</a></li>
+        </div>
+        <div class="row" id="categorias">
+            <div class="col s12" id="lista_categorias">
+            </div>
+        </div>
     </ul>
+
 
     <!-- Buscador -->
     <nav id="buscador" class="ocultar_buscador" style="background: #ffffff;">
@@ -74,6 +94,14 @@
             </form>
         </div>
     </nav>
+
+    <!-- Categoria -->
+    <div class="row" style="margin-top: 50px;">
+        <div class="col s12 center-align">
+            <h4 style="font-weight: bold;" id="nombre_categoria"></h4>
+        </div>
+    </div>
+
 
     <!-- Ofertas -->
     <div class="row" style="margin-top: 50px;">
@@ -906,6 +934,8 @@
     crear_carrito();
 
     $(document).ready(function() {
+        /**Activar tabs */
+        $(".tabs").tabs();
         /**Activar el sidenav */
         $(".sidenav").sidenav();
         /**Abrir el carrito en la derecha */
@@ -940,13 +970,13 @@
     });
 
     /**Ofertas */
-    ofertas();
+    ofertas(0);
 
     /**Productos nuevos */
-    productos_nuevos();
+    productos_nuevos(0);
 
     /**Todos */
-    todos_general();
+    todos_general(0);
 
     /**Activar buscador */
     buscador();
@@ -1070,6 +1100,9 @@
     function open_iniciar_sesion() {
         $("#abrir_signin").click();
     }
+
+    /**Listar caategorias */
+    listar_categorias();
 </script>
 
 </html>

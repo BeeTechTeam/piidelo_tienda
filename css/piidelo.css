@@ -58,7 +58,7 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 }
 
 .card-image:hover {
-    transform: scale(1.1);
+    transform: scale(1);
 }
 
 /* Botones */
@@ -288,4 +288,10 @@ input:not([type]):focus:not([readonly]), input[type=text]:not(.browser-default):
 
 .modal {
     border-radius: 30px !important;
+}
+
+/* Mostrar el menu trigger */
+
+.sidenav-trigger {
+    display: block !important;
 }
